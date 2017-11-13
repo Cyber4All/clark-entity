@@ -80,6 +80,13 @@ export class LearningOutcome implements Outcome {
      *       the learning object this outcome belongs to
      */
     get source(): LearningObject { return this._source; }
+
+    private _tag: number;
+    /**
+     * @property {number} tag (immutable)
+     *       a unique (over the source) identifier
+     */
+    get tag(): number { return this._tag; }
     
     private _bloom: string;
     /**
@@ -225,6 +232,21 @@ export class LearningOutcome implements Outcome {
      */
     constructor(source: LearningObject) {
         this._source = source;
+        this._tag = 0;
+
+        // ensure tag is unique
+        let searching = true;
+        while (searching) {
+            searching = false;
+            for (let outcome of source.outcomes) {
+                if (outcome.tag == this._tag) {
+                    this._tag ++;
+                    searching = true;
+                    break;
+                }
+            }
+        }
+
         this._bloom = Array.from(levels)[0];
         this._verb = Array.from(verbs[this._bloom])[0];
         this._text = "";
