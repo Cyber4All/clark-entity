@@ -5,6 +5,7 @@
 import { User } from './user';
 import { LearningGoal } from './learning-goal';
 import { LearningOutcome } from './learning-outcome';
+import { Repository } from './neutrino';
 import { lengths } from '../taxonomy/taxonomy';
 
 /**
@@ -110,6 +111,15 @@ export class LearningObject {
         return this._outcomes.splice(i, 1)[0];
     }
 
+    private _repository: Repository;
+    /**
+     * @property {Repository} repository neutrino file/url storage
+     * 
+     * TODO: extend constituents into full-fledged entities
+     */
+    get repository(): Repository { return this._repository; }
+    set repository(repository: Repository) { this._repository = repository; }
+
     /**
      * Construct a new, blank LearningOutcome.
      * @param {User} source the author the new object belongs to
@@ -123,6 +133,11 @@ export class LearningObject {
         this._length = Array.from(lengths)[0];
         this._goals = [];
         this._outcomes = [];
+        this.repository = {
+            files: [],
+            urls: [],
+            notes: ""
+        };
     }
     
     static serialize = function(entity: LearningObject): string {
@@ -131,7 +146,8 @@ export class LearningObject {
             date: entity.date,
             length: entity.length,
             goals: entity.goals.map(LearningGoal.serialize),
-            outcomes: entity.outcomes.map(LearningOutcome.serialize)
+            outcomes: entity.outcomes.map(LearningOutcome.serialize),
+            repository: entity.repository   /* TODO: serialization required when repository is upgraded */
         });
     }
 
@@ -147,6 +163,7 @@ export class LearningObject {
         entity._outcomes = doc.outcomes.map( (a:string) => {
             return LearningOutcome.unserialize(a, entity);
         });
+        entity._repository = doc.repository   /* TODO: serialization required when repository is upgraded */
         return entity;
     }
 }
