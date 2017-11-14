@@ -3,8 +3,13 @@
  * instructional strategy.
  */
 
-import { LearningOutcome } from './outcome';
+import { LearningOutcome } from './learning-outcome';
 import { levels, instructions } from '../taxonomy/taxonomy';
+
+export interface InstructionalStrategySerializable {
+    instruction: string,
+    text: string
+}
 
 /**
  * A class to represent a learning outcome's instructional strategy.
@@ -49,5 +54,20 @@ export class InstructionalStrategy {
         this._source = source;
         this._instruction = Array.from(instructions[source.bloom])[0];
         this._text = "";
+    }
+    
+    static serialize = function(entity: InstructionalStrategy): string {
+        return JSON.stringify({
+            instruction: entity.instruction,
+            text: entity.text
+        });
+    }
+
+    static unserialize = function(msg: string, parent: LearningOutcome): InstructionalStrategy {
+        let doc = JSON.parse(msg);
+        let entity = new InstructionalStrategy(parent);
+        entity._instruction = doc.instruction;
+        entity._text = doc.text;
+        return entity;
     }
 }

@@ -4,6 +4,10 @@
  */
 import { LearningObject } from './learning-object';
 
+export interface LearningGoalSerializable {
+    text: string
+}
+
 /**
  * A class to represent a learning object's learning goal.
  * @class
@@ -33,5 +37,18 @@ export class LearningGoal {
     constructor(source: LearningObject) {
         this._source = source;
         this._text = "";
+    }
+    
+    static serialize = function(entity: LearningGoal): string {
+        return JSON.stringify({
+            text: entity.text
+        });
+    }
+
+    static unserialize = function(msg: string, parent: LearningObject): LearningGoal {
+        let doc = JSON.parse(msg);
+        let entity = new LearningGoal(parent);
+        entity._text = doc.text;
+        return entity;
     }
 }

@@ -3,8 +3,13 @@
  * assessment plan.
  */
 
-import { LearningOutcome } from './outcome';
+import { LearningOutcome } from './learning-outcome';
 import { levels, assessments } from '../taxonomy/taxonomy';
+
+export interface AssessmentPlanSerializable {
+    plan: string,
+    text: string
+}
 
 /**
  * A class to represent a learning outcome's assessment plan.
@@ -50,4 +55,20 @@ export class AssessmentPlan {
         this._plan = Array.from(assessments[source.bloom])[0];
         this._text = "";
     }
+
+    static serialize = function(entity: AssessmentPlan): string {
+        return JSON.stringify({
+            plan: entity.plan,
+            text: entity.text
+        });
+    }
+
+    static unserialize = function(msg: string, parent: LearningOutcome): AssessmentPlan {
+        let doc = JSON.parse(msg);
+        let entity = new AssessmentPlan(parent);
+        entity._plan = doc.plan;
+        entity._text = doc.text;
+        return entity;
+    }
+    
 }

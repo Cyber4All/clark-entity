@@ -3,9 +3,19 @@
  */
 
 import { User } from './user';
-import { LearningGoal } from './learning-goal';
-import { LearningOutcome } from './outcome';
+import { LearningGoal, LearningGoalSerializable } from './learning-goal';
+import {
+    LearningOutcome, LearningOutcomeSerializable
+} from './learning-outcome';
 import { lengths } from '../taxonomy/taxonomy';
+
+export interface LearningObjectSerializable {
+    name: string,
+    date: string,
+    length: string,
+    goals: LearningGoalSerializable[],
+    outcomes: LearningOutcomeSerializable[]
+}
 
 /**
  * A class to represent a learning object.
@@ -33,8 +43,8 @@ export class LearningObject {
      *       the object's last-modified date
      * FIXME: if there's a reason to use an actual Date class
      */
-    get date(): string { return this._name; }
-    set date(name: string) { this._name = name; }
+    get date(): string { return this._date; }
+    set date(date: string) { this._date = date; }
 
     private _length: string;
     /**
@@ -123,5 +133,30 @@ export class LearningObject {
         this._length = Array.from(lengths)[0];
         this._goals = [];
         this._outcomes = [];
+    }
+    
+    static serialize = function(entity: LearningObject): string {
+        return JSON.stringify({
+            name: entity.name,
+            date: entity.date,
+            length: entity.length,
+            goals: entity.goals.map(LearningGoal.serialize),
+            outcomes: entity.outcomes.map(LearningOutcome.serialize)
+        });
+    }
+
+    static unserialize = function(msg: string, parent: User): LearningObject {
+        let doc = JSON.parse(msg);
+        let entity = new LearningObject(parent);
+        entity._name = doc.name;
+        entity._date = doc.date;
+        entity._length = doc.length;
+        entity._goals = doc.goals.map( (a:string) => {
+            return LearningGoal.unserialize(a, entity);
+        });
+        entity._outcomes = doc.outcomes.map( (a:string) => {
+            return LearningOutcome.unserialize(a, entity);
+        });
+        return entity;
     }
 }

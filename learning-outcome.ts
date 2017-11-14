@@ -4,9 +4,19 @@
 
 import { Outcome } from './outcome';
 import { LearningObject } from './learning-object';
-import { AssessmentPlan } from './assessment-plan';
-import { InstructionalStrategy } from './instructional-strategy';
+import { AssessmentPlan, AssessmentPlanSerializable } from './assessment-plan';
+import { InstructionalStrategy, InstructionalStrategySerializable } from './instructional-strategy';
 import { levels, verbs } from '../taxonomy/taxonomy';
+
+export interface LearningOutcomeSerializable {
+    tag: number,
+    bloom: string,
+    verb: string,
+    text: string,
+    mappings: Outcome[],
+    assessments: AssessmentPlanSerializable[],
+    strategies: InstructionalStrategySerializable[]
+}
 
 /**
  * A class to represent a learning outcome.
@@ -192,5 +202,34 @@ export class LearningOutcome implements Outcome {
         this._mappings = [];
         this._assessments = [];
         this._strategies = [];
+    }
+    
+    static serialize = function(entity: LearningOutcome): string {
+        return JSON.stringify({
+            tag: entity.tag,
+            bloom: entity.bloom,
+            verb: entity.verb,
+            text: entity.text,
+            mappings: entity.mappings,
+            assessments: entity.assessments.map(AssessmentPlan.serialize),
+            strategies: entity.strategies.map(InstructionalStrategy.serialize)
+        });
+    }
+
+    static unserialize = function(msg: string, parent: LearningObject): LearningOutcome {
+        let doc = JSON.parse(msg);
+        let entity = new LearningOutcome(parent);
+        entity._tag = doc.tag;
+        entity._bloom = doc.bloom;
+        entity._verb = doc.verb;
+        entity._text = doc.text;
+        entity._mappings = doc.mappings,
+        entity._assessments = doc.assessments.map( (a:string) => {
+            return AssessmentPlan.unserialize(a, entity);
+        });
+        entity._strategies = doc.strategies.map( (a:string) => {
+            return InstructionalStrategy.unserialize(a, entity);
+        });
+        return entity;
     }
 }

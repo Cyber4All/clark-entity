@@ -2,7 +2,15 @@
  * Provide an abstract representation for a Bloomin' Onion user.
  */
 
-import { LearningObject } from './learning-object';
+import { LearningObject, LearningObjectSerializable } from './learning-object';
+
+export interface UserSerializable {
+    id: string,
+    name: string,
+    email: string,
+    pwd: string,
+    objects: LearningObjectSerializable[],
+}
 
 /**
  * A class to represent Bloomin' Onion users.
@@ -54,7 +62,7 @@ export class User {
      */
     addObject(): LearningObject {
         let object = new LearningObject(this);
-        this._objects.push(new LearningObject(this));
+        this._objects.push(object);
         return object
     }
 
@@ -81,5 +89,24 @@ export class User {
         this._email = email;
         this._pwd = pwd;
         this._objects = [];
+    }
+    
+    static serialize = function(entity: User): string {
+        return JSON.stringify({
+            id: entity.id,
+            name: entity.name,
+            email: entity.email,
+            pwd: entity.pwd,
+            objects: entity.objects.map(LearningObject.serialize)
+        });
+    }
+
+    static unserialize = function(msg: string): User {
+        let doc = JSON.parse(msg);
+        let entity = new User(doc.id, doc.name, doc.email, doc.pwd);
+        entity._objects = doc.objects.map( (a: string) => {
+            return LearningObject.unserialize(a, entity)
+        });
+        return entity;
     }
 }
