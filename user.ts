@@ -2,15 +2,7 @@
  * Provide an abstract representation for a Bloomin' Onion user.
  */
 
-import { LearningObject, LearningObjectSerializable } from './learning-object';
-
-export interface UserSerializable {
-    id: string,
-    name: string,
-    email: string,
-    pwd: string,
-    objects: LearningObjectSerializable[],
-}
+import { LearningObject } from './learning-object';
 
 /**
  * A class to represent Bloomin' Onion users.

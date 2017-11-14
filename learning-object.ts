@@ -3,19 +3,9 @@
  */
 
 import { User } from './user';
-import { LearningGoal, LearningGoalSerializable } from './learning-goal';
-import {
-    LearningOutcome, LearningOutcomeSerializable
-} from './learning-outcome';
+import { LearningGoal } from './learning-goal';
+import { LearningOutcome } from './learning-outcome';
 import { lengths } from '../taxonomy/taxonomy';
-
-export interface LearningObjectSerializable {
-    name: string,
-    date: string,
-    length: string,
-    goals: LearningGoalSerializable[],
-    outcomes: LearningOutcomeSerializable[]
-}
 
 /**
  * A class to represent a learning object.

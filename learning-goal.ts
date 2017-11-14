@@ -4,10 +4,6 @@
  */
 import { LearningObject } from './learning-object';
 
-export interface LearningGoalSerializable {
-    text: string
-}
-
 /**
  * A class to represent a learning object's learning goal.
  * @class

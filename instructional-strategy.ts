@@ -6,11 +6,6 @@
 import { LearningOutcome } from './learning-outcome';
 import { levels, instructions } from '../taxonomy/taxonomy';
 
-export interface InstructionalStrategySerializable {
-    instruction: string,
-    text: string
-}
-
 /**
  * A class to represent a learning outcome's instructional strategy.
  * @class

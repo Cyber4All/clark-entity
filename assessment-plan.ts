@@ -6,11 +6,6 @@
 import { LearningOutcome } from './learning-outcome';
 import { levels, assessments } from '../taxonomy/taxonomy';
 
-export interface AssessmentPlanSerializable {
-    plan: string,
-    text: string
-}
-
 /**
  * A class to represent a learning outcome's assessment plan.
  * @class

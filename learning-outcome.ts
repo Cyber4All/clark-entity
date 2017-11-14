@@ -4,19 +4,9 @@
 
 import { Outcome } from './outcome';
 import { LearningObject } from './learning-object';
-import { AssessmentPlan, AssessmentPlanSerializable } from './assessment-plan';
-import { InstructionalStrategy, InstructionalStrategySerializable } from './instructional-strategy';
+import { AssessmentPlan } from './assessment-plan';
+import { InstructionalStrategy } from './instructional-strategy';
 import { levels, verbs } from '../taxonomy/taxonomy';
-
-export interface LearningOutcomeSerializable {
-    tag: number,
-    bloom: string,
-    verb: string,
-    text: string,
-    mappings: Outcome[],
-    assessments: AssessmentPlanSerializable[],
-    strategies: InstructionalStrategySerializable[]
-}
 
 /**
  * A class to represent a learning outcome.
