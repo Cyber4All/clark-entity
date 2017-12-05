@@ -26,7 +26,7 @@ export class LearningOutcome implements Outcome {
      *       a unique (over the source) identifier
      */
     get tag(): number { return this._tag; }
-    
+
     private _bloom: string;
     /**
      * @property {string} instruction
@@ -35,10 +35,13 @@ export class LearningOutcome implements Outcome {
      */
     get bloom(): string { return this._bloom; }
     set bloom(bloom: string) {
-        if (levels.has(bloom)) { this._bloom = bloom; }
-        else throw bloom+" is not a valid Bloom taxon";
+        if (levels.has(bloom)) {
+            this._bloom = bloom;
+        } else {
+            throw bloom + ' is not a valid Bloom taxon';
+        }
     }
-    
+
     private _verb: string;
     /**
      * @property {string} instruction
@@ -46,9 +49,12 @@ export class LearningOutcome implements Outcome {
      *       values are resetricted according to the bloom taxon
      */
     get verb(): string { return this._verb; }
-    set verb(verb: string)  {
-        if (verbs[this.bloom].has(verb)) { this._verb = verb; }
-        else throw verb+" is not a valid verb for the "+this.bloom+" taxon";
+    set verb(verb: string) {
+        if (verbs[this.bloom].has(verb)) {
+            this._verb = verb;
+        } else {
+            throw verb + ' is not a valid verb for the ' + this.bloom + ' taxon';
+        }
     }
 
     private _text: string;
@@ -63,12 +69,66 @@ export class LearningOutcome implements Outcome {
     /**
      * @property {Outcome[]} mappings (immutable)
      *       outcomes which presumably achieve similar things as this
-     * 
+     *
      * NOTE: individual elements are freely accessible, but the array
      *       reference itself is immutable, and elements can only be
      *       added and removed by the below functions
      */
     get mappings(): Outcome[] { return this._mappings; }
+
+    private _assessments: AssessmentPlan[];
+    /**
+     * @property {AssessmentPlan[]} assessments (immutable)
+     *       plans to assess how well the outcome is achieved
+     *
+     * NOTE: individual elements are freely accessible, but the array
+     *       reference itself is immutable, and elements can only be
+     *       added and removed by the below functions
+     */
+    get assessments(): AssessmentPlan[] { return this._assessments; }
+
+    private _strategies: InstructionalStrategy[];
+    /**
+     * @property {InstructionalStrategy[]} strategies (immutable)
+     *       strategies on how to achieve the outcome
+     *
+     * NOTE: individual elements are freely accessible, but the array
+     *       reference itself is immutable, and elements can only be
+     *       added and removed by the below functions
+     */
+    get strategies(): InstructionalStrategy[] { return this._strategies; }
+
+    /**
+     * Construct a new, blank LearningOutcome.
+     * @param {LearningObject} source the learning object
+     *       the new learning outcome belongs to
+     *
+     * @constructor
+     */
+    constructor(source: LearningObject) {
+        this._source = source;
+        this._tag = 0;
+
+        // ensure tag is unique
+        let searching = true;
+        while (searching) {
+            searching = false;
+            for (let outcome of source.outcomes) {
+                if (outcome.tag === this._tag) {
+                    this._tag++;
+                    searching = true;
+                    break;
+                }
+            }
+        }
+
+        this._bloom = Array.from(levels)[0];
+        this._verb = Array.from(verbs[this._bloom])[0];
+        this._text = '';
+        this._mappings = [];
+        this._assessments = [];
+        this._strategies = [];
+    }
 
     /**
      * Maps an outcome to this learning outcome.
@@ -77,27 +137,16 @@ export class LearningOutcome implements Outcome {
     mapTo(mapping: Outcome): number {
         return this._mappings.push(mapping);
     }
-    
+
     /**
      * Removes the outcome's i-th mapping.
      * @param {number} i the index to remove from the mappings array
-     * 
+     *
      * @returns {Outcome} the outcome which was removed
      */
     unmap(i: number): Outcome {
         return this._mappings.splice(i, 1)[0];
     }
-
-    private _assessments: AssessmentPlan[];
-    /**
-     * @property {AssessmentPlan[]} assessments (immutable)
-     *       plans to assess how well the outcome is achieved
-     * 
-     * NOTE: individual elements are freely accessible, but the array
-     *       reference itself is immutable, and elements can only be
-     *       added and removed by the below functions
-     */
-    get assessments(): AssessmentPlan[] { return this._assessments; }
 
     /**
      * Adds a new, blank assessment plan to this outcome.
@@ -112,23 +161,12 @@ export class LearningOutcome implements Outcome {
     /**
      * Removes the outcome's i-th assessment plan.
      * @param {number} i the index to remove from the assessments array
-     * 
+     *
      * @returns {LearningObject} the assessment plan which was removed
      */
     removeAssessment(i: number): AssessmentPlan {
         return this._assessments.splice(i, 1)[0];
     }
-
-    private _strategies: InstructionalStrategy[];
-    /**
-     * @property {InstructionalStrategy[]} strategies (immutable)
-     *       strategies on how to achieve the outcome
-     * 
-     * NOTE: individual elements are freely accessible, but the array
-     *       reference itself is immutable, and elements can only be
-     *       added and removed by the below functions
-     */
-    get strategies(): InstructionalStrategy[] { return this._strategies; }
 
     /**
      * Adds a new, blank instructional strategy to this outcome.
@@ -143,7 +181,7 @@ export class LearningOutcome implements Outcome {
     /**
      * Removes the outcome's i-th instructional strategy.
      * @param {number} i the index to remove from the strategies array
-     * 
+     *
      * @returns {LearningObject} the strategy which was removed
      */
     removeStrategy(i: number): InstructionalStrategy {
@@ -160,41 +198,9 @@ export class LearningOutcome implements Outcome {
     get author(): string { return this._source.author.name; }
     get name(): string { return this._source.name; }
     get date(): string { return this._source.date; }
-    get outcome(): string { return this._verb+" "+this._text; }
+    get outcome(): string { return this._verb + ' ' + this._text; }
 
-    /**
-     * Construct a new, blank LearningOutcome.
-     * @param {LearningObject} source the learning object
-     *       the new learning outcome belongs to
-     * 
-     * @constructor
-     */
-    constructor(source: LearningObject) {
-        this._source = source;
-        this._tag = 0;
-
-        // ensure tag is unique
-        let searching = true;
-        while (searching) {
-            searching = false;
-            for (let outcome of source.outcomes) {
-                if (outcome.tag == this._tag) {
-                    this._tag ++;
-                    searching = true;
-                    break;
-                }
-            }
-        }
-
-        this._bloom = Array.from(levels)[0];
-        this._verb = Array.from(verbs[this._bloom])[0];
-        this._text = "";
-        this._mappings = [];
-        this._assessments = [];
-        this._strategies = [];
-    }
-    
-    static serialize = function(entity: LearningOutcome): string {
+    static serialize = function (entity: LearningOutcome): string {
         return JSON.stringify({
             tag: entity.tag,
             bloom: entity.bloom,
@@ -202,11 +208,11 @@ export class LearningOutcome implements Outcome {
             text: entity.text,
             mappings: entity.mappings,
             assessments: entity.assessments.map(AssessmentPlan.serialize),
-            strategies: entity.strategies.map(InstructionalStrategy.serialize)
+            strategies: entity.strategies.map(InstructionalStrategy.serialize),
         });
-    }
+    };
 
-    static unserialize = function(msg: string, parent: LearningObject): LearningOutcome {
+    static unserialize = function (msg: string, parent: LearningObject): LearningOutcome {
         let doc = JSON.parse(msg);
         let entity = new LearningOutcome(parent);
         entity._tag = doc.tag;
@@ -214,12 +220,12 @@ export class LearningOutcome implements Outcome {
         entity._verb = doc.verb;
         entity._text = doc.text;
         entity._mappings = doc.mappings,
-        entity._assessments = doc.assessments.map( (a:string) => {
-            return AssessmentPlan.unserialize(a, entity);
-        });
-        entity._strategies = doc.strategies.map( (a:string) => {
+            entity._assessments = doc.assessments.map((a: string) => {
+                return AssessmentPlan.unserialize(a, entity);
+            });
+        entity._strategies = doc.strategies.map((a: string) => {
             return InstructionalStrategy.unserialize(a, entity);
         });
         return entity;
-    }
+    };
 }

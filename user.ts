@@ -36,12 +36,12 @@ export class User {
      */
     get pwd(): string { return this._pwd; }
     set pwd(pwd: string) { this._pwd = pwd; }
-    
+
     private _objects: LearningObject[];
     /**
      * @property {LearningObject[]} objects (immutable)
      *       an array of a user's learning objects
-     * 
+     *
      * NOTE: individual elements are freely accessible, but the array
      *       reference itself is immutable, and elements can only be
      *       added and removed by the below functions
@@ -49,30 +49,10 @@ export class User {
     get objects(): LearningObject[] { return this._objects; }
 
     /**
-     * Adds a new, blank learning object to this user.
-     * @returns {LearningObject} a reference to the new learning object
-     */
-    addObject(): LearningObject {
-        let object = new LearningObject(this);
-        this._objects.push(object);
-        return object
-    }
-
-    /**
-     * Removes the user's i-th learning object.
-     * @param {number} i the index to remove from the objects array
-     * 
-     * @returns {LearningObject} the learning object which was removed
-     */
-    removeObject(i: number): LearningObject {
-        return this._objects.splice(i, 1)[0];
-    }
-
-    /**
      * Construct a new User, given starting user id and name.
      * @param {string} id the user's unique log-in id
      * @param {string} name the user's real-life name
-     * 
+     *
      * @constructor
      */
     constructor(id: string, name: string, email: string, pwd: string) {
@@ -82,23 +62,43 @@ export class User {
         this._pwd = pwd;
         this._objects = [];
     }
-    
-    static serialize = function(entity: User): string {
+
+    /**
+     * Adds a new, blank learning object to this user.
+     * @returns {LearningObject} a reference to the new learning object
+     */
+    addObject(): LearningObject {
+        let object = new LearningObject(this);
+        this._objects.push(object);
+        return object;
+    }
+
+    /**
+     * Removes the user's i-th learning object.
+     * @param {number} i the index to remove from the objects array
+     *
+     * @returns {LearningObject} the learning object which was removed
+     */
+    removeObject(i: number): LearningObject {
+        return this._objects.splice(i, 1)[0];
+    }
+
+    static serialize = function (entity: User): string {
         return JSON.stringify({
             id: entity.id,
             name: entity.name,
             email: entity.email,
             pwd: entity.pwd,
-            objects: entity.objects.map(LearningObject.serialize)
+            objects: entity.objects.map(LearningObject.serialize),
         });
-    }
+    };
 
-    static unserialize = function(msg: string): User {
+    static unserialize = function (msg: string): User {
         let doc = JSON.parse(msg);
         let entity = new User(doc.id, doc.name, doc.email, doc.pwd);
-        entity._objects = doc.objects.map( (a: string) => {
-            return LearningObject.unserialize(a, entity)
+        entity._objects = doc.objects.map((a: string) => {
+            return LearningObject.unserialize(a, entity);
         });
         return entity;
-    }
+    };
 }

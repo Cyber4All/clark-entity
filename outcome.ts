@@ -16,5 +16,5 @@ export interface Outcome {
 }
 
 export interface OutcomeSuggestion extends Outcome {
-    id: any,    // do NOT have any database dependencies in entities
+    id: any;    // do NOT have any database dependencies in entities
 }

@@ -17,7 +17,7 @@ export class InstructionalStrategy {
      *       the outcome this instructional strategy belongs to
      */
     get source(): LearningOutcome { return this._source; }
-    
+
     private _instruction: string;
     /**
      * @property {string} instruction
@@ -26,8 +26,11 @@ export class InstructionalStrategy {
      */
     get instruction(): string { return this._instruction; }
     set instruction(instruction: string) {
-        if (instructions[this._source.bloom].has(instruction)) { this._instruction = instruction; }
-        else throw instruction+" is not a valid instructional strategy for the "+this._source.bloom+" taxon";
+        if (instructions[this._source.bloom].has(instruction)) {
+            this._instruction = instruction;
+        } else {
+            throw instruction + ' is not a valid instructional strategy for the ' + this._source.bloom + ' taxon';
+        }
     }
 
     private _text: string;
@@ -42,27 +45,27 @@ export class InstructionalStrategy {
      * Construct a new, blank InstructionalStrategy.
      * @param {LearningOutcome} source the learning outcome
      *       the new instructional strategy belongs to
-     * 
+     *
      * @constructor
      */
     constructor(source: LearningOutcome) {
         this._source = source;
         this._instruction = Array.from(instructions[source.bloom])[0];
-        this._text = "";
-    }
-    
-    static serialize = function(entity: InstructionalStrategy): string {
-        return JSON.stringify({
-            instruction: entity.instruction,
-            text: entity.text
-        });
+        this._text = '';
     }
 
-    static unserialize = function(msg: string, parent: LearningOutcome): InstructionalStrategy {
+    static serialize = function (entity: InstructionalStrategy): string {
+        return JSON.stringify({
+            instruction: entity.instruction,
+            text: entity.text,
+        });
+    };
+
+    static unserialize = function (msg: string, parent: LearningOutcome): InstructionalStrategy {
         let doc = JSON.parse(msg);
         let entity = new InstructionalStrategy(parent);
         entity._instruction = doc.instruction;
         entity._text = doc.text;
         return entity;
-    }
+    };
 }

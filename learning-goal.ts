@@ -27,24 +27,24 @@ export class LearningGoal {
      * Construct a new, blank InstructionalStrategy.
      * @param {LearningObject} source the learning object
      *       the new learning goal belongs to
-     * 
+     *
      * @constructor
      */
     constructor(source: LearningObject) {
         this._source = source;
-        this._text = "";
+        this._text = '';
     }
-    
+
     static serialize = function(entity: LearningGoal): string {
         return JSON.stringify({
-            text: entity.text
+            text: entity.text,
         });
-    }
+    };
 
     static unserialize = function(msg: string, parent: LearningObject): LearningGoal {
         let doc = JSON.parse(msg);
         let entity = new LearningGoal(parent);
         entity._text = doc.text;
         return entity;
-    }
+    };
 }

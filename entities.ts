@@ -16,5 +16,5 @@ export {
     StandardOutcome,
     LearningGoal,
     InstructionalStrategy,
-    AssessmentPlan
+    AssessmentPlan,
 };

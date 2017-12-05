@@ -26,8 +26,11 @@ export class AssessmentPlan {
      */
     get plan(): string { return this._plan; }
     set plan(plan: string) {
-        if (assessments[this._source.bloom].has(plan)) { this._plan = plan; }
-        else throw plan+" is not a valid assessment plan for the "+this._source.bloom+" taxon";
+        if (assessments[this._source.bloom].has(plan)) {
+            this._plan = plan;
+        } else {
+            throw plan + ' is not a valid assessment plan for the ' + this._source.bloom + ' taxon';
+        }
     }
 
     private _text: string;
@@ -42,28 +45,27 @@ export class AssessmentPlan {
      * Construct a new, blank AssessmentPlan.
      * @param {LearningOutcome} source the learning outcome
      *       the new assessment plan belongs to
-     * 
+     *
      * @constructor
      */
     constructor(source: LearningOutcome) {
         this._source = source;
         this._plan = Array.from(assessments[source.bloom])[0];
-        this._text = "";
+        this._text = '';
     }
 
-    static serialize = function(entity: AssessmentPlan): string {
+    static serialize = function (entity: AssessmentPlan): string {
         return JSON.stringify({
             plan: entity.plan,
-            text: entity.text
+            text: entity.text,
         });
-    }
+    };
 
-    static unserialize = function(msg: string, parent: LearningOutcome): AssessmentPlan {
+    static unserialize = function (msg: string, parent: LearningOutcome): AssessmentPlan {
         let doc = JSON.parse(msg);
         let entity = new AssessmentPlan(parent);
         entity._plan = doc.plan;
         entity._text = doc.text;
         return entity;
-    }
-    
+    };
 }
