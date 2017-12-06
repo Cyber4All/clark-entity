@@ -24,6 +24,8 @@ export class LearningObject {
     /**
      * @property {string} length
      *       the object's identifying name, unique over a user
+     *
+     * TODO: ensure uniqueness of name if author is not null
      */
     get name(): string { return this._name; }
     set name(name: string) { this._name = name; }
@@ -84,11 +86,18 @@ export class LearningObject {
      * Construct a new, blank LearningOutcome.
      * @param {User} source the author the new object belongs to
      *
+     * TODO: current constructor parameters (author required, name optional)
+     *       are in place for reverse compatibility, but actually they should
+     *       be backwards (name required, author optional [default to null])
+     * TODO: constructor should confirm uniqueness of name if author is not null
+     *
      * @constructor
      */
-    constructor(author: User) {
+    constructor(author: User, name?: string) {
+        if (!name) name = '';
+
         this._author = author;
-        this._name = '';
+        this._name = name;
         this._date = '';
         this._length = Array.from(lengths)[0];
         this._goals = [];

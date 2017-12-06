@@ -103,6 +103,15 @@ export class LearningOutcome implements Outcome {
      * @param {LearningObject} source the learning object
      *       the new learning outcome belongs to
      *
+     * TODO: constructor should take EITHER source OR tag (the other should be null)
+     *       If tag is given (0 allowed),
+     *          If source exists, validate that tag is unique,
+     *          Otherwise, trust it
+     *       Otherwise, auto-increment tag as necessary based on source
+     *
+     *       The order of parameters should be consistent with LearningObject,
+     *          ultimately that should be (tag, source)
+     *
      * @constructor
      */
     constructor(source: LearningObject) {
@@ -110,14 +119,16 @@ export class LearningOutcome implements Outcome {
         this._tag = 0;
 
         // ensure tag is unique
-        let searching = true;
-        while (searching) {
-            searching = false;
-            for (let outcome of source.outcomes) {
-                if (outcome.tag === this._tag) {
-                    this._tag++;
-                    searching = true;
-                    break;
+        if (source) {   // if outcome is independent of source, we obviously can't ensure a unique tag
+            let searching = true;
+            while (searching) {
+                searching = false;
+                for (let outcome of source.outcomes) {
+                    if (outcome.tag === this._tag) {
+                        this._tag++;
+                        searching = true;
+                        break;
+                    }
                 }
             }
         }
