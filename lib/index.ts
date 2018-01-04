@@ -1,6 +1,6 @@
 import { User } from './user';
 import { LearningObject } from './learning-object';
-import { Outcome, OutcomeSuggestion} from './outcome';
+import { Outcome, OutcomeSuggestion } from './outcome';
 import { StandardOutcome } from './standard-outcome';
 import { LearningOutcome } from './learning-outcome';
 import { LearningGoal } from './learning-goal';

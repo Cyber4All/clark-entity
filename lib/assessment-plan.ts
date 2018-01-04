@@ -4,7 +4,7 @@
  */
 
 import { LearningOutcome } from './learning-outcome';
-import { levels, assessments } from '../taxonomy/taxonomy';
+import { levels, assessments } from 'clark-taxonomy';
 
 /**
  * A class to represent a learning outcome's assessment plan.

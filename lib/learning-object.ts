@@ -6,7 +6,7 @@ import { User } from './user';
 import { LearningGoal } from './learning-goal';
 import { LearningOutcome } from './learning-outcome';
 import { Repository } from './neutrino';
-import { lengths } from '../taxonomy/taxonomy';
+import { lengths } from 'clark-taxonomy';
 
 /**
  * A class to represent a learning object.

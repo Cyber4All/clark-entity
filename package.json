@@ -1,0 +1,30 @@
+{
+  "name": "clark-entity",
+  "version": "1.0.1",
+  "description": "CLARK Entities",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cyber4All/entity.git"
+  },
+  "author": "Kyle Sherbert",
+  "contributors": [
+    "Gustavus Shaw II <gshaw1997@gmail.com> (https://gustavusshaw.com)"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cyber4All/entity/issues"
+  },
+  "homepage": "https://github.com/Cyber4All/entity#readme",
+  "dependencies": {
+    "@types/jsonfile": "^4.0.1",
+    "clark-taxonomy": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.2"
+  }
+}
