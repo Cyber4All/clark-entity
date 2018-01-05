@@ -4,6 +4,18 @@
 # Entities
 CLARK business rules encapsulated in TypeScript modules
 
+## Serialization
+
+The standard JSON.stringify function _does not work_ on entities. If you are sending an entity over a network, you must first convert its information to a string by:
+```javascript
+let serialized = <Entity>.serialize(entity);
+```
+On the receiving end, you must unserialize by:
+```javascript
+let entity = <Entity>.unserialize(serialized, parent);
+```
+If you are not working with a parent entity, pass `null` as the second argument.
+
 ## Interfaces
 
 #### `OutcomeSuggestion` (`outcome.ts`)
