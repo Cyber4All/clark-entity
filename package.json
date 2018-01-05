@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/Cyber4All/entity#readme",
   "dependencies": {
-    "@types/jsonfile": "^4.0.1",
     "clark-taxonomy": "^1.0.11"
   },
   "devDependencies": {
