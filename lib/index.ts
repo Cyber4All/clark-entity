@@ -1,5 +1,5 @@
 import { User } from './user';
-import { LearningObject } from './learning-object';
+import { LearningObject, ObjectSuggestion } from './learning-object';
 import { Outcome, OutcomeSuggestion} from './outcome';
 import { StandardOutcome } from './standard-outcome';
 import { LearningOutcome } from './learning-outcome';
@@ -11,6 +11,7 @@ import { Repository, LearningObjectFile, LearningObjectUrl } from './neutrino';
 export {
     User,
     LearningObject,
+    ObjectSuggestion,
     Outcome,
     OutcomeSuggestion,
     LearningOutcome,
