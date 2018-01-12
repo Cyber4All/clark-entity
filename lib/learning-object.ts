@@ -8,6 +8,18 @@ import { LearningOutcome } from './learning-outcome';
 import { Repository } from './neutrino';
 import { lengths } from 'clark-taxonomy';
 
+
+/**
+ * Scalar data appropriate for a CuBE.
+ */
+interface ObjectSuggestion {
+    id: any;    // do NOT have any database dependencies in entities
+    author: string;
+    length: string;
+    name: string;
+    date: string;
+}
+
 /**
  * A class to represent a learning object.
  * @class
