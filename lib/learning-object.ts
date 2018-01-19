@@ -105,7 +105,7 @@ export class LearningObject {
      *
      * @constructor
      */
-    constructor(author: User, name?: string) {
+    constructor(author: User, name: string) {
         if (!name) name = '';
 
         this._author = author;
@@ -163,6 +163,7 @@ export class LearningObject {
 
     static serialize = function (entity: LearningObject): string {
         return JSON.stringify({
+            author: entity.author,
             name: entity.name,
             date: entity.date,
             length: entity.length,
@@ -174,7 +175,7 @@ export class LearningObject {
 
     static unserialize = function (msg: string, parent: User): LearningObject {
         let doc = JSON.parse(msg);
-        let entity = new LearningObject(parent);
+        let entity = new LearningObject(parent, '');
         entity._name = doc.name;
         entity._date = doc.date;
         entity._length = doc.length;

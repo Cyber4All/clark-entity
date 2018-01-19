@@ -9,12 +9,12 @@ import { LearningObject } from './learning-object';
  * @class
  */
 export class User {
-    private _id: string;
+    private _username: string;
     /**
-     * @property {string} id a user's unique log-in id
+     * @property {string} id a user's unique log-in username
      */
-    get id(): string { return this._id; }
-    set id(id: string) { this._id = id; }
+    get username(): string { return this._username; }
+    set username(username: string) { this._username = username; }
 
     private _name: string;
     /**
@@ -50,13 +50,13 @@ export class User {
 
     /**
      * Construct a new User, given starting user id and name.
-     * @param {string} id the user's unique log-in id
+     * @param {string} username the user's unique log-in username
      * @param {string} name the user's real-life name
      *
      * @constructor
      */
-    constructor(id: string, name: string, email: string, pwd: string) {
-        this._id = id;
+    constructor(username: string, name: string, email: string, pwd: string) {
+        this._username = username;
         this._name = name;
         this._email = email;
         this._pwd = pwd;
@@ -68,7 +68,7 @@ export class User {
      * @returns {LearningObject} a reference to the new learning object
      */
     addObject(): LearningObject {
-        let object = new LearningObject(this);
+        let object = new LearningObject(this, '');
         this._objects.push(object);
         return object;
     }
@@ -85,7 +85,7 @@ export class User {
 
     static serialize = function (entity: User): string {
         return JSON.stringify({
-            id: entity.id,
+            username: entity.username,
             name: entity.name,
             email: entity.email,
             pwd: entity.pwd,
@@ -95,7 +95,7 @@ export class User {
 
     static unserialize = function (msg: string): User {
         let doc = JSON.parse(msg);
-        let entity = new User(doc.id, doc.name, doc.email, doc.pwd);
+        let entity = new User(doc.username, doc.name, doc.email, doc.pwd);
         entity._objects = doc.objects.map((a: string) => {
             return LearningObject.unserialize(a, entity);
         });
