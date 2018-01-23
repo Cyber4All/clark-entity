@@ -97,7 +97,7 @@ export class User {
         let doc = JSON.parse(msg);
         let entity = new User(doc.username, doc.name, doc.email, doc.pwd);
         entity._objects = doc.objects.map((a: string) => {
-            return LearningObject.unserialize(a, entity);
+            return LearningObject.unserialize(a);
         });
         return entity;
     };
