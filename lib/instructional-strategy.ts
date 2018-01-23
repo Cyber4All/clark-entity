@@ -4,7 +4,7 @@
  */
 
 import { LearningOutcome } from './learning-outcome';
-import { levels, instructions } from 'clark-taxonomy';
+import { levels, instructions } from '@cyber4all/clark-taxonomy';
 
 /**
  * A class to represent a learning outcome's instructional strategy.

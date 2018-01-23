@@ -6,7 +6,7 @@ import { Outcome } from './outcome';
 import { LearningObject } from './learning-object';
 import { AssessmentPlan } from './assessment-plan';
 import { InstructionalStrategy } from './instructional-strategy';
-import { levels, verbs } from 'clark-taxonomy';
+import { levels, verbs } from '@cyber4all/clark-taxonomy';
 
 /**
  * A class to represent a learning outcome.
