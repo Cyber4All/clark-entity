@@ -173,9 +173,9 @@ export class LearningObject {
         });
     };
 
-    static unserialize = function (msg: string, parent: User): LearningObject {
+    static unserialize = function (msg: string): LearningObject {
         let doc = JSON.parse(msg);
-        let entity = new LearningObject(parent, '');
+        let entity = new LearningObject(doc.author, '');
         entity._name = doc.name;
         entity._date = doc.date;
         entity._length = doc.length;
