@@ -1,6 +1,6 @@
 {
   "name": "@cyber4all/clark-entity",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "CLARK Entities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
