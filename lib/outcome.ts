@@ -8,6 +8,7 @@
  */
 export interface Outcome {
     // properties of source
+    id?: string;
     author: string;    // standard outcome sources have 'authors' like 'NCWF' or 'CAE'
     name: string;      // standard outcome sources have 'names' like 'K0027' or 'Operating Systems Concepts'
     date: string;   /* FIXME: if there's a reason to use an actual Date class */
