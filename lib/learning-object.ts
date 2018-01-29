@@ -122,13 +122,12 @@ export class LearningObject {
     }
 
     /**
-     * Adds a new, blank learning goal to this object.
-     * @returns {AssessmentPlan} a reference to the new goal
+     * Adds a new learning goal to this object.
+     *
      */
-    addGoal(): LearningGoal {
-        let goal = new LearningGoal(this);
+    addGoal(text: string): void {
+        let goal = new LearningGoal(text);
         this._goals.push(goal);
-        return goal;
     }
 
     /**
@@ -163,29 +162,27 @@ export class LearningObject {
 
     static serialize = function (entity: LearningObject): string {
         return JSON.stringify({
-            author: entity.author,
+            author: User.serialize(entity.author),
             name: entity.name,
             date: entity.date,
             length: entity.length,
-            goals: entity.goals.map(LearningGoal.serialize),
+            goals: entity.goals.map(goal => LearningGoal.serialize(goal)),
             outcomes: entity.outcomes.map(LearningOutcome.serialize),
-            repository: entity.repository,   /* TODO: serialization required when repository is upgraded */
+            repository: entity.repository,
         });
     };
 
     static unserialize = function (msg: string): LearningObject {
         let doc = JSON.parse(msg);
-        let entity = new LearningObject(doc.author, '');
+        let entity = new LearningObject(User.unserialize(doc.author), '');
         entity._name = doc.name;
         entity._date = doc.date;
         entity._length = doc.length;
-        entity._goals = doc.goals.map((a: string) => {
-            return LearningGoal.unserialize(a, entity);
-        });
+        entity._goals = doc.goals.map((goal: string) => LearningGoal.unserialize(goal));
         entity._outcomes = doc.outcomes.map((a: string) => {
             return LearningOutcome.unserialize(a, entity);
         });
-        entity._repository = doc.repository;   /* TODO: serialization required when repository is upgraded */
+        entity._repository = doc.repository;
         return entity;
     };
 }

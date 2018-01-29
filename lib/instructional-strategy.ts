@@ -11,12 +11,12 @@ import { levels, instructions } from '@cyber4all/clark-taxonomy';
  * @class
  */
 export class InstructionalStrategy {
-    private _source: LearningOutcome;
+    private _sourceBloom: string;
     /**
-     * @property {LearningOutcome} source (immutable)
-     *       the outcome this instructional strategy belongs to
+     * @property {string} sourceBloom (immutable)
+     *       the outcome's bloom taxon this assessment plan belongs to
      */
-    get source(): LearningOutcome { return this._source; }
+    get sourceBloom(): string { return this._sourceBloom; }
 
     private _instruction: string;
     /**
@@ -26,10 +26,10 @@ export class InstructionalStrategy {
      */
     get instruction(): string { return this._instruction; }
     set instruction(instruction: string) {
-        if (instructions[this._source.bloom].has(instruction)) {
+        if (instructions[this._sourceBloom].has(instruction)) {
             this._instruction = instruction;
         } else {
-            throw instruction + ' is not a valid instructional strategy for the ' + this._source.bloom + ' taxon';
+            throw instruction + ' is not a valid instructional strategy for the ' + this._sourceBloom + ' taxon';
         }
     }
 
@@ -49,7 +49,7 @@ export class InstructionalStrategy {
      * @constructor
      */
     constructor(source: LearningOutcome) {
-        this._source = source;
+        this._sourceBloom = source.bloom;
         this._instruction = Array.from(instructions[source.bloom])[0];
         this._text = '';
     }

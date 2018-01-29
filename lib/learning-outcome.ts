@@ -3,22 +3,31 @@
  */
 
 import { Outcome } from './outcome';
+import { User } from './user';
 import { LearningObject } from './learning-object';
 import { AssessmentPlan } from './assessment-plan';
 import { InstructionalStrategy } from './instructional-strategy';
 import { levels, verbs } from '@cyber4all/clark-taxonomy';
+
+export interface LearningOutcomeSource {
+    author: User;
+    name: string;
+    date: string;
+};
+
+
 
 /**
  * A class to represent a learning outcome.
  * @class
  */
 export class LearningOutcome implements Outcome {
-    private _source: LearningObject;
+    private _source: LearningOutcomeSource;
     /**
-     * @property {LearningOutcome} source (immutable)
-     *       the learning object this outcome belongs to
+     * @property {LearningOutcomeSource} source (immutable)
+     *       the author, name, and date of the learning object this outcome belongs to
      */
-    get source(): LearningObject { return this._source; }
+    get source(): LearningOutcomeSource { return this._source; }
 
     private _tag: number;
     /**
@@ -115,7 +124,11 @@ export class LearningOutcome implements Outcome {
      * @constructor
      */
     constructor(source: LearningObject) {
-        this._source = source;
+        this._source = {
+            author: source.author,
+            name: source.name,
+            date: source.date
+        };
         this._tag = 0;
 
         // ensure tag is unique
@@ -132,6 +145,8 @@ export class LearningOutcome implements Outcome {
                 }
             }
         }
+
+
 
         this._bloom = Array.from(levels)[0];
         this._verb = Array.from(verbs[this._bloom])[0];

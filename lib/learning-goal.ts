@@ -9,12 +9,6 @@ import { LearningObject } from './learning-object';
  * @class
  */
 export class LearningGoal {
-    private _source: LearningObject;
-    /**
-     * @property {LearningObject} source (immutable)
-     *       the learning object this goal belongs to
-     */
-    get source(): LearningObject { return this._source; }
 
     private _text: string;
     /**
@@ -24,27 +18,23 @@ export class LearningGoal {
     set text(text: string) { this._text = text; }
 
     /**
-     * Construct a new, blank InstructionalStrategy.
-     * @param {LearningObject} source the learning object
-     *       the new learning goal belongs to
+     * Construct a new Learning Goal with text.
+     * @param {string} text the text of the new Learning Goal
      *
      * @constructor
      */
-    constructor(source: LearningObject) {
-        this._source = source;
-        this._text = '';
+    constructor(text: string) {
+        this._text = text;
     }
-
-    static serialize = function(entity: LearningGoal): string {
+    static serialize = function (entity: LearningGoal): string {
         return JSON.stringify({
             text: entity.text,
         });
     };
 
-    static unserialize = function(msg: string, parent: LearningObject): LearningGoal {
+    static unserialize = function (msg: string): LearningGoal {
         let doc = JSON.parse(msg);
-        let entity = new LearningGoal(parent);
-        entity._text = doc.text;
+        let entity = new LearningGoal(doc.text);
         return entity;
     };
 }

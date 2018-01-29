@@ -11,12 +11,12 @@ import { levels, assessments } from '@cyber4all/clark-taxonomy';
  * @class
  */
 export class AssessmentPlan {
-    private _source: LearningOutcome;
+    private _sourceBloom: string;
     /**
-     * @property {LearningOutcome} source (immutable)
-     *       the outcome this assessment plan belongs to
+     * @property {string} sourceBloom (immutable)
+     *       the outcome's bloom taxon this assessment plan belongs to
      */
-    get source(): LearningOutcome { return this._source; }
+    get sourceBloom(): string { return this._sourceBloom; }
 
     private _plan: string;
     /**
@@ -26,10 +26,10 @@ export class AssessmentPlan {
      */
     get plan(): string { return this._plan; }
     set plan(plan: string) {
-        if (assessments[this._source.bloom].has(plan)) {
+        if (assessments[this._sourceBloom].has(plan)) {
             this._plan = plan;
         } else {
-            throw plan + ' is not a valid assessment plan for the ' + this._source.bloom + ' taxon';
+            throw plan + ' is not a valid assessment plan for the ' + this._sourceBloom + ' taxon';
         }
     }
 
@@ -49,11 +49,10 @@ export class AssessmentPlan {
      * @constructor
      */
     constructor(source: LearningOutcome) {
-        this._source = source;
+        this._sourceBloom = source.bloom;
         this._plan = Array.from(assessments[source.bloom])[0];
         this._text = '';
     }
-
     static serialize = function (entity: AssessmentPlan): string {
         return JSON.stringify({
             plan: entity.plan,
