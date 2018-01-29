@@ -21,6 +21,7 @@ If you are not working with a parent entity, pass `null` as the second argument.
 
 ## Interfaces
 * [User](#User)
+* [LearningObject](#LearningObject)
 * [LearningGoal](#LearningGoal)
 * [LearningOutcome](#LearningOutcome)
 * [StandardOutcome](#StandardOutcome)
