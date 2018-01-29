@@ -20,12 +20,12 @@ let entity = <Entity>.unserialize(serialized, parent);
 If you are not working with a parent entity, pass `null` as the second argument.
 
 ## Interfaces
-*[User](#User)
-*[LearningGoal](#LearningGoal)
-*[LearningOutcome](#LearningOutcome)
-*[StandardOutcome](#StandardOutcome)
-*[InstructionalStrategy](#InstructionalStrategy)
-*[AssessmentPlan](#AssessmentPlan)
+* [User](#User)
+* [LearningGoal](#LearningGoal)
+* [LearningOutcome](#LearningOutcome)
+* [StandardOutcome](#StandardOutcome)
+* [InstructionalStrategy](#InstructionalStrategy)
+* [AssessmentPlan](#AssessmentPlan)
 
 
 <a name="User"></a>
