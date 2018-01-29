@@ -20,14 +20,15 @@ let entity = <Entity>.unserialize(serialized, parent);
 If you are not working with a parent entity, pass `null` as the second argument.
 
 ## Interfaces
-<a name="User"></a>
-<a name="LearningObject"></a>
-<a name="LearningGoal"></a>
-<a name="LearningOutcome"></a>
-<a name="StandardOutcome"></a>
-<a name="InstructionalStrategy"></a>
-<a name="AssessmentPlan"></a>
+*[User](#User)
+*[LearningGoal](#LearningGoal)
+*[LearningOutcome](#LearningOutcome)
+*[StandardOutcome](#StandardOutcome)
+*[InstructionalStrategy](#InstructionalStrategy)
+*[AssessmentPlan](#AssessmentPlan)
 
+
+<a name="User"></a>
 #### `User` (`user.ts`)
 A class to represent Bloomin' Onion users.
 
@@ -124,6 +125,7 @@ Removes the user's i-th learning object.
 | i     | <code>number</code> | the index to remove from the objects array |
 
 
+<a name="LearningObject"></a>
 
 ## LearningObject (`learning-object.ts`)
 A class to represent a learning object.
@@ -145,6 +147,8 @@ A class to represent a learning object.
     * [.removeOutcome(i)](#LearningObject+removeOutcome) ⇒ [<code>LearningObject</code>](#LearningObject)
 
 <a name="new_LearningObject_new"></a>
+
+<a name="LearningOutcome"></a>
 
 ### new LearningObject(source)
 Construct a new, blank LearningOutcome.
@@ -260,6 +264,8 @@ Removes the object's i-th learning outcome.
 | Param | Type                | Description                                 |
 | ----- | ------------------- | ------------------------------------------- |
 | i     | <code>number</code> | the index to remove from the outcomes array |
+
+<a name="LearningGoal"></a>
 
 ## LearningGoal (`learning-goal.ts`)
 A class to represent a learning object's learning goal.
@@ -476,6 +482,8 @@ Removes the outcome's i-th instructional strategy.
 | ----- | ------------------- | --------------------------------------------- |
 | i     | <code>number</code> | the index to remove from the strategies array |
 
+<a name="StandardOutcome"></a>
+
 ## StandardOutcome (`standard-outcome.ts`)
 A class to represent a standard outcome. Immutable.
 
@@ -540,6 +548,7 @@ Create a new StandardOutcome.
 | ------- | ------------------- | ----------------------- |
 | outcome | <code>string</code> | the text of the outcome |
 
+<a name="InstructionalStrategy"></a>
 
 ## InstructionalStrategy (`instructional-strategy.ts`)
 A class to represent a learning outcome's instructional strategy.
@@ -591,6 +600,8 @@ Construct a new, blank InstructionalStrategy.
 | Name | Type                | Description                                          |
 | ---- | ------------------- | ---------------------------------------------------- |
 | text | <code>string</code> | full text description of this instructional strategy |
+
+<a name="AssessmentPlan"></a>
 
 ## AssessmentPlan (`assessment-plan.ts`)
 A class to represent a learning outcome's assessment plan.
