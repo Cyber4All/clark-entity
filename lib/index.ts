@@ -1,6 +1,6 @@
 import { User } from './user';
 import { LearningObject, ObjectSuggestion } from './learning-object';
-import { Outcome, OutcomeSuggestion} from './outcome';
+import { Outcome, OutcomeSuggestion } from './outcome';
 import { StandardOutcome } from './standard-outcome';
 import { LearningOutcome } from './learning-outcome';
 import { LearningGoal } from './learning-goal';
@@ -8,6 +8,7 @@ import { InstructionalStrategy } from './instructional-strategy';
 import { AssessmentPlan } from './assessment-plan';
 import { Repository, LearningObjectFile, LearningObjectUrl } from './neutrino';
 
+//Exports All Interfaces
 export {
     User,
     LearningObject,
