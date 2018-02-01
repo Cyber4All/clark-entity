@@ -1,11 +1,11 @@
 /**
- * Provide an abstract representation for a Bloomin' Onion user.
+ * Provide an abstract representation for a CLARK user.
  */
 
 import { LearningObject } from './learning-object';
 
 /**
- * A class to represent Bloomin' Onion users.
+ * A class to represent CLARK users.
  * @class
  */
 export class User {
@@ -30,9 +30,16 @@ export class User {
     get email(): string { return this._email; }
     set email(email: string) { this._email = email; }
 
+    private _organization: string;
+    /**
+     * @property {string} organization a user's associate organization
+     */
+    get organization(): string { return this._organization; }
+    set organization(organization: string) { this._organization = organization; }
+
     private _pwd: string;
     /**
-     * @property {string} pwdhash a user's password authentication
+     * @property {string} pwd a user's password authentication
      */
     get pwd(): string { return this._pwd; }
     set pwd(pwd: string) { this._pwd = pwd; }
@@ -55,10 +62,11 @@ export class User {
      *
      * @constructor
      */
-    constructor(username: string, name: string, email: string, pwd: string) {
+    constructor(username: string, name: string, email: string, organization: string, pwd: string) {
         this._username = username;
         this._name = name;
         this._email = email;
+        this._organization = organization;
         this._pwd = pwd;
         this._objects = [];
     }
@@ -88,6 +96,7 @@ export class User {
             username: entity.username,
             name: entity.name,
             email: entity.email,
+            organization: entity.organization,
             pwd: entity.pwd,
             objects: entity.objects.map(LearningObject.serialize),
         });
@@ -95,7 +104,7 @@ export class User {
 
     static unserialize = function (msg: string): User {
         let doc = JSON.parse(msg);
-        let entity = new User(doc.username, doc.name, doc.email, doc.pwd);
+        let entity = new User(doc.username, doc.name, doc.email, doc.organization, doc.pwd);
         entity._objects = doc.objects.map((a: string) => {
             return LearningObject.unserialize(a);
         });

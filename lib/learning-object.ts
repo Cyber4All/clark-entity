@@ -20,6 +20,12 @@ export interface ObjectSuggestion {
     date: string;
 }
 
+export enum AcademicLevel {
+    K_12 = 'K-12',
+    Undergraduate = 'Undergradute',
+    Graduate = 'Graduate',
+}
+
 /**
  * A class to represent a learning object.
  * @class
@@ -61,6 +67,16 @@ export class LearningObject {
     set length(length: string) {
         if (lengths.has(length)) this._length = length;
         else throw length + ' is not a valid Learning Object class';
+    }
+
+    private _level: string;
+    /**
+     * @property {string} level
+     *       the object's Academic Level. (ie K-12)
+     */
+    get level(): string { return this._level; }
+    set level(level: string) {
+        this._level = level;
     }
 
     private _goals: LearningGoal[];
@@ -105,13 +121,12 @@ export class LearningObject {
      *
      * @constructor
      */
-    constructor(author: User, name: string) {
-        if (!name) name = '';
-
+    constructor(author: User = new User('', '', '', '', ''), name: string = '') {
         this._author = author;
         this._name = name;
-        this._date = '';
+        this._date = Date.now().toString();
         this._length = Array.from(lengths)[0];
+        this._level = AcademicLevel.Undergraduate;
         this._goals = [];
         this._outcomes = [];
         this.repository = {
@@ -166,6 +181,7 @@ export class LearningObject {
             name: entity.name,
             date: entity.date,
             length: entity.length,
+            level: entity.level,
             goals: entity.goals.map(goal => LearningGoal.serialize(goal)),
             outcomes: entity.outcomes.map(LearningOutcome.serialize),
             repository: entity.repository,
@@ -174,10 +190,10 @@ export class LearningObject {
 
     static unserialize = function (msg: string): LearningObject {
         let doc = JSON.parse(msg);
-        let entity = new LearningObject(User.unserialize(doc.author), '');
-        entity._name = doc.name;
+        let entity = new LearningObject(User.unserialize(doc.author), doc.name);
         entity._date = doc.date;
         entity._length = doc.length;
+        entity._level = doc.level;
         entity._goals = doc.goals.map((goal: string) => LearningGoal.unserialize(goal));
         entity._outcomes = doc.outcomes.map((a: string) => {
             return LearningOutcome.unserialize(a, entity);
