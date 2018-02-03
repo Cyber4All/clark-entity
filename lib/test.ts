@@ -10,7 +10,7 @@ import { levels } from '@cyber4all/clark-taxonomy';
 
 function basicTest() {
     console.log('----- Testing User Entity -----');
-    let newUser = new User('test1', 'Test User', 'test@test.com', 'test123');
+    let newUser = new User('test1', 'Test User', 'test@test.com', 'CLARK', 'test123');
     console.log();
     console.log('New User Entity: ', newUser);
     console.log();
