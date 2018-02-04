@@ -110,6 +110,30 @@ export class LearningObject {
     get repository(): Repository { return this._repository; }
     set repository(repository: Repository) { this._repository = repository; }
 
+    private _published: boolean;
+    /**
+     * @property {boolean} published
+     *       Whether or not the Learning Object is published
+     */
+    get published(): boolean { return this._published; }
+    /**
+     * Sets LearningObject's published flag to true
+     * 
+     * @memberof LearningObject
+     */
+    publish(): void {
+        this._published = true;
+    }
+    /**
+         * Sets LearningObject's published flag to false
+         * 
+         * @memberof LearningObject
+         */
+    unpublish(): void {
+        this._published = false;
+    }
+
+
     /**
      * Construct a new, blank LearningOutcome.
      * @param {User} source the author the new object belongs to
@@ -134,6 +158,7 @@ export class LearningObject {
             urls: [],
             notes: '',
         };
+        this._published = false;
     }
 
     /**
@@ -185,6 +210,7 @@ export class LearningObject {
             goals: entity.goals.map(goal => LearningGoal.serialize(goal)),
             outcomes: entity.outcomes.map(LearningOutcome.serialize),
             repository: entity.repository,
+            published: entity.published
         });
     };
 
@@ -199,6 +225,7 @@ export class LearningObject {
             return LearningOutcome.unserialize(a, entity);
         });
         entity._repository = doc.repository;
+        entity._published = doc.published;
         return entity;
     };
 }
