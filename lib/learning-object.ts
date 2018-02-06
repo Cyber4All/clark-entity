@@ -6,6 +6,7 @@ import { User } from './user';
 import { LearningGoal } from './learning-goal';
 import { LearningOutcome } from './learning-outcome';
 import { Repository } from './neutrino';
+import { Metrics } from './metrics';
 import { lengths } from '@cyber4all/clark-taxonomy';
 
 
@@ -110,6 +111,15 @@ export class LearningObject {
     get repository(): Repository { return this._repository; }
     set repository(repository: Repository) { this._repository = repository; }
 
+    private _metrics: Metrics;
+    /**
+     * @property {Metrics} metrics neutrino file/url storage
+     *
+     * TODO: extend constituents into full-fledged entities
+     */
+    get metrics(): Metrics { return this._metrics; }
+    set metrics(metrics: Metrics) { this._metrics = metrics; }
+
     private _published: boolean;
     /**
      * @property {boolean} published
@@ -158,6 +168,9 @@ export class LearningObject {
             urls: [],
             notes: '',
         };
+        this._metrics = {
+            downloads: 0
+        }
         this._published = false;
     }
 
@@ -210,7 +223,8 @@ export class LearningObject {
             goals: entity.goals.map(goal => LearningGoal.serialize(goal)),
             outcomes: entity.outcomes.map(LearningOutcome.serialize),
             repository: entity.repository,
-            published: entity.published
+            published: entity.published,
+            metrics: entity.metrics
         });
     };
 
@@ -226,6 +240,7 @@ export class LearningObject {
         });
         entity._repository = doc.repository;
         entity._published = doc.published;
+        entity._metrics = doc.metrics;
         return entity;
     };
 }
