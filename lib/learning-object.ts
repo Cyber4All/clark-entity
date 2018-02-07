@@ -23,7 +23,7 @@ export interface ObjectSuggestion {
 
 export enum AcademicLevel {
     K_12 = 'K-12',
-    Undergraduate = 'Undergradute',
+    Undergraduate = 'Undergraduate',
     Graduate = 'Graduate',
 }
 
