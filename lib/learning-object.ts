@@ -70,13 +70,13 @@ export class LearningObject {
         else throw length + ' is not a valid Learning Object class';
     }
 
-    private _level: string;
+    private _level: string[];
     /**
-     * @property {string} level
+     * @property {string[]} level
      *       the object's Academic Level. (ie K-12)
      */
-    get level(): string { return this._level; }
-    set level(level: string) {
+    get level(): string[] { return this._level; }
+    set level(level: string[]) {
         this._level = level;
     }
 
@@ -160,7 +160,7 @@ export class LearningObject {
         this._name = name;
         this._date = Date.now().toString();
         this._length = Array.from(lengths)[0];
-        this._level = AcademicLevel.Undergraduate;
+        this._level = [AcademicLevel.Undergraduate];
         this._goals = [];
         this._outcomes = [];
         this.repository = {
