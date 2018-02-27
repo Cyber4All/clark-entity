@@ -1,27 +1,22 @@
 import { User } from './user';
-import { LearningObject, AcademicLevel, ObjectSuggestion } from './learning-object';
+import { LearningObject, AcademicLevel } from './learning-object';
 import { Outcome, OutcomeSuggestion } from './outcome';
 import { StandardOutcome } from './standard-outcome';
 import { LearningOutcome } from './learning-outcome';
 import { LearningGoal } from './learning-goal';
 import { InstructionalStrategy } from './instructional-strategy';
 import { AssessmentPlan } from './assessment-plan';
-import { Repository, LearningObjectFile, LearningObjectUrl } from './neutrino';
 
 //Exports All Interfaces
 export {
-    User,
-    LearningObject,
-    AcademicLevel,
-    ObjectSuggestion,
-    Outcome,
-    OutcomeSuggestion,
-    LearningOutcome,
-    StandardOutcome,
-    LearningGoal,
-    InstructionalStrategy,
-    AssessmentPlan,
-    Repository,
-    LearningObjectFile,
-    LearningObjectUrl,
+  User,
+  LearningObject,
+  AcademicLevel,
+  Outcome,
+  OutcomeSuggestion,
+  LearningOutcome,
+  StandardOutcome,
+  LearningGoal,
+  InstructionalStrategy,
+  AssessmentPlan
 };
