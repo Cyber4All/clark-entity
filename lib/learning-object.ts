@@ -104,7 +104,7 @@ export class LearningObject {
   }
 
   /**
-   * Sets Array of Academic Levels
+   * Sets Array of Academic Levelspus
    *
    * @memberof LearningObject
    */
