@@ -102,12 +102,21 @@ export class LearningObject {
   get levels(): AcademicLevel[] {
     return this._levels;
   }
+
+  /**
+   * Sets Array of Academic Levels
+   *
+   * @memberof LearningObject
+   */
+  set levels(levels: AcademicLevel[]) {
+    this._levels = levels;
+  }
   /**
    * Adds new AcademicLevel to Array of levels if level is not present in the array
    *
    * @memberof LearningObject
    */
-  set addLevel(level: AcademicLevel) {
+  addLevel(level: AcademicLevel) {
     if (!this._levels.includes(level)) this._levels.push(level);
   }
   /**
@@ -212,14 +221,8 @@ export class LearningObject {
     this._levels = [AcademicLevel.Undergraduate];
     this._goals = [];
     this._outcomes = [];
-    this._materials = {
-      files: [],
-      urls: [],
-      notes: ''
-    };
-    this._metrics = {
-      saves: 0
-    };
+    this._materials = { files: [], urls: [], notes: '' };
+    this._metrics = { saves: 0 };
     this._published = false;
   }
 
