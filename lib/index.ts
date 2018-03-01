@@ -6,6 +6,7 @@ import { LearningOutcome } from './learning-outcome';
 import { LearningGoal } from './learning-goal';
 import { InstructionalStrategy } from './instructional-strategy';
 import { AssessmentPlan } from './assessment-plan';
+import { Collection } from './collection';
 
 //Exports All Interfaces
 export {
@@ -18,5 +19,6 @@ export {
   StandardOutcome,
   LearningGoal,
   InstructionalStrategy,
-  AssessmentPlan
+  AssessmentPlan,
+  Collection,
 };
