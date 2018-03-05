@@ -20,21 +20,21 @@ export class InstructionalStrategy {
     return this._sourceBloom;
   }
 
-  private _instruction: string;
+  private _plan: string;
   /**
-   * @property {string} instruction
+   * @property {string} plan
    *       the class of this instructional strategy (eg. lecture)
    *       values are resetricted according to source's bloom taxon
    */
-  get instruction(): string {
-    return this._instruction;
+  get plan(): string {
+    return this._plan;
   }
-  set instruction(instruction: string) {
-    if (instructions[this._sourceBloom].has(instruction)) {
-      this._instruction = instruction;
+  set plan(plan: string) {
+    if (instructions[this._sourceBloom].has(plan)) {
+      this._plan = plan;
     } else {
-      throw `${instruction} is not a valid instructional strategy for the ${
-        this._sourceBloom
+      throw `${plan} is not a valid instructional strategy for the ${
+      this._sourceBloom
       } taxon`;
     }
   }
@@ -60,7 +60,7 @@ export class InstructionalStrategy {
    */
   constructor(source: LearningOutcome) {
     this._sourceBloom = source.bloom;
-    this._instruction = Array.from(instructions[source.bloom])[0];
+    this._plan = Array.from(instructions[source.bloom])[0];
     this._text = '';
   }
 }
