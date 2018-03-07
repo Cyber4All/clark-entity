@@ -93,6 +93,10 @@ function basicTest() {
     newLearingObject
   );
   console.log();
+  let object = JSON.parse(JSON.stringify(newLearingObject));
+  object.blah = 'FOO BLAH';
+  console.log('Learning Object instantiation', LearningObject.instantiate(object));
+  console.log();
   console.log(
     "----- Removing Learning Object Entity's Property Modifications -----"
   );

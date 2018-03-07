@@ -11,6 +11,9 @@ import { levels, instructions } from '@cyber4all/clark-taxonomy';
  * @class
  */
 export class InstructionalStrategy {
+  // Index Signature to allow extra properties;
+  [key: string]: any;
+
   private _sourceBloom: string;
   /**
    * @property {string} sourceBloom (immutable)
@@ -63,4 +66,28 @@ export class InstructionalStrategy {
     this._plan = Array.from(instructions[source.bloom])[0];
     this._text = '';
   }
+
+  public static instantiate(source: LearningOutcome, object: InstructionalStrategyProperties): InstructionalStrategy {
+    let strategy = new InstructionalStrategy(source);
+
+    strategy._plan = object._plan;
+    strategy._text = object._text;
+
+    // Remove known properties
+    delete object._plan;
+    delete object._text;
+
+    // Copy over injected props
+    Object.keys(object).forEach((key: string) => {
+      strategy[key] = object[key];
+    });
+
+    return strategy;
+  }
+}
+
+export type InstructionalStrategyProperties = {
+  _plan: string;
+  _text: string;
+  [key: string]: any;
 }

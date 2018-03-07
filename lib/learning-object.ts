@@ -2,21 +2,21 @@
  * Provide abstract representations for learning objects.
  */
 
-import { User } from './user';
-import { LearningGoal } from './learning-goal';
-import { LearningOutcome } from './learning-outcome';
+import { User, UserProperties } from './user';
+import { LearningGoal, LearningGoalProperties } from './learning-goal';
+import { LearningOutcome, LearningOutcomeProperties } from './learning-outcome';
 import { lengths } from '@cyber4all/clark-taxonomy';
 
 /**
  * Provide abstract representations for Materials.
  */
-export interface Material {
+export type Material = {
   files: File[];
   urls: Url[];
   notes: string;
 }
 
-export interface File {
+export type File = {
   id: string;
   name: string;
   fileType: string;
@@ -24,12 +24,12 @@ export interface File {
   date: string;
 }
 
-export interface Url {
+export type Url = {
   title: string;
   url: string;
 }
 
-export interface Metric {
+export type Metric = {
   saves: number;
 }
 
@@ -44,6 +44,9 @@ export enum AcademicLevel {
  * @class
  */
 export class LearningObject {
+  // Index Signature to allow extra properties;
+  [key: string]: any;
+
   private _author: User;
   /**
    * @property {User} author (immutable)
@@ -264,4 +267,56 @@ export class LearningObject {
   removeOutcome(i: number): LearningOutcome {
     return this._outcomes.splice(i, 1)[0];
   }
+
+  public static instantiate(object: LearningObjectProperties): LearningObject {
+    let author = User.instantiate(object._author);
+    let learningObject = new LearningObject(
+      author,
+      object._name
+    );
+
+    learningObject._date = object._date;
+    learningObject._length = object._length;
+    learningObject._levels = object._levels;
+    learningObject._goals = object._goals.map((goal) => LearningGoal.instantiate(goal));
+    learningObject._outcomes = object._outcomes.map((outcome) => LearningOutcome.instantiate(learningObject, outcome));
+    learningObject._materials = object._materials;
+    learningObject._metrics = object._metrics;
+    learningObject._published = object._published;
+
+
+    // Remove known props;
+    delete object._author;
+    delete object._name;
+    delete object._date;
+    delete object._length;
+    delete object._levels;
+    delete object._goals;
+    delete object._outcomes;
+    delete object._materials;
+    delete object._metrics;
+    delete object._published;
+
+
+    // Copy over injected props
+    Object.keys(object).forEach((key: string) => {
+      learningObject[key] = object[key];
+    });
+
+    return learningObject;
+  }
+}
+
+export type LearningObjectProperties = {
+  _author: UserProperties;
+  _name: string;
+  _date: string;
+  _length: string;
+  _levels: AcademicLevel[];
+  _goals: LearningGoalProperties[];
+  _outcomes: LearningOutcomeProperties[];
+  _materials: Material;
+  _metrics: Metric;
+  _published: boolean;
+  [key: string]: any;
 }

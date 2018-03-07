@@ -5,8 +5,8 @@
 import { Outcome } from './outcome';
 import { User } from './user';
 import { LearningObject } from './learning-object';
-import { AssessmentPlan } from './assessment-plan';
-import { InstructionalStrategy } from './instructional-strategy';
+import { AssessmentPlan, AssessmentPlanProperties } from './assessment-plan';
+import { InstructionalStrategy, InstructionalStrategyProperties } from './instructional-strategy';
 import { levels, verbs } from '@cyber4all/clark-taxonomy';
 
 export interface LearningOutcomeSource {
@@ -20,6 +20,9 @@ export interface LearningOutcomeSource {
  * @class
  */
 export class LearningOutcome implements Outcome {
+  // Index Signature to allow extra properties;
+  [key: string]: any;
+
   private _source: LearningOutcomeSource;
   /**
    * @property {LearningOutcomeSource} source (immutable)
@@ -248,4 +251,43 @@ export class LearningOutcome implements Outcome {
   get outcome(): string {
     return `${this._verb} ${this._text}`;
   }
+
+  public static instantiate(source: LearningObject, object: LearningOutcomeProperties): LearningOutcome {
+    let outcome = new LearningOutcome(source);
+
+    outcome._tag = object._tag;
+    outcome._bloom = object._bloom;
+    outcome._verb = object._verb;
+    outcome._text = object._text;
+    outcome._mappings = object._mappings;
+    outcome._assessments = object._assessments.map((assessment) => AssessmentPlan.instantiate(outcome, assessment));
+    outcome._strategies = object._strategies.map((strategy) => InstructionalStrategy.instantiate(outcome, strategy));
+
+    // Remove known props;
+    delete object._tag;
+    delete object._bloom;
+    delete object._verb;
+    delete object._text;
+    delete object._mappings;
+    delete object._assessments;
+    delete object._strategies;
+
+    // Copy over injected props
+    Object.keys(object).forEach((key: string) => {
+      outcome[key] = object[key];
+    });
+
+    return outcome;
+  }
+}
+
+export type LearningOutcomeProperties = {
+  _tag: number;
+  _bloom: string;
+  _verb: string;
+  _text: string;
+  _mappings: Outcome[];
+  _assessments: AssessmentPlanProperties[];
+  _strategies: InstructionalStrategyProperties[];
+  [key: string]: any;
 }

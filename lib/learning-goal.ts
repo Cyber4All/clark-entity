@@ -9,6 +9,9 @@ import { LearningObject } from './learning-object';
  * @class
  */
 export class LearningGoal {
+  // Index Signature to allow extra properties;
+  [key: string]: any;
+
   private _text: string;
   /**
    * @property {string} text text content of this learning goal
@@ -29,4 +32,23 @@ export class LearningGoal {
   constructor(text: string) {
     this._text = text;
   }
+
+  public static instantiate(object: LearningGoalProperties): LearningGoal {
+    let goal = new LearningGoal(object._text);
+
+    //Remove known properties
+    delete object._text;
+
+    // Copy over injected props
+    Object.keys(object).forEach((key: string) => {
+      goal[key] = object[key];
+    });
+
+    return goal;
+  }
+}
+
+export type LearningGoalProperties = {
+  _text: string;
+  [key: string]: any;
 }

@@ -11,6 +11,9 @@ import { levels, assessments } from '@cyber4all/clark-taxonomy';
  * @class
  */
 export class AssessmentPlan {
+  // Index Signature to allow extra properties;
+  [key: string]: any;
+
   private _sourceBloom: string;
   /**
    * @property {string} sourceBloom (immutable)
@@ -34,7 +37,7 @@ export class AssessmentPlan {
       this._plan = plan;
     } else {
       throw `${plan} is not a valid assessment plan for the ${
-        this._sourceBloom
+      this._sourceBloom
       } taxon`;
     }
   }
@@ -63,4 +66,29 @@ export class AssessmentPlan {
     this._plan = Array.from(assessments[source.bloom])[0];
     this._text = '';
   }
+
+  public static instantiate(source: LearningOutcome, object: AssessmentPlanProperties): AssessmentPlan {
+    let assessment = new AssessmentPlan(source);
+
+    assessment._plan = object._plan;
+    assessment._text = object._text;
+
+    // Remove known properties
+    delete object._plan;
+    delete object._text;
+
+
+    // Copy over injected props
+    Object.keys(object).forEach((key: string) => {
+      assessment[key] = object[key];
+    });
+
+    return assessment;
+  }
+}
+
+export type AssessmentPlanProperties = {
+  _plan: string;
+  _text: string;
+  [key: string]: any;
 }

@@ -9,6 +9,9 @@ import { LearningObject } from './learning-object';
  * @class
  */
 export class User {
+  // Index Signature to allow extra properties;
+  [key: string]: any;
+
   private _username: string;
   /**
    * @property {string} id a user's unique log-in username
@@ -118,4 +121,36 @@ export class User {
   removeObject(i: number): LearningObject {
     return this._objects.splice(i, 1)[0];
   }
+
+  public static instantiate(object: UserProperties): User {
+    let user = new User(
+      object._username,
+      object._name,
+      object._email,
+      object._organization,
+      object._password
+    );
+    // Remove known props;
+    delete object._username;
+    delete object._name;
+    delete object._email;
+    delete object._organization;
+    delete object._password;
+
+    // Copy over injected props
+    Object.keys(object).forEach((key: string) => {
+      user[key] = object[key];
+    });
+
+    return user;
+  }
+}
+
+export type UserProperties = {
+  _username: string;
+  _name: string;
+  _email: string;
+  _organization: string;
+  _password: string;
+  [key: string]: any;
 }
