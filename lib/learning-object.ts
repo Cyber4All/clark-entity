@@ -36,7 +36,10 @@ export type Metric = {
 export enum AcademicLevel {
   K_12 = 'k-12',
   Undergraduate = 'undergraduate',
-  Graduate = 'graduate'
+  Graduate = 'graduate',
+  PostGraduate = 'post graduate',
+  CC = 'community college',
+  Training = 'training'
 }
 
 /**
