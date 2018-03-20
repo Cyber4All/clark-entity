@@ -125,7 +125,7 @@ export class User {
   public static instantiate(object: UserProperties): User {
     let user = new User(
       object._username ? object._username : object.username,
-      object._name ? object.name : object.name,
+      object._name ? object._name : object.name,
       object._email ? object._email : object.email,
       object._organization ? object._organization : object.organization,
       object._password ? object._password : object.password
