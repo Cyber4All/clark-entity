@@ -37,7 +37,7 @@ export class InstructionalStrategy {
       this._plan = plan;
     } else {
       throw `${plan} is not a valid instructional strategy for the ${
-      this._sourceBloom
+        this._sourceBloom
       } taxon`;
     }
   }
@@ -67,15 +67,22 @@ export class InstructionalStrategy {
     this._text = '';
   }
 
-  public static instantiate(source: LearningOutcome, object: InstructionalStrategyProperties): InstructionalStrategy {
+  public static instantiate(
+    source: LearningOutcome,
+    object: InstructionalStrategyProperties
+  ): InstructionalStrategy {
     let strategy = new InstructionalStrategy(source);
 
-    strategy._plan = object._plan;
-    strategy._text = object._text;
+    strategy._plan = object._plan ? object._plan : object.plan;
+    strategy._text = object._text ? object._text : object.text;
 
     // Remove known properties
     delete object._plan;
     delete object._text;
+
+    // Remove probable properties
+    delete object.plan;
+    delete object.text;
 
     // Copy over injected props
     Object.keys(object).forEach((key: string) => {
@@ -90,4 +97,4 @@ export type InstructionalStrategyProperties = {
   _plan: string;
   _text: string;
   [key: string]: any;
-}
+};

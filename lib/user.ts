@@ -124,11 +124,11 @@ export class User {
 
   public static instantiate(object: UserProperties): User {
     let user = new User(
-      object._username,
-      object._name,
-      object._email,
-      object._organization,
-      object._password
+      object._username ? object._username : object.username,
+      object._name ? object.name : object.name,
+      object._email ? object._email : object.email,
+      object._organization ? object._organization : object.organization,
+      object._password ? object._password : object.password
     );
     // Remove known props;
     delete object._username;
@@ -136,6 +136,13 @@ export class User {
     delete object._email;
     delete object._organization;
     delete object._password;
+
+    // Remove probable properties
+    delete object.usernmae;
+    delete object.name;
+    delete object.email;
+    delete object.organization;
+    delete object.password;
 
     // Copy over injected props
     Object.keys(object).forEach((key: string) => {
@@ -153,4 +160,4 @@ export type UserProperties = {
   _organization: string;
   _password: string;
   [key: string]: any;
-}
+};

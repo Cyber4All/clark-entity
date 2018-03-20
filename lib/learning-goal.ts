@@ -34,10 +34,13 @@ export class LearningGoal {
   }
 
   public static instantiate(object: LearningGoalProperties): LearningGoal {
-    let goal = new LearningGoal(object._text);
+    let goal = new LearningGoal(object._text ? object._text : object.text);
 
     //Remove known properties
     delete object._text;
+
+    //Remove probable properties
+    delete object.text;
 
     // Copy over injected props
     Object.keys(object).forEach((key: string) => {
@@ -51,4 +54,4 @@ export class LearningGoal {
 export type LearningGoalProperties = {
   _text: string;
   [key: string]: any;
-}
+};

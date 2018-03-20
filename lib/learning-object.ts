@@ -14,7 +14,7 @@ export type Material = {
   files: File[];
   urls: Url[];
   notes: string;
-}
+};
 
 export type File = {
   id: string;
@@ -22,16 +22,16 @@ export type File = {
   fileType: string;
   url: string;
   date: string;
-}
+};
 
 export type Url = {
   title: string;
   url: string;
-}
+};
 
 export type Metric = {
   saves: number;
-}
+};
 
 export enum AcademicLevel {
   K_12 = 'k-12',
@@ -270,20 +270,32 @@ export class LearningObject {
 
   public static instantiate(object: LearningObjectProperties): LearningObject {
     let author = User.instantiate(object._author);
-    let learningObject = new LearningObject(
-      author,
-      object._name
-    );
+    let learningObject = new LearningObject(author, object._name);
 
-    learningObject._date = object._date;
-    learningObject._length = object._length;
-    learningObject._levels = object._levels;
-    learningObject._goals = object._goals.map((goal) => LearningGoal.instantiate(goal));
-    learningObject._outcomes = object._outcomes.map((outcome) => LearningOutcome.instantiate(learningObject, outcome));
-    learningObject._materials = object._materials;
-    learningObject._metrics = object._metrics;
-    learningObject._published = object._published;
-
+    learningObject._date = object._date ? object._date : object.date;
+    learningObject._length = object._length ? object._length : object.length;
+    learningObject._levels = object._levels ? object._levels : object.levels;
+    learningObject._goals = object._goals
+      ? object._goals.map(goal => LearningGoal.instantiate(goal))
+      : object.goals.map((goal: LearningGoalProperties) =>
+          LearningGoal.instantiate(goal)
+        );
+    learningObject._outcomes = object._outcomes
+      ? object._outcomes.map(outcome =>
+          LearningOutcome.instantiate(learningObject, outcome)
+        )
+      : object.outcomes.map((outcome: LearningOutcomeProperties) =>
+          LearningOutcome.instantiate(learningObject, outcome)
+        );
+    learningObject._materials = object._materials
+      ? object._materials
+      : object.materials;
+    learningObject._metrics = object._metrics
+      ? object._metrics
+      : object.metrics;
+    learningObject._published = object._published
+      ? object._published
+      : object.published;
 
     // Remove known props;
     delete object._author;
@@ -297,6 +309,17 @@ export class LearningObject {
     delete object._metrics;
     delete object._published;
 
+    // Remove probable props;
+    delete object.author;
+    delete object.name;
+    delete object.date;
+    delete object.length;
+    delete object.levels;
+    delete object.goals;
+    delete object.outcomes;
+    delete object.materials;
+    delete object.metrics;
+    delete object.published;
 
     // Copy over injected props
     Object.keys(object).forEach((key: string) => {
@@ -319,4 +342,4 @@ export type LearningObjectProperties = {
   _metrics: Metric;
   _published: boolean;
   [key: string]: any;
-}
+};

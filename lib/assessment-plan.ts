@@ -37,7 +37,7 @@ export class AssessmentPlan {
       this._plan = plan;
     } else {
       throw `${plan} is not a valid assessment plan for the ${
-      this._sourceBloom
+        this._sourceBloom
       } taxon`;
     }
   }
@@ -67,16 +67,22 @@ export class AssessmentPlan {
     this._text = '';
   }
 
-  public static instantiate(source: LearningOutcome, object: AssessmentPlanProperties): AssessmentPlan {
+  public static instantiate(
+    source: LearningOutcome,
+    object: AssessmentPlanProperties
+  ): AssessmentPlan {
     let assessment = new AssessmentPlan(source);
 
-    assessment._plan = object._plan;
-    assessment._text = object._text;
+    assessment._plan = object._plan ? object._plan : object.plan;
+    assessment._text = object._text ? object._text : object.text;
 
     // Remove known properties
     delete object._plan;
     delete object._text;
 
+    // Remove probable properties
+    delete object.plan;
+    delete object.text;
 
     // Copy over injected props
     Object.keys(object).forEach((key: string) => {
@@ -91,4 +97,4 @@ export type AssessmentPlanProperties = {
   _plan: string;
   _text: string;
   [key: string]: any;
-}
+};
