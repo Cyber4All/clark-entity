@@ -261,7 +261,7 @@ export class LearningOutcome implements Outcome {
   ): LearningOutcome {
     let outcome = new LearningOutcome(source);
 
-    outcome._tag = object._tag ? object._tag : object.tag;
+    outcome._tag = object._tag !== undefined ? object._tag : object.tag;
     outcome._bloom = object._bloom ? object._bloom : object.bloom;
     outcome._verb = object._verb ? object._verb : object.verb;
     outcome._text = object._text ? object._text : object.text;

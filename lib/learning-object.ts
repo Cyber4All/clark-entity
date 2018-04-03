@@ -20,8 +20,12 @@ export type File = {
   id: string;
   name: string;
   fileType: string;
+  extension: string;
   url: string;
   date: string;
+  fullPath?: string;
+  size?: number;
+  description?: string;
 };
 
 export type Url = {
