@@ -339,9 +339,11 @@ export class LearningObject {
       ? obj._children.map((child: LearningObjectProperties) =>
           LearningObject.instantiate(child)
         )
-      : obj.children.map((child: LearningObjectProperties) =>
-          LearningObject.instantiate(child)
-        );
+      : obj.children
+        ? obj.children.map((child: LearningObjectProperties) =>
+            LearningObject.instantiate(child)
+          )
+        : [];
 
     // Remove known props;
     delete obj._author;
