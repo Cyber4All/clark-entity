@@ -49,7 +49,8 @@ export class StandardOutcome implements Outcome {
    * @param {string} outcome the new outcome's text
    */
   constructor(author: string, name: string, date: string, outcome: string) {
-    (this._author = author), (this._name = name);
+    this._author = author;
+    this._name = name;
     this._date = date;
     this._outcome = outcome;
   }

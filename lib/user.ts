@@ -80,6 +80,25 @@ export class User {
     return this._objects;
   }
 
+  private _bio: string;
+  /**
+   * Returns User's Bio
+   *
+   * @type {string}
+   * @memberof User
+   */
+  get bio(): string {
+    return this._bio;
+  }
+  /**
+   * Sets User's Bio
+   *
+   * @memberof User
+   */
+  set bio(bio: string) {
+    this._bio = bio;
+  }
+
   /**
    * Construct a new User, given starting user id and name.
    * @param {string} username the user's unique log-in username
@@ -100,6 +119,7 @@ export class User {
     this._organization = organization;
     this._password = password;
     this._objects = [];
+    this._bio = '';
   }
 
   /**
@@ -123,30 +143,34 @@ export class User {
   }
 
   public static instantiate(object: UserProperties): User {
-    let user = new User(
-      object._username ? object._username : object.username,
-      object._name ? object._name : object.name,
-      object._email ? object._email : object.email,
-      object._organization ? object._organization : object.organization,
-      object._password ? object._password : object.password
+    const obj = { ...object };
+    const user = new User(
+      obj._username ? obj._username : obj.username,
+      obj._name ? obj._name : obj.name,
+      obj._email ? obj._email : obj.email,
+      obj._organization ? obj._organization : obj.organization,
+      obj._password ? obj._password : obj.password
     );
+    user._bio = obj._bio ? obj._bio : obj.bio;
     // Remove known props;
-    delete object._username;
-    delete object._name;
-    delete object._email;
-    delete object._organization;
-    delete object._password;
+    delete obj._username;
+    delete obj._name;
+    delete obj._email;
+    delete obj._organization;
+    delete obj._password;
+    delete obj._bio;
 
     // Remove probable properties
-    delete object.usernmae;
-    delete object.name;
-    delete object.email;
-    delete object.organization;
-    delete object.password;
+    delete obj.username;
+    delete obj.name;
+    delete obj.email;
+    delete obj.organization;
+    delete obj.password;
+    delete obj.bio;
 
     // Copy over injected props
-    Object.keys(object).forEach((key: string) => {
-      user[key] = object[key];
+    Object.keys(obj).forEach((key: string) => {
+      user[key] = obj[key];
     });
 
     return user;
@@ -159,5 +183,6 @@ export type UserProperties = {
   _email: string;
   _organization: string;
   _password: string;
+  _bio: string;
   [key: string]: any;
 };

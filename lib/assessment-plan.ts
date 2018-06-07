@@ -63,7 +63,7 @@ export class AssessmentPlan {
    */
   constructor(source: LearningOutcome) {
     this._sourceBloom = source.bloom;
-    this._plan = Array.from(assessments[source.bloom])[0];
+    this._plan = <string>Array.from(assessments[source.bloom])[0];
     this._text = '';
   }
 
@@ -71,22 +71,23 @@ export class AssessmentPlan {
     source: LearningOutcome,
     object: AssessmentPlanProperties
   ): AssessmentPlan {
-    let assessment = new AssessmentPlan(source);
+    const obj = { ...object };
+    const assessment = new AssessmentPlan(source);
 
-    assessment._plan = object._plan ? object._plan : object.plan;
-    assessment._text = object._text ? object._text : object.text;
+    assessment._plan = obj._plan ? obj._plan : obj.plan;
+    assessment._text = obj._text ? obj._text : obj.text;
 
     // Remove known properties
-    delete object._plan;
-    delete object._text;
+    delete obj._plan;
+    delete obj._text;
 
     // Remove probable properties
-    delete object.plan;
-    delete object.text;
+    delete obj.plan;
+    delete obj.text;
 
     // Copy over injected props
-    Object.keys(object).forEach((key: string) => {
-      assessment[key] = object[key];
+    Object.keys(obj).forEach((key: string) => {
+      assessment[key] = obj[key];
     });
 
     return assessment;

@@ -14,6 +14,7 @@ export type Material = {
   files: File[];
   urls: Url[];
   notes: string;
+  folderDescriptions: FolderDescription[];
 };
 
 export type File = {
@@ -33,8 +34,14 @@ export type Url = {
   url: string;
 };
 
-export type Metric = {
+export type FolderDescription = {
+  path: string;
+  description: string;
+};
+
+export type Metrics = {
   saves: number;
+  downloads: number;
 };
 
 export enum AcademicLevel {
@@ -94,7 +101,7 @@ export class LearningObject {
   /**
    * @property {string} length
    *       the object's class, determining its length (eg. module)
-   *       values are resetricted according to available lengths
+   *       values are restricted according to available lengths
    */
   get length(): string {
     return this._length;
@@ -114,7 +121,7 @@ export class LearningObject {
   }
 
   /**
-   * Sets Array of Academic Levelspus
+   * Sets Array of Academic Levels
    *
    * @memberof LearningObject
    */
@@ -179,16 +186,16 @@ export class LearningObject {
     this._materials = materials;
   }
 
-  private _metrics: Metric;
+  private _metrics: Metrics;
   /**
    * @property {Metrics} metrics neutrino file/url storage
    *
    * TODO: extend constituents into full-fledged entities
    */
-  get metrics(): Metric {
+  get metrics(): Metrics {
     return this._metrics;
   }
-  set metrics(metrics: Metric) {
+  set metrics(metrics: Metrics) {
     this._metrics = metrics;
   }
 
@@ -217,6 +224,18 @@ export class LearningObject {
     this._published = false;
   }
 
+  private _children: LearningObject[];
+  /**
+   * Returns Array of Children Learning Objects
+   *
+   * @readonly
+   * @type {LearningObject[]}
+   * @memberof LearningObject
+   */
+  get children(): LearningObject[] {
+    return this._children;
+  }
+
   /**
    * Construct a new, blank LearningOutcome.
    * @param {User} source the author the new object belongs to
@@ -227,13 +246,19 @@ export class LearningObject {
     this._author = author;
     this._name = name;
     this._date = Date.now().toString();
-    this._length = Array.from(lengths)[0];
+    this._length = <string>Array.from(lengths)[0];
     this._levels = [AcademicLevel.Undergraduate];
     this._goals = [];
     this._outcomes = [];
-    this._materials = { files: [], urls: [], notes: '' };
-    this._metrics = { saves: 0 };
+    this._materials = {
+      files: [],
+      urls: [],
+      notes: '',
+      folderDescriptions: []
+    };
+    this._metrics = { saves: 0, downloads: 0 };
     this._published = false;
+    this._children = [];
   }
 
   /**
@@ -274,63 +299,79 @@ export class LearningObject {
   removeOutcome(i: number): LearningOutcome {
     return this._outcomes.splice(i, 1)[0];
   }
+  /**
+   * Adds new child
+   *
+   * @param {string} name
+   * @returns {LearningObject}
+   * @memberof LearningObject
+   */
+  addChild(name: string): LearningObject {
+    const child = new LearningObject(this._author, name);
+    this._children.push(child);
+    return child;
+  }
 
   public static instantiate(object: LearningObjectProperties): LearningObject {
-    let author = User.instantiate(object._author);
-    let learningObject = new LearningObject(author, object._name);
+    const obj = { ...object };
+    let author = User.instantiate(obj._author);
+    let learningObject = new LearningObject(author, obj._name);
 
-    learningObject._date = object._date ? object._date : object.date;
-    learningObject._length = object._length ? object._length : object.length;
-    learningObject._levels = object._levels ? object._levels : object.levels;
-    learningObject._goals = object._goals
-      ? object._goals.map(goal => LearningGoal.instantiate(goal))
-      : object.goals.map((goal: LearningGoalProperties) =>
+    learningObject._date = obj._date ? obj._date : obj.date;
+    learningObject._length = obj._length ? obj._length : obj.length;
+    learningObject._levels = obj._levels ? obj._levels : obj.levels;
+    learningObject._goals = obj._goals
+      ? obj._goals.map(goal => LearningGoal.instantiate(goal))
+      : obj.goals.map((goal: LearningGoalProperties) =>
           LearningGoal.instantiate(goal)
         );
-    learningObject._outcomes = object._outcomes
-      ? object._outcomes.map(outcome =>
+    learningObject._outcomes = obj._outcomes
+      ? obj._outcomes.map(outcome =>
           LearningOutcome.instantiate(learningObject, outcome)
         )
-      : object.outcomes.map((outcome: LearningOutcomeProperties) =>
+      : obj.outcomes.map((outcome: LearningOutcomeProperties) =>
           LearningOutcome.instantiate(learningObject, outcome)
         );
-    learningObject._materials = object._materials
-      ? object._materials
-      : object.materials;
-    learningObject._metrics = object._metrics
-      ? object._metrics
-      : object.metrics;
-    learningObject._published = object._published
-      ? object._published
-      : object.published;
+    learningObject._materials = obj._materials ? obj._materials : obj.materials;
+    learningObject._metrics = obj._metrics ? obj._metrics : obj.metrics;
+    learningObject._published = obj._published ? obj._published : obj.published;
+    learningObject._children = obj._children
+      ? obj._children.map((child: LearningObjectProperties) =>
+          LearningObject.instantiate(child)
+        )
+      : obj.children.map((child: LearningObjectProperties) =>
+          LearningObject.instantiate(child)
+        );
 
     // Remove known props;
-    delete object._author;
-    delete object._name;
-    delete object._date;
-    delete object._length;
-    delete object._levels;
-    delete object._goals;
-    delete object._outcomes;
-    delete object._materials;
-    delete object._metrics;
-    delete object._published;
+    delete obj._author;
+    delete obj._name;
+    delete obj._date;
+    delete obj._length;
+    delete obj._levels;
+    delete obj._goals;
+    delete obj._outcomes;
+    delete obj._materials;
+    delete obj._metrics;
+    delete obj._published;
+    delete obj._children;
 
     // Remove probable props;
-    delete object.author;
-    delete object.name;
-    delete object.date;
-    delete object.length;
-    delete object.levels;
-    delete object.goals;
-    delete object.outcomes;
-    delete object.materials;
-    delete object.metrics;
-    delete object.published;
+    delete obj.author;
+    delete obj.name;
+    delete obj.date;
+    delete obj.length;
+    delete obj.levels;
+    delete obj.goals;
+    delete obj.outcomes;
+    delete obj.materials;
+    delete obj.metrics;
+    delete obj.published;
+    delete obj.children;
 
     // Copy over injected props
-    Object.keys(object).forEach((key: string) => {
-      learningObject[key] = object[key];
+    Object.keys(obj).forEach((key: string) => {
+      learningObject[key] = obj[key];
     });
 
     return learningObject;
@@ -346,7 +387,8 @@ export type LearningObjectProperties = {
   _goals: LearningGoalProperties[];
   _outcomes: LearningOutcomeProperties[];
   _materials: Material;
-  _metrics: Metric;
+  _metrics: Metrics;
   _published: boolean;
+  _children: LearningObjectProperties[];
   [key: string]: any;
 };

@@ -27,7 +27,7 @@ export class InstructionalStrategy {
   /**
    * @property {string} plan
    *       the class of this instructional strategy (eg. lecture)
-   *       values are resetricted according to source's bloom taxon
+   *       values are restricted according to source's bloom taxon
    */
   get plan(): string {
     return this._plan;
@@ -71,22 +71,23 @@ export class InstructionalStrategy {
     source: LearningOutcome,
     object: InstructionalStrategyProperties
   ): InstructionalStrategy {
-    let strategy = new InstructionalStrategy(source);
+    const obj = { ...object };
+    const strategy = new InstructionalStrategy(source);
 
-    strategy._plan = object._plan ? object._plan : object.plan;
-    strategy._text = object._text ? object._text : object.text;
+    strategy._plan = obj._plan ? obj._plan : obj.plan;
+    strategy._text = obj._text ? obj._text : obj.text;
 
     // Remove known properties
-    delete object._plan;
-    delete object._text;
+    delete obj._plan;
+    delete obj._text;
 
     // Remove probable properties
-    delete object.plan;
-    delete object.text;
+    delete obj.plan;
+    delete obj.text;
 
     // Copy over injected props
-    Object.keys(object).forEach((key: string) => {
-      strategy[key] = object[key];
+    Object.keys(obj).forEach((key: string) => {
+      strategy[key] = obj[key];
     });
 
     return strategy;

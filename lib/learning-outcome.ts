@@ -259,49 +259,50 @@ export class LearningOutcome implements Outcome {
     source: LearningObject,
     object: LearningOutcomeProperties
   ): LearningOutcome {
-    let outcome = new LearningOutcome(source);
+    const obj = { ...object };
+    const outcome = new LearningOutcome(source);
 
-    outcome._tag = object._tag !== undefined ? object._tag : object.tag;
-    outcome._bloom = object._bloom ? object._bloom : object.bloom;
-    outcome._verb = object._verb ? object._verb : object.verb;
-    outcome._text = object._text ? object._text : object.text;
-    outcome._mappings = object._mappings ? object._mappings : object.mappings;
-    outcome._assessments = object._assessments
-      ? object._assessments.map(assessment =>
+    outcome._tag = obj._tag !== undefined ? obj._tag : obj.tag;
+    outcome._bloom = obj._bloom ? obj._bloom : obj.bloom;
+    outcome._verb = obj._verb ? obj._verb : obj.verb;
+    outcome._text = obj._text ? obj._text : obj.text;
+    outcome._mappings = obj._mappings ? obj._mappings : obj.mappings;
+    outcome._assessments = obj._assessments
+      ? obj._assessments.map(assessment =>
           AssessmentPlan.instantiate(outcome, assessment)
         )
-      : object.assessments.map((assessment: AssessmentPlanProperties) =>
+      : obj.assessments.map((assessment: AssessmentPlanProperties) =>
           AssessmentPlan.instantiate(outcome, assessment)
         );
-    outcome._strategies = object._strategies
-      ? object._strategies.map(strategy =>
+    outcome._strategies = obj._strategies
+      ? obj._strategies.map(strategy =>
           InstructionalStrategy.instantiate(outcome, strategy)
         )
-      : object.strategies.map((strategy: InstructionalStrategyProperties) =>
+      : obj.strategies.map((strategy: InstructionalStrategyProperties) =>
           InstructionalStrategy.instantiate(outcome, strategy)
         );
 
     // Remove known props;
-    delete object._tag;
-    delete object._bloom;
-    delete object._verb;
-    delete object._text;
-    delete object._mappings;
-    delete object._assessments;
-    delete object._strategies;
+    delete obj._tag;
+    delete obj._bloom;
+    delete obj._verb;
+    delete obj._text;
+    delete obj._mappings;
+    delete obj._assessments;
+    delete obj._strategies;
 
     // Remove probable props;
-    delete object.tag;
-    delete object.bloom;
-    delete object.verb;
-    delete object.text;
-    delete object.mappings;
-    delete object.assessments;
-    delete object.strategies;
+    delete obj.tag;
+    delete obj.bloom;
+    delete obj.verb;
+    delete obj.text;
+    delete obj.mappings;
+    delete obj.assessments;
+    delete obj.strategies;
 
     // Copy over injected props
-    Object.keys(object).forEach((key: string) => {
-      outcome[key] = object[key];
+    Object.keys(obj).forEach((key: string) => {
+      outcome[key] = obj[key];
     });
 
     return outcome;
