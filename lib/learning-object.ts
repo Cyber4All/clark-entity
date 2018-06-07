@@ -224,7 +224,8 @@ export class LearningObject {
     this._published = false;
   }
 
-  private _children: LearningObject[];
+  private _children: LearningObject[] | string[];
+
   /**
    * Returns Array of Children Learning Objects
    *
@@ -232,8 +233,16 @@ export class LearningObject {
    * @type {LearningObject[]}
    * @memberof LearningObject
    */
-  get children(): LearningObject[] {
+  get children(): LearningObject[] | string[] {
     return this._children;
+  }
+  /**
+   * Sets children to array of Learning Objects or array of Learning Object IDs
+   *
+   * @memberof LearningObject
+   */
+  set children(children: LearningObject[] | string[]) {
+    this._children = children;
   }
 
   /**
@@ -298,18 +307,6 @@ export class LearningObject {
    */
   removeOutcome(i: number): LearningOutcome {
     return this._outcomes.splice(i, 1)[0];
-  }
-  /**
-   * Adds new child
-   *
-   * @param {string} name
-   * @returns {LearningObject}
-   * @memberof LearningObject
-   */
-  addChild(name: string): LearningObject {
-    const child = new LearningObject(this._author, name);
-    this._children.push(child);
-    return child;
   }
 
   public static instantiate(object: LearningObjectProperties): LearningObject {
