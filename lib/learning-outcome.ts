@@ -263,9 +263,9 @@ export class LearningOutcome implements Outcome {
     const outcome = new LearningOutcome(source);
 
     outcome._tag =
-      obj._tag !== undefined || obj._tag !== null
+      obj._tag !== undefined && obj._tag !== null
         ? obj._tag
-        : obj.tag !== undefined || obj.tag !== null
+        : obj.tag !== undefined && obj.tag !== null
           ? obj.tag
           : outcome.tag;
     outcome._bloom = obj._bloom

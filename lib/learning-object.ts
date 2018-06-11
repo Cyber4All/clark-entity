@@ -352,9 +352,9 @@ export class LearningObject {
         ? obj.metrics
         : learningObject.metrics;
     learningObject._published =
-      obj._published !== undefined || obj._published !== null
+      obj._published !== undefined && obj._published !== null
         ? obj._published
-        : obj.published !== undefined || obj.published !== null
+        : obj.published !== undefined && obj.published !== null
           ? obj.published
           : learningObject.published;
     learningObject._children = obj._children
