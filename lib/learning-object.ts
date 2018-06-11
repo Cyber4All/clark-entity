@@ -357,14 +357,23 @@ export class LearningObject {
         : obj.published !== undefined && obj.published !== null
           ? obj.published
           : learningObject.published;
+
     learningObject._children = obj._children
-      ? obj._children.map((child: LearningObjectProperties) =>
-          LearningObject.instantiate(child)
-        )
-      : obj.children
-        ? obj.children.map((child: LearningObjectProperties) =>
+      ? obj._children
+          .filter(
+            (lo: LearningObjectProperties | string) => typeof lo !== 'string'
+          )
+          .map((child: LearningObjectProperties) =>
             LearningObject.instantiate(child)
           )
+      : obj.children
+        ? obj.children
+            .filter(
+              (lo: LearningObjectProperties | string) => typeof lo !== 'string'
+            )
+            .map((child: LearningObjectProperties) =>
+              LearningObject.instantiate(child)
+            )
         : learningObject.children;
 
     // Remove known props;
