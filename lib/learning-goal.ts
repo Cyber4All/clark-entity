@@ -35,7 +35,9 @@ export class LearningGoal {
 
   public static instantiate(object: LearningGoalProperties): LearningGoal {
     const obj = { ...object };
-    let goal = new LearningGoal(obj._text ? obj._text : obj.text);
+    let goal = new LearningGoal(
+      obj._text ? obj._text : obj.text ? obj.text : ''
+    );
 
     //Remove known properties
     delete obj._text;

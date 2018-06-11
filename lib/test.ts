@@ -93,9 +93,31 @@ function basicTest() {
     newLearingObject
   );
   console.log();
+  console.log("----- Testing Learning Object Entity's Children -----");
+  console.log();
+  const child1 = new LearningObject(newUser, 'Child1');
+  const child1_child1 = new LearningObject(newUser, "Child 1's Child 1");
+  const child1_child2 = new LearningObject(newUser, "Child 1's Child 2");
+  child1.children = [child1_child1, child1_child2];
+  const child2 = new LearningObject(newUser, 'Child2');
+  const child3 = new LearningObject(newUser, 'Child3');
+  const child4 = new LearningObject(newUser, 'Child4');
+  const child5 = new LearningObject(newUser, 'Child5');
+  const children = [child1, child2, child3, child4, child5];
+  newLearingObject.children = children;
+  console.log(newLearingObject);
+  console.log();
+  console.log('----- Testing Learning Object Instantiation -----');
+  console.log();
   let object = JSON.parse(JSON.stringify(newLearingObject));
   object.blah = 'FOO BLAH';
-  console.log('Learning Object instantiation', LearningObject.instantiate(object));
+  console.log();
+  console.log('----- Primitive Object -----');
+  object._goals[0]._text = null;
+  console.log(object);
+  console.log();
+  console.log('----- Instantiate Object -----');
+  console.log(LearningObject.instantiate(object));
   console.log();
   console.log(
     "----- Removing Learning Object Entity's Property Modifications -----"
@@ -105,6 +127,7 @@ function basicTest() {
   newLearingOutcome.removeStrategy(0);
   newLearingObject.removeOutcome(0);
   newLearingObject.removeGoal(0);
+  newLearingObject.children = [];
   console.log('Removed properties', newLearingObject);
   console.log();
   console.log(

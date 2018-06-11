@@ -315,23 +315,48 @@ export class LearningObject {
     let learningObject = new LearningObject(author, obj._name);
 
     learningObject._date = obj._date ? obj._date : obj.date;
-    learningObject._length = obj._length ? obj._length : obj.length;
-    learningObject._levels = obj._levels ? obj._levels : obj.levels;
+    learningObject._length = obj._length
+      ? obj._length
+      : obj.length
+        ? obj.length
+        : learningObject.length;
+    learningObject._levels = obj._levels
+      ? obj._levels
+      : obj.levels
+        ? object.levels
+        : learningObject.levels;
     learningObject._goals = obj._goals
       ? obj._goals.map(goal => LearningGoal.instantiate(goal))
-      : obj.goals.map((goal: LearningGoalProperties) =>
-          LearningGoal.instantiate(goal)
-        );
+      : obj.goals
+        ? obj.goals.map((goal: LearningGoalProperties) =>
+            LearningGoal.instantiate(goal)
+          )
+        : learningObject.goals;
     learningObject._outcomes = obj._outcomes
       ? obj._outcomes.map(outcome =>
           LearningOutcome.instantiate(learningObject, outcome)
         )
-      : obj.outcomes.map((outcome: LearningOutcomeProperties) =>
-          LearningOutcome.instantiate(learningObject, outcome)
-        );
-    learningObject._materials = obj._materials ? obj._materials : obj.materials;
-    learningObject._metrics = obj._metrics ? obj._metrics : obj.metrics;
-    learningObject._published = obj._published ? obj._published : obj.published;
+      : obj.outcomes
+        ? obj.outcomes.map((outcome: LearningOutcomeProperties) =>
+            LearningOutcome.instantiate(learningObject, outcome)
+          )
+        : learningObject.outcomes;
+    learningObject._materials = obj._materials
+      ? obj._materials
+      : obj.materials
+        ? obj.materials
+        : learningObject.materials;
+    learningObject._metrics = obj._metrics
+      ? obj._metrics
+      : obj.metrics
+        ? obj.metrics
+        : learningObject.metrics;
+    learningObject._published =
+      obj._published !== undefined || obj._published !== null
+        ? obj._published
+        : obj.published !== undefined || obj.published !== null
+          ? obj.published
+          : learningObject.published;
     learningObject._children = obj._children
       ? obj._children.map((child: LearningObjectProperties) =>
           LearningObject.instantiate(child)
@@ -340,7 +365,7 @@ export class LearningObject {
         ? obj.children.map((child: LearningObjectProperties) =>
             LearningObject.instantiate(child)
           )
-        : [];
+        : learningObject.children;
 
     // Remove known props;
     delete obj._author;

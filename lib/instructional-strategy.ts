@@ -74,8 +74,16 @@ export class InstructionalStrategy {
     const obj = { ...object };
     const strategy = new InstructionalStrategy(source);
 
-    strategy._plan = obj._plan ? obj._plan : obj.plan;
-    strategy._text = obj._text ? obj._text : obj.text;
+    strategy._plan = obj._plan
+      ? obj._plan
+      : obj.plan
+        ? obj.plan
+        : strategy.plan;
+    strategy._text = obj._text
+      ? obj._text
+      : obj.text
+        ? obj.text
+        : strategy.text;
 
     // Remove known properties
     delete obj._plan;

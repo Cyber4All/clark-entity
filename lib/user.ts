@@ -151,7 +151,7 @@ export class User {
       obj._organization ? obj._organization : obj.organization,
       obj._password ? obj._password : obj.password
     );
-    user._bio = obj._bio ? obj._bio : obj.bio;
+    user._bio = obj._bio ? obj._bio : obj.bio ? obj.bio : user.bio;
     // Remove known props;
     delete obj._username;
     delete obj._name;

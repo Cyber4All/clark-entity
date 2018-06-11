@@ -262,25 +262,42 @@ export class LearningOutcome implements Outcome {
     const obj = { ...object };
     const outcome = new LearningOutcome(source);
 
-    outcome._tag = obj._tag !== undefined ? obj._tag : obj.tag;
-    outcome._bloom = obj._bloom ? obj._bloom : obj.bloom;
-    outcome._verb = obj._verb ? obj._verb : obj.verb;
-    outcome._text = obj._text ? obj._text : obj.text;
-    outcome._mappings = obj._mappings ? obj._mappings : obj.mappings;
+    outcome._tag =
+      obj._tag !== undefined || obj._tag !== null
+        ? obj._tag
+        : obj.tag !== undefined || obj.tag !== null
+          ? obj.tag
+          : outcome.tag;
+    outcome._bloom = obj._bloom
+      ? obj._bloom
+      : obj.bloom
+        ? obj.bloom
+        : outcome.bloom;
+    outcome._verb = obj._verb ? obj._verb : obj.verb ? obj.verb : outcome.verb;
+    outcome._text = obj._text ? obj._text : obj.text ? obj.text : outcome.text;
+    outcome._mappings = obj._mappings
+      ? obj._mappings
+      : obj.mappings
+        ? obj.mappings
+        : outcome.mappings;
     outcome._assessments = obj._assessments
       ? obj._assessments.map(assessment =>
           AssessmentPlan.instantiate(outcome, assessment)
         )
-      : obj.assessments.map((assessment: AssessmentPlanProperties) =>
-          AssessmentPlan.instantiate(outcome, assessment)
-        );
+      : obj.assessments
+        ? obj.assessments.map((assessment: AssessmentPlanProperties) =>
+            AssessmentPlan.instantiate(outcome, assessment)
+          )
+        : outcome.assessments;
     outcome._strategies = obj._strategies
       ? obj._strategies.map(strategy =>
           InstructionalStrategy.instantiate(outcome, strategy)
         )
-      : obj.strategies.map((strategy: InstructionalStrategyProperties) =>
-          InstructionalStrategy.instantiate(outcome, strategy)
-        );
+      : obj.strategies
+        ? obj.strategies.map((strategy: InstructionalStrategyProperties) =>
+            InstructionalStrategy.instantiate(outcome, strategy)
+          )
+        : outcome.strategies;
 
     // Remove known props;
     delete obj._tag;

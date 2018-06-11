@@ -27,7 +27,7 @@ export class AssessmentPlan {
   /**
    * @property {string} instruction
    *       the class of this assessment plan (essay, test, etc.)
-   *       values are resetricted according to source's bloom taxon
+   *       values are restricted according to source's bloom taxon
    */
   get plan(): string {
     return this._plan;
@@ -74,8 +74,16 @@ export class AssessmentPlan {
     const obj = { ...object };
     const assessment = new AssessmentPlan(source);
 
-    assessment._plan = obj._plan ? obj._plan : obj.plan;
-    assessment._text = obj._text ? obj._text : obj.text;
+    assessment._plan = obj._plan
+      ? obj._plan
+      : obj.plan
+        ? obj.plan
+        : assessment.plan;
+    assessment._text = obj._text
+      ? obj._text
+      : obj.text
+        ? obj.text
+        : assessment.text;
 
     // Remove known properties
     delete obj._plan;
