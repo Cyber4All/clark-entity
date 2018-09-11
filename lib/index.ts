@@ -7,6 +7,7 @@ import { LearningGoal } from './learning-goal';
 import { InstructionalStrategy } from './instructional-strategy';
 import { AssessmentPlan } from './assessment-plan';
 import { Collection } from './collection';
+import { Rating } from './rating';
 
 //Exports All Interfaces
 export {
@@ -21,4 +22,5 @@ export {
   InstructionalStrategy,
   AssessmentPlan,
   Collection,
+  Rating
 };

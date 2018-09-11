@@ -7,6 +7,16 @@ import { LearningGoal, LearningGoalProperties } from './learning-goal';
 import { LearningOutcome, LearningOutcomeProperties } from './learning-outcome';
 import { lengths } from '@cyber4all/clark-taxonomy';
 
+export enum Restriction {
+  FULL = 'full',
+  PUBLISH = 'publish',
+  DOWNLOAD = 'download'
+}
+export type LearningObjectLock = {
+  date?: string;
+  restrictions: Restriction[];
+};
+
 /**
  * Provide abstract representations for Materials.
  */
@@ -15,6 +25,12 @@ export type Material = {
   urls: Url[];
   notes: string;
   folderDescriptions: FolderDescription[];
+  pdf: LearningObjectPDF;
+};
+
+export type LearningObjectPDF = {
+  name: string;
+  url: string;
 };
 
 export type File = {
@@ -45,7 +61,9 @@ export type Metrics = {
 };
 
 export enum AcademicLevel {
-  K_12 = 'k-12',
+  Elementary = 'elementary',
+  Middle = 'middle',
+  High = 'high',
   Undergraduate = 'undergraduate',
   Graduate = 'graduate',
   PostGraduate = 'post graduate',
@@ -245,6 +263,30 @@ export class LearningObject {
     this._children = children;
   }
 
+  private _contributors: string[];
+  /**
+   * @property {contributors} string[] array of usernames
+   *
+   */
+  get contributors(): string[] {
+    return this._contributors;
+  }
+  set contributors(contributors: string[]) {
+    this._contributors = contributors;
+  }
+
+  private _lock: LearningObjectLock | undefined;
+  /**
+   * @property {lock}
+   *
+   */
+  get lock(): LearningObjectLock | undefined {
+    return this._lock;
+  }
+  set lock(lock: LearningObjectLock | undefined) {
+    this._lock = lock;
+  }
+
   /**
    * Construct a new, blank LearningOutcome.
    * @param {User} source the author the new object belongs to
@@ -268,6 +310,8 @@ export class LearningObject {
     this._metrics = { saves: 0, downloads: 0 };
     this._published = false;
     this._children = [];
+    this._contributors = [];
+    this._lock = undefined;
   }
 
   /**
@@ -376,6 +420,12 @@ export class LearningObject {
             )
         : learningObject.children;
 
+    learningObject._contributors = obj._contributors
+      ? obj._contributors
+      : obj.contributors;
+
+    learningObject._lock = obj._lock ? obj._lock : obj.lock;
+
     // Remove known props;
     delete obj._author;
     delete obj._name;
@@ -388,6 +438,8 @@ export class LearningObject {
     delete obj._metrics;
     delete obj._published;
     delete obj._children;
+    delete obj._contributors;
+    delete obj._lock;
 
     // Remove probable props;
     delete obj.author;
@@ -401,6 +453,8 @@ export class LearningObject {
     delete obj.metrics;
     delete obj.published;
     delete obj.children;
+    delete obj.contributors;
+    delete obj.lock;
 
     // Copy over injected props
     Object.keys(obj).forEach((key: string) => {
@@ -423,5 +477,7 @@ export type LearningObjectProperties = {
   _metrics: Metrics;
   _published: boolean;
   _children: LearningObjectProperties[];
+  _contributors: string[];
+  _lock: LearningObjectLock;
   [key: string]: any;
 };

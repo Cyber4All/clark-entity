@@ -99,6 +99,17 @@ export class User {
     this._bio = bio;
   }
 
+  private _createdAt: string;
+  /**
+   * @property {string} createdAt timestamp of user entity creation
+   */
+  get createdAt(): string {
+    return this._createdAt;
+  }
+  set createdAt(createdAt: string) {
+    this._createdAt = createdAt;
+  }
+
   /**
    * Construct a new User, given starting user id and name.
    * @param {string} username the user's unique log-in username
@@ -120,6 +131,7 @@ export class User {
     this._password = password;
     this._objects = [];
     this._bio = '';
+    this._createdAt = '';
   }
 
   /**
@@ -152,6 +164,12 @@ export class User {
       obj._password ? obj._password : obj.password
     );
     user._bio = obj._bio ? obj._bio : obj.bio ? obj.bio : user.bio;
+    user._createdAt = obj._createdAt
+      ? obj._createdAt
+      : obj.createdAt
+        ? obj.createdAt
+        : user.createdAt;
+
     // Remove known props;
     delete obj._username;
     delete obj._name;
@@ -159,6 +177,7 @@ export class User {
     delete obj._organization;
     delete obj._password;
     delete obj._bio;
+    delete obj._createdAt;
 
     // Remove probable properties
     delete obj.username;
@@ -167,6 +186,7 @@ export class User {
     delete obj.organization;
     delete obj.password;
     delete obj.bio;
+    delete obj.createdAt;
 
     // Copy over injected props
     Object.keys(obj).forEach((key: string) => {
@@ -184,5 +204,6 @@ export type UserProperties = {
   _organization: string;
   _password: string;
   _bio: string;
+  _createdAt: string;
   [key: string]: any;
 };
