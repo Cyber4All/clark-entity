@@ -305,7 +305,8 @@ export class LearningObject {
       files: [],
       urls: [],
       notes: '',
-      folderDescriptions: []
+      folderDescriptions: [],
+      pdf: { name: '', url: '' }
     };
     this._metrics = { saves: 0, downloads: 0 };
     this._published = false;
