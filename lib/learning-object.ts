@@ -144,7 +144,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   set levels(levels: AcademicLevel[]) {
-    this._levels = levels;
+    this._levels = levels ? levels : [AcademicLevel.Undergraduate];
   }
   /**
    * Adds new AcademicLevel to Array of levels if level is not present in the array
@@ -152,7 +152,9 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addLevel(level: AcademicLevel) {
-    if (!this._levels.includes(level)) this._levels.push(level);
+    if (!this._levels.includes(level)) {
+      this._levels.push(level);
+    }
   }
   /**
    * Removes AcademicLevel from array of AcademicLevels
@@ -260,7 +262,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   set children(children: LearningObject[] | string[]) {
-    this._children = children;
+    this._children = children ? children : [];
   }
 
   private _contributors: User[];
@@ -272,7 +274,7 @@ export class LearningObject {
     return this._contributors;
   }
   set contributors(contributors: User[]) {
-    this._contributors = contributors;
+    this._contributors = contributors ? contributors : [];
   }
 
   private _lock: LearningObjectLock | undefined;
@@ -293,35 +295,6 @@ export class LearningObject {
   }
   set collection(collection: string) {
     this._collection = collection;
-  }
-
-  /**
-   * Construct a new, blank LearningOutcome.
-   * @param {User} source the author the new object belongs to
-   *
-   * @constructor
-   */
-  constructor(author: User = new User('', '', '', '', ''), name: string = '') {
-    this._author = author;
-    this._name = name;
-    this._date = Date.now().toString();
-    this._length = <string>Array.from(lengths)[0];
-    this._levels = [AcademicLevel.Undergraduate];
-    this._goals = [];
-    this._outcomes = [];
-    this._materials = {
-      files: [],
-      urls: [],
-      notes: '',
-      folderDescriptions: [],
-      pdf: { name: '', url: '' }
-    };
-    this._metrics = { saves: 0, downloads: 0 };
-    this._published = false;
-    this._children = [];
-    this._contributors = [];
-    this._lock = undefined;
-    this._collection = '';
   }
 
   /**
@@ -361,6 +334,35 @@ export class LearningObject {
    */
   removeOutcome(i: number): LearningOutcome {
     return this._outcomes.splice(i, 1)[0];
+  }
+
+  /**
+   * Construct a new, blank LearningOutcome.
+   * @param {User} source the author the new object belongs to
+   *
+   * @constructor
+   */
+  constructor(author: User = new User('', '', '', '', ''), name: string = '') {
+    this._author = author;
+    this._name = name;
+    this._date = Date.now().toString();
+    this._length = <string>Array.from(lengths)[0];
+    this._levels = [AcademicLevel.Undergraduate];
+    this._goals = [];
+    this._outcomes = [];
+    this._materials = {
+      files: [],
+      urls: [],
+      notes: '',
+      folderDescriptions: [],
+      pdf: { name: '', url: '' }
+    };
+    this._metrics = { saves: 0, downloads: 0 };
+    this._published = false;
+    this._children = [];
+    this._contributors = [];
+    this._lock = undefined;
+    this._collection = '';
   }
 
   public static instantiate(object: LearningObjectProperties): LearningObject {
