@@ -287,6 +287,14 @@ export class LearningObject {
     this._lock = lock;
   }
 
+  private _collection: string;
+  get collection(): string {
+    return this._collection;
+  }
+  set collection(collection: string) {
+    this._collection = collection;
+  }
+
   /**
    * Construct a new, blank LearningOutcome.
    * @param {User} source the author the new object belongs to
@@ -313,6 +321,7 @@ export class LearningObject {
     this._children = [];
     this._contributors = [];
     this._lock = undefined;
+    this._collection = '';
   }
 
   /**
