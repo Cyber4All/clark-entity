@@ -263,15 +263,15 @@ export class LearningObject {
     this._children = children;
   }
 
-  private _contributors: string[];
+  private _contributors: User[];
   /**
-   * @property {contributors} string[] array of usernames
+   * @property {contributors} User[] array of usernames
    *
    */
-  get contributors(): string[] {
+  get contributors(): User[] {
     return this._contributors;
   }
-  set contributors(contributors: string[]) {
+  set contributors(contributors: User[]) {
     this._contributors = contributors;
   }
 
@@ -422,8 +422,8 @@ export class LearningObject {
         : learningObject.children;
 
     learningObject._contributors = obj._contributors
-      ? obj._contributors
-      : obj.contributors;
+      ? obj._contributors.map((user: UserProperties) => User.instantiate(user))
+      : obj.contributors.map((user: UserProperties) => User.instantiate(user));
 
     learningObject._lock = obj._lock ? obj._lock : obj.lock;
 
@@ -478,7 +478,7 @@ export type LearningObjectProperties = {
   _metrics: Metrics;
   _published: boolean;
   _children: LearningObjectProperties[];
-  _contributors: string[];
+  _contributors: UserProperties[];
   _lock: LearningObjectLock;
   [key: string]: any;
 };
