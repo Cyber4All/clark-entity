@@ -146,7 +146,6 @@ export class LearningOutcome implements Outcome {
    * @constructor
    */
   constructor(source: LearningObject) {
-    console.log('big test');
     this._source = {
       author: source.author,
       name: source.name,
