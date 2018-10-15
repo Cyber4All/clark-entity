@@ -54,7 +54,7 @@ export class LearningOutcome implements Outcome {
     return this._bloom;
   }
   set bloom(bloom: string) {
-    if (levels.has(bloom)) {
+    if (bloom === '' || levels.has(bloom)) {
       this._bloom = bloom;
     } else {
       throw `${bloom} is not a valid Bloom taxon`;
@@ -71,7 +71,7 @@ export class LearningOutcome implements Outcome {
     return this._verb;
   }
   set verb(verb: string) {
-    if (verbs[this.bloom].has(verb)) {
+    if (verb === '' || verbs[this.bloom].has(verb)) {
       this._verb = verb;
     } else {
       throw `${verb} is not a valid verb for the ${this.bloom} taxon`;
@@ -146,6 +146,7 @@ export class LearningOutcome implements Outcome {
    * @constructor
    */
   constructor(source: LearningObject) {
+    console.log('big test');
     this._source = {
       author: source.author,
       name: source.name,
@@ -169,8 +170,8 @@ export class LearningOutcome implements Outcome {
       }
     }
 
-    this._bloom = Array.from(levels)[0];
-    this._verb = Array.from(verbs[this._bloom])[0];
+    this._bloom = '';
+    this._verb = '';
     this._text = '';
     this._mappings = [];
     this._assessments = [];
