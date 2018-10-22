@@ -182,15 +182,21 @@ export class LearningObject {
 
   private _outcomes: LearningOutcome[];
   /**
-   * @property {LearningOutcome[]} outcomes (immutable)
+   * @property {LearningOutcome[]} outcomes
    *       outcomes this object should enable students to achieve
    *
-   * NOTE: individual elements are freely accessible, but the array
-   *       reference itself is immutable, and elements can only be
-   *       added and removed by the below functions
    */
   get outcomes(): LearningOutcome[] {
     return this._outcomes;
+  }
+
+  /**
+   * Setter for Learning Outcomes
+   *
+   * @memberof LearningObject
+   */
+  set outcomes(outcomes: LearningOutcome[]) {
+    this._outcomes = outcomes;
   }
 
   private _materials: Material;
