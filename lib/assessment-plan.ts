@@ -4,7 +4,7 @@
  */
 
 import { LearningOutcome } from './learning-outcome';
-import { levels, assessments } from '@cyber4all/clark-taxonomy';
+import { assessments } from '@cyber4all/clark-taxonomy';
 
 /**
  * A class to represent a learning outcome's assessment plan.

@@ -2,7 +2,6 @@
  * Provide an abstract representation for a learning object's
  * learning goal.
  */
-import { LearningObject } from './learning-object';
 
 /**
  * A class to represent a learning object's learning goal.
