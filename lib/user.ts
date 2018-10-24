@@ -11,63 +11,31 @@ import { LearningObject } from './learning-object';
 export class User {
   // Index Signature to allow extra properties;
   [key: string]: any;
-
-  private _username: string;
   /**
    * @property {string} id a user's unique log-in username
    */
-  get username(): string {
-    return this._username;
-  }
-  set username(username: string) {
-    this._username = username;
-  }
+  username: string;
 
-  private _name: string;
   /**
    * @property {string} name a user's real-life name
    */
-  get name(): string {
-    return this._name;
-  }
-  set name(name: string) {
-    this._name = name;
-  }
+  name: string;
 
-  private _email: string;
   /**
    * @property {string} email a user's email on file
    */
-  get email(): string {
-    return this._email;
-  }
-  set email(email: string) {
-    this._email = email;
-  }
+  email: string;
 
-  private _organization: string;
   /**
    * @property {string} organization a user's associate organization
    */
-  get organization(): string {
-    return this._organization;
-  }
-  set organization(organization: string) {
-    this._organization = organization;
-  }
+  organization: string;
 
-  private _password: string;
   /**
    * @property {string} password a user's password authentication
    */
-  get password(): string {
-    return this._password;
-  }
-  set password(password: string) {
-    this._password = password;
-  }
+  password: string;
 
-  private _objects: LearningObject[];
   /**
    * @property {LearningObject[]} objects (immutable)
    *       an array of a user's learning objects
@@ -76,39 +44,20 @@ export class User {
    *       reference itself is immutable, and elements can only be
    *       added and removed by the below functions
    */
-  get objects(): LearningObject[] {
-    return this._objects;
-  }
+  objects: LearningObject[];
 
-  private _bio: string;
   /**
    * Returns User's Bio
    *
    * @type {string}
    * @memberof User
    */
-  get bio(): string {
-    return this._bio;
-  }
-  /**
-   * Sets User's Bio
-   *
-   * @memberof User
-   */
-  set bio(bio: string) {
-    this._bio = bio;
-  }
+  bio: string;
 
-  private _createdAt: string;
   /**
    * @property {string} createdAt timestamp of user entity creation
    */
-  get createdAt(): string {
-    return this._createdAt;
-  }
-  set createdAt(createdAt: string) {
-    this._createdAt = createdAt;
-  }
+  createdAt: string;
 
   /**
    * Construct a new User, given starting user id and name.
@@ -124,14 +73,14 @@ export class User {
     organization: string,
     password: string
   ) {
-    this._username = username;
-    this._name = name;
-    this._email = email;
-    this._organization = organization;
-    this._password = password;
-    this._objects = [];
-    this._bio = '';
-    this._createdAt = '';
+    this.username = username;
+    this.name = name;
+    this.email = email;
+    this.organization = organization;
+    this.password = password;
+    this.objects = [];
+    this.bio = '';
+    this.createdAt = '';
   }
 
   /**
@@ -154,41 +103,16 @@ export class User {
     return this._objects.splice(i, 1)[0];
   }
 
-  public static instantiate(object: UserProperties): User {
+  public static instantiate(object: any): User {
     const obj = { ...object };
     const user = new User(
-      obj._username ? obj._username : obj.username,
-      obj._name ? obj._name : obj.name,
-      obj._email ? obj._email : obj.email,
-      obj._organization ? obj._organization : obj.organization,
-      obj._password ? obj._password : obj.password
+      obj.username ? obj.username : '',
+      obj.name ? obj.name : '',
+      obj.email ? obj.email : '',
+      obj.organization ? obj.organization : '',
+      obj.password ? obj.password : ''
     );
-    user._bio = obj._bio ? obj._bio : obj.bio ? obj.bio : user.bio;
-    user._createdAt = obj._createdAt
-      ? obj._createdAt
-      : obj.createdAt
-        ? obj.createdAt
-        : user.createdAt;
-
-    // Remove known props;
-    delete obj._username;
-    delete obj._name;
-    delete obj._email;
-    delete obj._organization;
-    delete obj._password;
-    delete obj._bio;
-    delete obj._createdAt;
-
-    // Remove probable properties
-    delete obj.username;
-    delete obj.name;
-    delete obj.email;
-    delete obj.organization;
-    delete obj.password;
-    delete obj.bio;
-    delete obj.createdAt;
-
-    // Copy over injected props
+    // Copy over props not in constructor
     Object.keys(obj).forEach((key: string) => {
       user[key] = obj[key];
     });

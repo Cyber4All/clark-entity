@@ -14,45 +14,24 @@ export class AssessmentPlan {
   // Index Signature to allow extra properties;
   [key: string]: any;
 
-  private _sourceBloom: string;
   /**
    * @property {string} sourceBloom (immutable)
    *       the outcome's bloom taxon this assessment plan belongs to
    */
-  get sourceBloom(): string {
-    return this._sourceBloom;
-  }
+  sourceBloom: string;
 
-  private _plan: string;
   /**
    * @property {string} instruction
    *       the class of this assessment plan (essay, test, etc.)
    *       values are restricted according to source's bloom taxon
    */
-  get plan(): string {
-    return this._plan;
-  }
-  set plan(plan: string) {
-    if (assessments[this._sourceBloom].has(plan)) {
-      this._plan = plan;
-    } else {
-      throw `${plan} is not a valid assessment plan for the ${
-        this._sourceBloom
-      } taxon`;
-    }
-  }
+  plan: string;
 
-  private _text: string;
   /**
    * @property {string} text
    *       full text description of this instructional strategy
    */
-  get text(): string {
-    return this._text;
-  }
-  set text(text: string) {
-    this._text = text;
-  }
+  text: string;
 
   /**
    * Construct a new, blank AssessmentPlan.
@@ -62,9 +41,9 @@ export class AssessmentPlan {
    * @constructor
    */
   constructor(source: LearningOutcome) {
-    this._sourceBloom = source.bloom;
-    this._plan = <string>Array.from(assessments[source.bloom])[0];
-    this._text = '';
+    this.sourceBloom = source.bloom;
+    this.plan = <string>Array.from(assessments[source.bloom])[0];
+    this.text = '';
   }
 
   public static instantiate(
@@ -74,22 +53,10 @@ export class AssessmentPlan {
     const obj = { ...object };
     const assessment = new AssessmentPlan(source);
 
-    assessment._plan = obj._plan
-      ? obj._plan
-      : obj.plan
-        ? obj.plan
-        : assessment.plan;
-    assessment._text = obj._text
-      ? obj._text
-      : obj.text
-        ? obj.text
-        : assessment.text;
+    assessment.plan = obj.plan ? obj.plan : assessment.plan;
+    assessment.text = obj.text ? obj.text : assessment.text;
 
     // Remove known properties
-    delete obj._plan;
-    delete obj._text;
-
-    // Remove probable properties
     delete obj.plan;
     delete obj.text;
 
@@ -103,7 +70,7 @@ export class AssessmentPlan {
 }
 
 export type AssessmentPlanProperties = {
-  _plan: string;
-  _text: string;
+  plan: string;
+  text: string;
   [key: string]: any;
 };

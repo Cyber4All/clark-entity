@@ -12,16 +12,10 @@ export class LearningGoal {
   // Index Signature to allow extra properties;
   [key: string]: any;
 
-  private _text: string;
   /**
    * @property {string} text text content of this learning goal
    */
-  get text(): string {
-    return this._text;
-  }
-  set text(text: string) {
-    this._text = text;
-  }
+  text: string;
 
   /**
    * Construct a new Learning Goal with text.
@@ -30,22 +24,14 @@ export class LearningGoal {
    * @constructor
    */
   constructor(text: string) {
-    this._text = text;
+    this.text = text;
   }
 
   public static instantiate(object: LearningGoalProperties): LearningGoal {
     const obj = { ...object };
-    let goal = new LearningGoal(
-      obj._text ? obj._text : obj.text ? obj.text : ''
-    );
+    let goal = new LearningGoal(obj.text ? obj.text : obj.text ? obj.text : '');
 
-    //Remove known properties
-    delete obj._text;
-
-    //Remove probable properties
-    delete obj.text;
-
-    // Copy over injected props
+    // Copy over props
     Object.keys(obj).forEach((key: string) => {
       goal[key] = obj[key];
     });
@@ -55,6 +41,6 @@ export class LearningGoal {
 }
 
 export type LearningGoalProperties = {
-  _text: string;
+  text: string;
   [key: string]: any;
 };

@@ -10,7 +10,6 @@ import {
   InstructionalStrategy,
   InstructionalStrategyProperties
 } from './instructional-strategy';
-import { levels, verbs } from '@cyber4all/clark-taxonomy';
 
 export interface LearningOutcomeSource {
   author: User;
@@ -26,71 +25,38 @@ export class LearningOutcome implements Outcome {
   // Index Signature to allow extra properties;
   [key: string]: any;
 
-  private _source: LearningOutcomeSource;
   /**
    * @property {LearningOutcomeSource} source (immutable)
    *       the author, name, and date of the learning object this outcome belongs to
    */
-  get source(): LearningOutcomeSource {
-    return this._source;
-  }
+  source: LearningOutcomeSource;
 
-  private _tag: number;
   /**
    * @property {number} tag (immutable)
    *       a unique (over the source) identifier
    */
-  get tag(): number {
-    return this._tag;
-  }
+  tag: number;
 
-  private _bloom: string;
   /**
    * @property {string} instruction
    *       the bloom taxon of this learning outcome
-   *       values are resetricted according to available levels
+   *       values are restricted according to available levels
    */
-  get bloom(): string {
-    return this._bloom;
-  }
-  set bloom(bloom: string) {
-    if (bloom === '' || levels.has(bloom)) {
-      this._bloom = bloom;
-    } else {
-      throw `${bloom} is not a valid Bloom taxon`;
-    }
-  }
+  bloom: string;
 
-  private _verb: string;
   /**
    * @property {string} instruction
    *       the verb this outcome text starts with (eg. define)
-   *       values are resetricted according to the bloom taxon
+   *       values are restricted according to the bloom taxon
    */
-  get verb(): string {
-    return this._verb;
-  }
-  set verb(verb: string) {
-    if (verb === '' || verbs[this.bloom].has(verb)) {
-      this._verb = verb;
-    } else {
-      throw `${verb} is not a valid verb for the ${this.bloom} taxon`;
-    }
-  }
+  verb: string;
 
-  private _text: string;
   /**
    * @property {string} text
    *       full text description of this outcome, except the verb
    */
-  get text(): string {
-    return this._text;
-  }
-  set text(text: string) {
-    this._text = text;
-  }
+  text: string;
 
-  private _mappings: Outcome[];
   /**
    * @property {Outcome[]} mappings (immutable)
    *       outcomes which presumably achieve similar things as this
@@ -99,11 +65,8 @@ export class LearningOutcome implements Outcome {
    *       reference itself is immutable, and elements can only be
    *       added and removed by the below functions
    */
-  get mappings(): Outcome[] {
-    return this._mappings;
-  }
+  mappings: Outcome[];
 
-  private _assessments: AssessmentPlan[];
   /**
    * @property {AssessmentPlan[]} assessments (immutable)
    *       plans to assess how well the outcome is achieved
@@ -112,11 +75,8 @@ export class LearningOutcome implements Outcome {
    *       reference itself is immutable, and elements can only be
    *       added and removed by the below functions
    */
-  get assessments(): AssessmentPlan[] {
-    return this._assessments;
-  }
+  assessments: AssessmentPlan[];
 
-  private _strategies: InstructionalStrategy[];
   /**
    * @property {InstructionalStrategy[]} strategies (immutable)
    *       strategies on how to achieve the outcome
@@ -125,9 +85,7 @@ export class LearningOutcome implements Outcome {
    *       reference itself is immutable, and elements can only be
    *       added and removed by the below functions
    */
-  get strategies(): InstructionalStrategy[] {
-    return this._strategies;
-  }
+  strategies: InstructionalStrategy[];
 
   /**
    * Construct a new, blank LearningOutcome.
@@ -146,12 +104,12 @@ export class LearningOutcome implements Outcome {
    * @constructor
    */
   constructor(source: LearningObject) {
-    this._source = {
+    this.source = {
       author: source.author,
       name: source.name,
       date: source.date
     };
-    this._tag = 0;
+    this.tag = 0;
 
     // ensure tag is unique
     if (source) {
@@ -160,8 +118,8 @@ export class LearningOutcome implements Outcome {
       while (searching) {
         searching = false;
         for (let outcome of source.outcomes) {
-          if (outcome.tag === this._tag) {
-            this._tag++;
+          if (outcome.tag === this.tag) {
+            this.tag++;
             searching = true;
             break;
           }
@@ -169,12 +127,12 @@ export class LearningOutcome implements Outcome {
       }
     }
 
-    this._bloom = '';
-    this._verb = '';
-    this._text = '';
-    this._mappings = [];
-    this._assessments = [];
-    this._strategies = [];
+    this.bloom = '';
+    this.verb = '';
+    this.text = '';
+    this.mappings = [];
+    this.assessments = [];
+    this.strategies = [];
   }
 
   /**
@@ -182,7 +140,7 @@ export class LearningOutcome implements Outcome {
    * @returns {number} the new length of the mappings array
    */
   mapTo(mapping: Outcome): number {
-    return this._mappings.push(mapping);
+    return this.mappings.push(mapping);
   }
 
   /**
@@ -192,7 +150,7 @@ export class LearningOutcome implements Outcome {
    * @returns {Outcome} the outcome which was removed
    */
   unmap(i: number): Outcome {
-    return this._mappings.splice(i, 1)[0];
+    return this.mappings.splice(i, 1)[0];
   }
 
   /**
@@ -201,7 +159,7 @@ export class LearningOutcome implements Outcome {
    */
   addAssessment(): AssessmentPlan {
     let assessment = new AssessmentPlan(this);
-    this._assessments.push(assessment);
+    this.assessments.push(assessment);
     return assessment;
   }
 
@@ -212,7 +170,7 @@ export class LearningOutcome implements Outcome {
    * @returns {LearningObject} the assessment plan which was removed
    */
   removeAssessment(i: number): AssessmentPlan {
-    return this._assessments.splice(i, 1)[0];
+    return this.assessments.splice(i, 1)[0];
   }
 
   /**
@@ -221,7 +179,7 @@ export class LearningOutcome implements Outcome {
    */
   addStrategy(): InstructionalStrategy {
     let strategy = new InstructionalStrategy(this);
-    this._strategies.push(strategy);
+    this.strategies.push(strategy);
     return strategy;
   }
 
@@ -232,7 +190,7 @@ export class LearningOutcome implements Outcome {
    * @returns {LearningObject} the strategy which was removed
    */
   removeStrategy(i: number): InstructionalStrategy {
-    return this._strategies.splice(i, 1)[0];
+    return this.strategies.splice(i, 1)[0];
   }
 
   /**
@@ -243,16 +201,16 @@ export class LearningOutcome implements Outcome {
    * @property {string} outcome
    */
   get author(): string {
-    return this._source.author.name;
+    return this.source.author.name;
   }
   get name(): string {
-    return this._source.name;
+    return this.source.name;
   }
   get date(): string {
-    return this._source.date;
+    return this.source.date;
   }
   get outcome(): string {
-    return `${this._verb} ${this._text}`;
+    return `${this.verb} ${this.text}`;
   }
 
   public static instantiate(
@@ -261,63 +219,22 @@ export class LearningOutcome implements Outcome {
   ): LearningOutcome {
     const obj = { ...object };
     const outcome = new LearningOutcome(source);
-
-    outcome._tag =
-      obj._tag !== undefined && obj._tag !== null
-        ? obj._tag
-        : obj.tag !== undefined && obj.tag !== null
-          ? obj.tag
-          : outcome.tag;
-    outcome._bloom = obj._bloom
-      ? obj._bloom
-      : obj.bloom
-        ? obj.bloom
-        : outcome.bloom;
-    outcome._verb = obj._verb ? obj._verb : obj.verb ? obj.verb : outcome.verb;
-    outcome._text = obj._text ? obj._text : obj.text ? obj.text : outcome.text;
-    outcome._mappings = obj._mappings
-      ? obj._mappings
-      : obj.mappings
-        ? obj.mappings
-        : outcome.mappings;
-    outcome._assessments = obj._assessments
-      ? obj._assessments.map(assessment =>
+    outcome.assessments = obj.assessments
+      ? obj.assessments.map(assessment =>
           AssessmentPlan.instantiate(outcome, assessment)
         )
-      : obj.assessments
-        ? obj.assessments.map((assessment: AssessmentPlanProperties) =>
-            AssessmentPlan.instantiate(outcome, assessment)
-          )
-        : outcome.assessments;
-    outcome._strategies = obj._strategies
-      ? obj._strategies.map(strategy =>
+      : outcome.assessments;
+    outcome.strategies = obj.strategies
+      ? obj.strategies.map(strategy =>
           InstructionalStrategy.instantiate(outcome, strategy)
         )
-      : obj.strategies
-        ? obj.strategies.map((strategy: InstructionalStrategyProperties) =>
-            InstructionalStrategy.instantiate(outcome, strategy)
-          )
-        : outcome.strategies;
+      : outcome.strategies;
 
-    // Remove known props;
-    delete obj._tag;
-    delete obj._bloom;
-    delete obj._verb;
-    delete obj._text;
-    delete obj._mappings;
-    delete obj._assessments;
-    delete obj._strategies;
-
-    // Remove probable props;
-    delete obj.tag;
-    delete obj.bloom;
-    delete obj.verb;
-    delete obj.text;
-    delete obj.mappings;
+    // Remove entities that required instantiation;
     delete obj.assessments;
     delete obj.strategies;
 
-    // Copy over injected props
+    // Copy over remaining props
     Object.keys(obj).forEach((key: string) => {
       outcome[key] = obj[key];
     });
@@ -327,12 +244,12 @@ export class LearningOutcome implements Outcome {
 }
 
 export type LearningOutcomeProperties = {
-  _tag: number;
-  _bloom: string;
-  _verb: string;
-  _text: string;
-  _mappings: Outcome[];
-  _assessments: AssessmentPlanProperties[];
-  _strategies: InstructionalStrategyProperties[];
+  tag: number;
+  bloom: string;
+  verb: string;
+  text: string;
+  mappings: Outcome[];
+  assessments: AssessmentPlanProperties[];
+  strategies: InstructionalStrategyProperties[];
   [key: string]: any;
 };

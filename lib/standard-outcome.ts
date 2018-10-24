@@ -9,38 +9,26 @@ import { Outcome } from './outcome';
  * @class
  */
 export class StandardOutcome implements Outcome {
-  private _author: string;
   /**
    * @property {string} source
    *       the organization or document this outcome is drawn from
    */
-  get author(): string {
-    return this._author;
-  }
+  author: string;
 
-  private _name: string;
   /**
    * @property {string} name the label or unit of the outcome
    */
-  get name(): string {
-    return this._name;
-  }
+  name: string;
 
-  private _date: string;
   /**
    * @property {string} date the year this standard was established
    */
-  get date(): string {
-    return this._date;
-  }
+  date: string;
 
-  private _outcome: string;
   /**
    * @property {string} outcome the text of the outcome
    */
-  get outcome(): string {
-    return this._outcome;
-  }
+  outcome: string;
 
   /**
    * Create a new StandardOutcome.
@@ -49,9 +37,9 @@ export class StandardOutcome implements Outcome {
    * @param {string} outcome the new outcome's text
    */
   constructor(author: string, name: string, date: string, outcome: string) {
-    this._author = author;
-    this._name = name;
-    this._date = date;
-    this._outcome = outcome;
+    this.author = author;
+    this.name = name;
+    this.date = date;
+    this.outcome = outcome;
   }
 }
