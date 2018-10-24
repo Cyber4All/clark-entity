@@ -88,6 +88,30 @@ export class LearningOutcome implements Outcome {
   strategies: InstructionalStrategy[];
 
   /**
+   * @property {number} author
+   *      Learning Object's author's name
+   */
+  author: string;
+
+  /**
+   * @property {number} name
+   *      Learning Object's name
+   */
+  name: string;
+
+  /**
+   * @property {number} date
+   *      Learning Object's last edited date
+   */
+  date: string;
+
+  /**
+   * @property {number} outcome
+   *       Bloom verb and text concatenated
+   */
+  outcome: string;
+
+  /**
    * Construct a new, blank LearningOutcome.
    * @param {LearningObject} source the learning object
    *       the new learning outcome belongs to
@@ -133,6 +157,11 @@ export class LearningOutcome implements Outcome {
     this.mappings = [];
     this.assessments = [];
     this.strategies = [];
+
+    this.author = this.source.author.name;
+    this.name = this.source.name;
+    this.date = this.source.date;
+    this.outcome = `${this.verb} ${this.text}`;
   }
 
   /**
@@ -191,26 +220,6 @@ export class LearningOutcome implements Outcome {
    */
   removeStrategy(i: number): InstructionalStrategy {
     return this.strategies.splice(i, 1)[0];
-  }
-
-  /**
-   * properties for consistency with the Outcome interface
-   * @property {string} author
-   * @property {string} name
-   * @property {string} date
-   * @property {string} outcome
-   */
-  get author(): string {
-    return this.source.author.name;
-  }
-  get name(): string {
-    return this.source.name;
-  }
-  get date(): string {
-    return this.source.date;
-  }
-  get outcome(): string {
-    return `${this.verb} ${this.text}`;
   }
 
   public static instantiate(
