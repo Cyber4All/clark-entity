@@ -199,6 +199,11 @@ export class LearningObject {
   lock: LearningObjectLock | undefined;
 
   collection: string;
+  /**
+   * @property {status} string Represents current state of Learning Object
+   *
+   */
+  status: string;
 
   /**
    * Adds a new learning goal to this object.
@@ -266,6 +271,7 @@ export class LearningObject {
     this.contributors = [];
     this.lock = undefined;
     this.collection = '';
+    this.status = '';
   }
 
   public static instantiate(object: LearningObjectProperties): LearningObject {
