@@ -77,10 +77,10 @@ export class LearningOutcome {
   }
   /**
    * Maps a StandardOutcome to this learning outcome.
-   * @returns {number} the new length of the mappings array
+   * @returns {number} the index of the mapping
    */
   mapTo(mapping: StandardOutcome): number {
-    return this._mappings.push(mapping);
+    return this._mappings.push(mapping) - 1;
   }
 
   /**
