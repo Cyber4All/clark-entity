@@ -47,12 +47,14 @@ describe('Class: LearningOutcome', () => {
     expect(outcome.bloom).toEqual(validBloom);
   });
   it('should set an invalid bloom taxon and thrown an error', () => {
+    const errorMessage = LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_BLOOM(
+      invalidBloom
+    );
     try {
       outcome.bloom = invalidBloom;
+      fail(`Expected ${errorMessage}`);
     } catch (e) {
-      expect(e.message).toEqual(
-        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_BLOOM(invalidBloom)
-      );
+      expect(e.message).toEqual(errorMessage);
     }
   });
   it('should set a valid bloom verb', () => {
@@ -61,13 +63,16 @@ describe('Class: LearningOutcome', () => {
     expect(outcome.verb).toEqual(validVerb);
   });
   it('should set an invalid bloom verb and thrown an error', () => {
+    const errorMessage = LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_VERB(
+      outcome.bloom,
+      invalidVerb
+    );
     outcome.bloom = validBloom;
     try {
       outcome.verb = invalidVerb;
+      fail(`Expected ${errorMessage}`);
     } catch (e) {
-      expect(e.message).toEqual(
-        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_VERB(outcome.bloom, invalidVerb)
-      );
+      expect(e.message).toEqual(errorMessage);
     }
   });
   it('should set valid outcome text', () => {
@@ -75,11 +80,13 @@ describe('Class: LearningOutcome', () => {
     expect(outcome.text).toEqual(validText);
   });
   it('should set invalid outcome text and thrown an error', () => {
+    const errorMessage = LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT;
     try {
       // @ts-ignore Text will not be a string for this text case
       outcome.text = invalidText;
+      fail(`Expected ${errorMessage}`);
     } catch (e) {
-      expect(e.message).toEqual(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
+      expect(e.message).toEqual(errorMessage);
     }
   });
   it('should map learning outcome to standard outcome', () => {

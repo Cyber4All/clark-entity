@@ -22,12 +22,13 @@ describe('Class: SubmittableLearningOutcome', () => {
     expect(outcome).toBeDefined();
   });
   it('should set invalid outcome text and thrown an error', () => {
+    const errorMessage =
+      SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT;
     try {
       outcome.text = invalidText;
+      fail(new Error(`Expected ${errorMessage}`));
     } catch (e) {
-      expect(e).toEqual(
-        SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT
-      );
+      expect(e.message).toEqual(errorMessage);
     }
   });
 });
