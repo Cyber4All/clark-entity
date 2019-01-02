@@ -63,7 +63,7 @@ export class LearningOutcome {
     }
   }
 
-  private _mappings!: StandardOutcome[];
+  private _mappings: StandardOutcome[];
   /**
    * @property {StandardOutcome[]} mappings (immutable)
    *       outcomes which presumably achieve similar things as this
@@ -169,12 +169,10 @@ export class LearningOutcome {
       ? <string>outcome.verb
       : Array.from(verbs[this.bloom])[0];
     this.text = '';
-
+    this._mappings = [];
     // Add mappings from passed outcome
     if (outcome) {
       (<StandardOutcome[]>outcome.mappings).map(outcome => this.mapTo(outcome));
-    } else {
-      this._mappings = [];
     }
     this._assessments = [];
     this._strategies = [];
