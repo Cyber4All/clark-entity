@@ -1,13 +1,23 @@
 defaults: &defaults
-    working_directory: ~/clark-entity
-    docker:
-        - image: node:11-alpine
+  working_directory: ~/clark-entity
+  docker:
+    - image: node:11-alpine
+
 version: 2
 jobs:
-    build:
+  build:
     <<: *defaults
     steps:
-        - checkout
-        - run:
-            name: Install Dependencies
-            command: npm install
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Build Package
+          command: npm run build
+      - run:
+          name: Run Unit Tests
+          command: npm test
+      - persist_to_workspace: 
+          root: dist
+          paths: ./
