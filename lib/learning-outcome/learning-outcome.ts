@@ -56,7 +56,7 @@ export class LearningOutcome {
     return this._text;
   }
   set text(text: string) {
-    if (text !== undefined || text !== null) {
+    if (text !== undefined && text !== null) {
       this._text = text.trim();
     } else {
       throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
