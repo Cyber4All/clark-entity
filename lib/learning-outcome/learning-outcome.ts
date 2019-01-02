@@ -1,72 +1,98 @@
-/**
- * Provide abstract representations for learning outcomes.
- */
-
-import { Outcome } from '../outcome/outcome';
-import { User } from '../user/user';
-import { LearningObject } from '../learning-object/learning-object';
-import { AssessmentPlan, AssessmentPlanProperties } from '../assessment-plan';
-import {
-  InstructionalStrategy,
-  InstructionalStrategyProperties
-} from '../instructional-strategy';
-
-export interface LearningOutcomeSource {
-  author: User;
-  name: string;
-  date: string;
-}
+import { AssessmentPlan } from '../assessment-plan';
+import { InstructionalStrategy } from '../instructional-strategy';
+import { StandardOutcome } from '../standard-outcome/standard-outcome';
+import { levels, verbs } from '@cyber4all/clark-taxonomy';
 
 /**
  * A class to represent a learning outcome.
  * @class
  */
-export class LearningOutcome implements Outcome {
-  // Index Signature to allow extra properties;
-  [key: string]: any;
+export class LearningOutcome {
+  public id?: string;
 
-  /**
-   * @property {LearningOutcomeSource} source (immutable)
-   *       the author, name, and date of the learning object this outcome belongs to
-   */
-  source: LearningOutcomeSource;
-
-  /**
-   * @property {number} tag (immutable)
-   *       a unique (over the source) identifier
-   */
-  tag: number;
-
+  private _bloom!: string;
   /**
    * @property {string} instruction
    *       the bloom taxon of this learning outcome
    *       values are restricted according to available levels
    */
-  bloom: string;
+  get bloom(): string {
+    return this._bloom;
+  }
+  set bloom(bloom: string) {
+    if (bloom && levels.has(bloom)) {
+      this._bloom = bloom;
+    } else {
+      throw new Error(`${bloom} is not a valid Bloom taxon`);
+    }
+  }
 
+  private _verb!: string;
   /**
    * @property {string} instruction
    *       the verb this outcome text starts with (eg. define)
    *       values are restricted according to the bloom taxon
    */
-  verb: string;
+  get verb(): string {
+    return this._verb;
+  }
+  set verb(verb: string) {
+    if (verb && verbs[this.bloom].has(verb)) {
+      this._verb = verb;
+    } else {
+      throw new Error(
+        `${verb} is not a valid verb for the ${this.bloom} taxon`
+      );
+    }
+  }
 
+  private _text!: string;
   /**
    * @property {string} text
    *       full text description of this outcome, except the verb
    */
-  text: string;
+  get text(): string {
+    return this._text;
+  }
+  set text(text: string) {
+    if (text !== undefined || text !== null) {
+      this._text = text.trim();
+    } else {
+      throw new Error('Text must be defined');
+    }
+  }
 
+  private _mappings!: StandardOutcome[];
   /**
-   * @property {Outcome[]} mappings (immutable)
+   * @property {StandardOutcome[]} mappings (immutable)
    *       outcomes which presumably achieve similar things as this
    *
    * NOTE: individual elements are freely accessible, but the array
    *       reference itself is immutable, and elements can only be
    *       added and removed by the below functions
    */
-  mappings: Outcome[];
+  get mappings(): StandardOutcome[] {
+    return this._mappings;
+  }
+  /**
+   * Maps a StandardOutcome to this learning outcome.
+   * @returns {number} the new length of the mappings array
+   */
+  mapTo(mapping: StandardOutcome): number {
+    return this._mappings.push(mapping);
+  }
 
+  /**
+   * Removes the outcome's i-th mapping.
+   * @param {number} i the index to remove from the mappings array
+   *
+   * @returns {StandardOutcome} the outcome which was removed
+   */
+  unmap(i: number): StandardOutcome {
+    return this._mappings.splice(i, 1)[0];
+  }
+
+  private _assessments: AssessmentPlan[];
   /**
    * @property {AssessmentPlan[]} assessments (immutable)
    *       plans to assess how well the outcome is achieved
@@ -75,120 +101,16 @@ export class LearningOutcome implements Outcome {
    *       reference itself is immutable, and elements can only be
    *       added and removed by the below functions
    */
-  assessments: AssessmentPlan[];
-
-  /**
-   * @property {InstructionalStrategy[]} strategies (immutable)
-   *       strategies on how to achieve the outcome
-   *
-   * NOTE: individual elements are freely accessible, but the array
-   *       reference itself is immutable, and elements can only be
-   *       added and removed by the below functions
-   */
-  strategies: InstructionalStrategy[];
-
-  /**
-   * @property {number} author
-   *      Learning Object's author's name
-   */
-  author: string;
-
-  /**
-   * @property {number} name
-   *      Learning Object's name
-   */
-  name: string;
-
-  /**
-   * @property {number} date
-   *      Learning Object's last edited date
-   */
-  date: string;
-
-  /**
-   * @property {number} outcome
-   *       Bloom verb and text concatenated
-   */
-  outcome: string;
-
-  /**
-   * Construct a new, blank LearningOutcome.
-   * @param {LearningObject} source the learning object
-   *       the new learning outcome belongs to
-   *
-   * TODO: constructor should take EITHER source OR tag (the other should be null)
-   *       If tag is given (0 allowed),
-   *          If source exists, validate that tag is unique,
-   *          Otherwise, trust it
-   *       Otherwise, auto-increment tag as necessary based on source
-   *
-   *       The order of parameters should be consistent with LearningObject,
-   *          ultimately that should be (tag, source)
-   *
-   * @constructor
-   */
-  constructor(source: LearningObject) {
-    this.source = {
-      author: source.author,
-      name: source.name,
-      date: source.date
-    };
-    this.tag = 0;
-
-    // ensure tag is unique
-    if (source) {
-      // if outcome is independent of source, we obviously can't ensure a unique tag
-      let searching = true;
-      while (searching) {
-        searching = false;
-        for (let outcome of source.outcomes) {
-          if (outcome.tag === this.tag) {
-            this.tag++;
-            searching = true;
-            break;
-          }
-        }
-      }
-    }
-
-    this.bloom = '';
-    this.verb = '';
-    this.text = '';
-    this.mappings = [];
-    this.assessments = [];
-    this.strategies = [];
-
-    this.author = this.source.author.name;
-    this.name = this.source.name;
-    this.date = this.source.date;
-    this.outcome = `${this.verb} ${this.text}`;
+  get assessments(): AssessmentPlan[] {
+    return this._assessments;
   }
-
-  /**
-   * Maps an outcome to this learning outcome.
-   * @returns {number} the new length of the mappings array
-   */
-  mapTo(mapping: Outcome): number {
-    return this.mappings.push(mapping);
-  }
-
-  /**
-   * Removes the outcome's i-th mapping.
-   * @param {number} i the index to remove from the mappings array
-   *
-   * @returns {Outcome} the outcome which was removed
-   */
-  unmap(i: number): Outcome {
-    return this.mappings.splice(i, 1)[0];
-  }
-
   /**
    * Adds a new, blank assessment plan to this outcome.
    * @returns {AssessmentPlan} a reference to the new assessment plan
    */
   addAssessment(): AssessmentPlan {
     let assessment = new AssessmentPlan(this);
-    this.assessments.push(assessment);
+    this._assessments.push(assessment);
     return assessment;
   }
 
@@ -199,7 +121,20 @@ export class LearningOutcome implements Outcome {
    * @returns {LearningObject} the assessment plan which was removed
    */
   removeAssessment(i: number): AssessmentPlan {
-    return this.assessments.splice(i, 1)[0];
+    return this._assessments.splice(i, 1)[0];
+  }
+
+  private _strategies: InstructionalStrategy[];
+  /**
+   * @property {InstructionalStrategy[]} strategies (immutable)
+   *       strategies on how to achieve the outcome
+   *
+   * NOTE: individual elements are freely accessible, but the array
+   *       reference itself is immutable, and elements can only be
+   *       added and removed by the below functions
+   */
+  get strategies(): InstructionalStrategy[] {
+    return this._strategies;
   }
 
   /**
@@ -208,7 +143,7 @@ export class LearningOutcome implements Outcome {
    */
   addStrategy(): InstructionalStrategy {
     let strategy = new InstructionalStrategy(this);
-    this.strategies.push(strategy);
+    this._strategies.push(strategy);
     return strategy;
   }
 
@@ -219,46 +154,38 @@ export class LearningOutcome implements Outcome {
    * @returns {LearningObject} the strategy which was removed
    */
   removeStrategy(i: number): InstructionalStrategy {
-    return this.strategies.splice(i, 1)[0];
+    return this._strategies.splice(i, 1)[0];
+  }
+
+  /**
+   *Creates an instance of LearningOutcome.
+   * @param {Partial<LearningOutcome>} [outcome]
+   * @memberof LearningOutcome
+   */
+  constructor(outcome?: Partial<LearningOutcome>) {
+    this.bloom = outcome ? <string>outcome.bloom : Array.from(levels)[0];
+    this.verb = outcome
+      ? <string>outcome.verb
+      : Array.from(verbs[this.bloom])[0];
+    this.text = '';
+
+    // Add mappings from passed outcome
+    if (outcome) {
+      (<StandardOutcome[]>outcome.mappings).map(outcome => this.mapTo(outcome));
+    } else {
+      this._mappings = [];
+    }
+    this._assessments = [];
+    this._strategies = [];
+  }
+
+  get outcome(): string {
+    return `${this.verb} ${this.text}`;
   }
 
   public static instantiate(
-    source: LearningObject,
-    object: LearningOutcomeProperties
+    outcome: Partial<LearningOutcome>
   ): LearningOutcome {
-    const obj = { ...object };
-    const outcome = new LearningOutcome(source);
-    outcome.assessments = obj.assessments
-      ? obj.assessments.map(assessment =>
-          AssessmentPlan.instantiate(outcome, assessment)
-        )
-      : outcome.assessments;
-    outcome.strategies = obj.strategies
-      ? obj.strategies.map(strategy =>
-          InstructionalStrategy.instantiate(outcome, strategy)
-        )
-      : outcome.strategies;
-
-    // Remove entities that required instantiation;
-    delete obj.assessments;
-    delete obj.strategies;
-
-    // Copy over remaining props
-    Object.keys(obj).forEach((key: string) => {
-      outcome[key] = obj[key];
-    });
-
-    return outcome;
+    return new LearningOutcome(outcome);
   }
 }
-
-export type LearningOutcomeProperties = {
-  tag: number;
-  bloom: string;
-  verb: string;
-  text: string;
-  mappings: Outcome[];
-  assessments: AssessmentPlanProperties[];
-  strategies: InstructionalStrategyProperties[];
-  [key: string]: any;
-};
