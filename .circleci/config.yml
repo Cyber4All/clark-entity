@@ -2,35 +2,35 @@ defaults: &defaults
     working_directory: ~/clark-entity
     docker:
         - image: node:11-alpine
-version
+version: 2
 jobs:
-    build:
-    <<: *defaults
-    steps:
-        - checkout
-        - run:
-            name: Install Dependencies
-            command: npm install
-        - run:
-            name: Build Package
-            command: npm run build
-        - run:
-            name: Run Unit Tests
-            command: npm test
-        - persist_to_workspace:
-            root: dist
-            paths: ./
-    publish:
-    <<: *defaults
-    steps:
-        - attach_workspace:
-            at: ~/clark-entity/dist
-        - run: 
-            name: Expose NPM Key
-            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-        - run:
-            name: Publish to NPM
-            command: npm publish
+  build:
+  <<: *defaults
+  steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Build Package
+          command: npm run build
+      - run:
+          name: Run Unit Tests
+          command: npm test
+      - persist_to_workspace:
+          root: dist
+          paths: ./
+  publish:
+  <<: *defaults
+  steps:
+      - attach_workspace:
+          at: ~/clark-entity/dist
+      - run: 
+          name: Expose NPM Key
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run:
+          name: Publish to NPM
+          command: npm publish
 
 workflows:
   version: 2
