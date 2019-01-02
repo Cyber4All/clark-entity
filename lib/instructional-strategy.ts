@@ -3,7 +3,7 @@
  * instructional strategy.
  */
 
-import { LearningOutcome } from './learning-outcome';
+import { LearningOutcome } from './learning-outcome/learning-outcome';
 import { levels, instructions } from '@cyber4all/clark-taxonomy';
 
 /**

@@ -2,9 +2,9 @@
  * Provide abstract representations for learning objects.
  */
 
-import { User, UserProperties } from './user';
-import { LearningGoal, LearningGoalProperties } from './learning-goal';
-import { LearningOutcome, LearningOutcomeProperties } from './learning-outcome';
+import { User, UserProperties } from '../user/user';
+import { LearningGoal, LearningGoalProperties } from '../learning-goal';
+import { LearningOutcome } from '../learning-outcome/learning-outcome';
 import { lengths } from '@cyber4all/clark-taxonomy';
 
 export enum Restriction {
@@ -229,7 +229,7 @@ export class LearningObject {
    * @returns {AssessmentPlan} a reference to the new outcome
    */
   addOutcome(): LearningOutcome {
-    let outcome = new LearningOutcome(this);
+    let outcome = new LearningOutcome();
     this.outcomes.push(outcome);
     return outcome;
   }
@@ -283,8 +283,8 @@ export class LearningObject {
       ? obj.goals.map(goal => LearningGoal.instantiate(goal))
       : learningObject.goals;
     learningObject.outcomes = obj.outcomes
-      ? obj.outcomes.map(outcome =>
-          LearningOutcome.instantiate(learningObject, outcome)
+      ? obj.outcomes.map((outcome: Partial<LearningOutcome>) =>
+          LearningOutcome.instantiate(outcome)
         )
       : learningObject.outcomes;
 
@@ -326,7 +326,6 @@ export type LearningObjectProperties = {
   length: string;
   levels: AcademicLevel[];
   goals: LearningGoalProperties[];
-  outcomes: LearningOutcomeProperties[];
   materials: Material;
   metrics: Metrics;
   published: boolean;

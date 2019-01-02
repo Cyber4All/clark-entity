@@ -1,12 +1,12 @@
 {
   "name": "@cyber4all/clark-entity",
-  "version": "3.2.1-dev",
+  "version": "4.0.0-rc.1.0",
   "description": "CLARK Entities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && node ./dist/test.js"
+    "test": "node_modules/.bin/jest --verbose  --coverage"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,9 @@
     "@cyber4all/clark-taxonomy": "^2.0.0"
   },
   "devDependencies": {
-    "typescript": "^2.6.2"
+    "@types/jest": "^23.3.11",
+    "jest": "^23.6.0",
+    "typescript": "^3.2.2"
   },
   "prettier": {
     "singleQuote": true
