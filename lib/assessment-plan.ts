@@ -3,7 +3,7 @@
  * assessment plan.
  */
 
-import { LearningOutcome } from './learning-outcome';
+import { LearningOutcome } from './learning-outcome/learning-outcome';
 import { assessments } from '@cyber4all/clark-taxonomy';
 
 /**
