@@ -50,7 +50,7 @@ describe('Class: LearningOutcome', () => {
     try {
       outcome.bloom = invalidBloom;
     } catch (e) {
-      expect(e).toEqual(
+      expect(e.message).toEqual(
         LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_BLOOM(invalidBloom)
       );
     }
@@ -65,7 +65,7 @@ describe('Class: LearningOutcome', () => {
     try {
       outcome.verb = invalidVerb;
     } catch (e) {
-      expect(e).toEqual(
+      expect(e.message).toEqual(
         LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_VERB(outcome.bloom, invalidVerb)
       );
     }
@@ -79,7 +79,7 @@ describe('Class: LearningOutcome', () => {
       // @ts-ignore Text will not be a string for this text case
       outcome.text = invalidText;
     } catch (e) {
-      expect(e).toEqual(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
+      expect(e.message).toEqual(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
     }
   });
   it('should map learning outcome to standard outcome', () => {
