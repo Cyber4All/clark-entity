@@ -13,7 +13,7 @@ export class LearningOutcome {
 
   private _bloom!: string;
   /**
-   * @property {string} instruction
+   * @property {string} bloom
    *       the bloom taxon of this learning outcome
    *       values are restricted according to available levels
    */
@@ -30,7 +30,7 @@ export class LearningOutcome {
 
   private _verb!: string;
   /**
-   * @property {string} instruction
+   * @property {string} verb
    *       the verb this outcome text starts with (eg. define)
    *       values are restricted according to the bloom taxon
    */
