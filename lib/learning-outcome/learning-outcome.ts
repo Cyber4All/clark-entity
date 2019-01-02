@@ -168,7 +168,7 @@ export class LearningOutcome {
     this.verb = outcome
       ? <string>outcome.verb
       : Array.from(verbs[this.bloom])[0];
-    this.text = '';
+    this.text = outcome ? <string>outcome.text : '';
     this._mappings = [];
     // Add mappings from passed outcome
     if (outcome) {
