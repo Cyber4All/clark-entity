@@ -7,6 +7,16 @@ import { SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
  */
 export class SubmittableLearningOutcome extends LearningOutcome {
   /**
+   * Returns text from parent's getter
+   *
+   * @type {string}
+   * @memberof SubmittableLearningOutcome
+   */
+  get text(): string {
+    return super.text;
+  }
+
+  /**
    * Sets text to trimmed text string.
    * If text is empty an error is thrown
    *
