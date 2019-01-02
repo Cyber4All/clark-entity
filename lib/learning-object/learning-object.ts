@@ -2,9 +2,12 @@
  * Provide abstract representations for learning objects.
  */
 
-import { User, UserProperties } from './user';
-import { LearningGoal, LearningGoalProperties } from './learning-goal';
-import { LearningOutcome, LearningOutcomeProperties } from './learning-outcome';
+import { User, UserProperties } from '../user/user';
+import { LearningGoal, LearningGoalProperties } from '../learning-goal';
+import {
+  LearningOutcome,
+  LearningOutcomeProperties
+} from '../learning-outcome/learning-outcome';
 import { lengths } from '@cyber4all/clark-taxonomy';
 
 export enum Restriction {

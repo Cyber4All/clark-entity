@@ -2,14 +2,14 @@
  * Provide abstract representations for learning outcomes.
  */
 
-import { Outcome } from './outcome';
-import { User } from './user';
-import { LearningObject } from './learning-object';
-import { AssessmentPlan, AssessmentPlanProperties } from './assessment-plan';
+import { Outcome } from '../outcome/outcome';
+import { User } from '../user/user';
+import { LearningObject } from '../learning-object/learning-object';
+import { AssessmentPlan, AssessmentPlanProperties } from '../assessment-plan';
 import {
   InstructionalStrategy,
   InstructionalStrategyProperties
-} from './instructional-strategy';
+} from '../instructional-strategy';
 
 export interface LearningOutcomeSource {
   author: User;

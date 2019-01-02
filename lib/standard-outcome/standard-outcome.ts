@@ -2,7 +2,7 @@
  * Provide abstract representations for standard outcomes.
  */
 
-import { Outcome } from './outcome';
+import { Outcome } from '../outcome/outcome';
 
 /**
  * A class to represent a standard outcome. Immutable.
