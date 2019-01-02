@@ -2,6 +2,7 @@ import { AssessmentPlan } from '../assessment-plan';
 import { InstructionalStrategy } from '../instructional-strategy';
 import { StandardOutcome } from '../standard-outcome/standard-outcome';
 import { levels, verbs } from '@cyber4all/clark-taxonomy';
+import { LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
 
 /**
  * A class to represent a learning outcome.
@@ -23,7 +24,7 @@ export class LearningOutcome {
     if (bloom && levels.has(bloom)) {
       this._bloom = bloom;
     } else {
-      throw new Error(`${bloom} is not a valid Bloom taxon`);
+      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_BLOOM(bloom));
     }
   }
 
@@ -41,7 +42,7 @@ export class LearningOutcome {
       this._verb = verb;
     } else {
       throw new Error(
-        `${verb} is not a valid verb for the ${this.bloom} taxon`
+        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_VERB(this.bloom, verb)
       );
     }
   }
@@ -58,7 +59,7 @@ export class LearningOutcome {
     if (text !== undefined || text !== null) {
       this._text = text.trim();
     } else {
-      throw new Error('Text must be defined');
+      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
     }
   }
 
@@ -177,10 +178,6 @@ export class LearningOutcome {
     }
     this._assessments = [];
     this._strategies = [];
-  }
-
-  get outcome(): string {
-    return `${this.verb} ${this.text}`;
   }
 
   public static instantiate(

@@ -1,4 +1,5 @@
 import { LearningOutcome } from './learning-outcome';
+import { SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
 
 /**
  * A class to represent a submittable learning outcome.
@@ -15,7 +16,7 @@ export class SubmittableLearningOutcome extends LearningOutcome {
     if (text && text.trim()) {
       super.text = text;
     } else {
-      throw new Error('Text must not be an empty string.');
+      throw new Error(SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
     }
   }
   /**
