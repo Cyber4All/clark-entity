@@ -13,7 +13,7 @@ export class SubmittableLearningOutcome extends LearningOutcome {
    */
   set text(text: string) {
     if (text && text.trim()) {
-      super.text = text.trim();
+      super.text = text;
     } else {
       throw new Error('Text must not be an empty string.');
     }
