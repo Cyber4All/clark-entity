@@ -2,7 +2,7 @@
  * Provide an abstract representation for a CLARK user.
  */
 
-import { LearningObject } from './learning-object';
+import { LearningObject } from '../learning-object/learning-object';
 
 /**
  * A class to represent CLARK users.
