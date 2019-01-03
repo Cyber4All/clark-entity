@@ -120,6 +120,8 @@ export class LearningObject {
     if (description !== undefined && description !== null) {
       this._description = description.trim();
       this.updateDate();
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_DESCRIPTION);
     }
   }
 
