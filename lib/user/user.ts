@@ -88,7 +88,7 @@ export class User {
    * @returns {LearningObject} a reference to the new learning object
    */
   addObject(): LearningObject {
-    let object = new LearningObject(this, '');
+    let object = new LearningObject({ author: this });
     this._objects.push(object);
     return object;
   }
