@@ -99,13 +99,14 @@ export class LearningObject {
     return this._name;
   }
   set name(name: string) {
-    if (name !== undefined && name !== null) {
+    if (name !== undefined && name !== null && name.trim()) {
       this._name = name.trim();
       this.updateDate();
     } else {
       throw new Error(LEARNING_OBJECT_ERRORS.INVALID_NAME);
     }
   }
+  
 
   private _date: string;
   /**
