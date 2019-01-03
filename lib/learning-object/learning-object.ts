@@ -2,10 +2,10 @@
  * Provide abstract representations for learning objects.
  */
 
-import { User, UserProperties } from '../user/user';
-import { LearningGoal, LearningGoalProperties } from '../learning-goal';
+import { User } from '../user/user';
+import { LearningGoal } from '../learning-goal';
 import { LearningOutcome } from '../learning-outcome/learning-outcome';
-import { lengths } from '@cyber4all/clark-taxonomy';
+import { LEARNING_OBJECT_ERRORS } from './error-messages';
 
 export enum Restriction {
   FULL = 'full',
@@ -71,69 +71,165 @@ export enum AcademicLevel {
   Training = 'training'
 }
 
+type Length = 'nanomodule' | 'micromodule' | 'module' | 'unit' | 'course';
+type Status = string;
+
 /**
  * A class to represent a learning object.
  * @class
  */
 export class LearningObject {
-  // Index Signature to allow extra properties;
-  [key: string]: any;
-
+  private _author: User;
   /**
    * @property {User} author (immutable)
    *       the user this learning object belongs to
    */
-  author: User;
+  get author(): User {
+    return this._author;
+  }
 
+  private _name: string;
   /**
-   * @property {string} length
+   * @property {string} name
    *       the object's identifying name, unique over a user
    *
-   * TODO: ensure uniqueness of name if author is not null
    */
-  name: string;
+  get name(): string {
+    return this._name;
+  }
+  set name(name: string) {
+    if (name !== undefined && name !== null) {
+      this._name = name.trim();
+      this.updateDate();
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_NAME);
+    }
+  }
+
+  private _date: string;
+  /**
+   * @property {string} date
+   *       the object's last-modified date
+   */
+  get date(): string {
+    return this._date;
+  }
 
   /**
-   * @property {string} length
-   *       the object's last-modified date
-   * FIXME: if there's a reason to use an actual Date class
+   * Updates LearningObject's last-modified date
+   *
+   * @private
+   * @memberof LearningObject
    */
-  date: string;
+  private updateDate() {
+    this._date = Date.now().toString();
+  }
 
+  private _length: Length;
   /**
    * @property {string} length
    *       the object's class, determining its length (eg. module)
    *       values are restricted according to available lengths
    */
-  length: string;
+  get length(): Length {
+    return this._length;
+  }
 
+  set length(length: Length) {
+    if (this.acceptLength(length)) {
+      this._length = length;
+      this.updateDate();
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_LENGTH(length));
+    }
+  }
+
+  /**
+   * Validates length
+   *
+   * @private
+   * @param {Length} length
+   * @returns {boolean}
+   * @memberof LearningObject
+   */
+  private acceptLength(length: Length): boolean {
+    const validLengths: Length[] = [
+      'nanomodule',
+      'micromodule',
+      'module',
+      'unit',
+      'course'
+    ];
+    if (validLengths.includes(length)) {
+      return true;
+    }
+    return false;
+  }
+
+  private _levels: AcademicLevel[];
   /**
    * @property {string[]} levels
-   *       the array of the object's Academic Level. (ie K-12)
+   *       this object's Academic Level. (ie K-12)
    */
-  levels: AcademicLevel[];
+  get levels(): AcademicLevel[] {
+    return this._levels;
+  }
 
   /**
-   * Adds new AcademicLevel to Array of levels if level is not present in the array
+   * Adds new AcademicLevel to array of levels if level is not present in this object's levels
    *
    * @memberof LearningObject
    */
   addLevel(level: AcademicLevel) {
-    if (!this.levels.includes(level)) {
-      this.levels.push(level);
+    const [alreadyAdded, isValid] = this.acceptLevel(level);
+    if (!alreadyAdded && isValid) {
+      this._levels.push(level);
+      this.updateDate();
+    } else if (alreadyAdded) {
+      throw new Error(LEARNING_OBJECT_ERRORS.LEVEL_EXISTS(level));
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_LEVEL(level));
     }
   }
+
   /**
-   * Removes AcademicLevel from array of AcademicLevels
+   * Removes AcademicLevel from this object's levels
    *
    * @param {number} index
    * @returns {AcademicLevel}
    * @memberof LearningObject
    */
   removeLevel(index: number): AcademicLevel {
-    return this.levels.splice(index, 1)[0];
+    if (this.levels.length > 1) {
+      this.updateDate();
+      return this._levels.splice(index, 1)[0];
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_LEVELS);
+    }
   }
 
+  /**
+   * Validates level and checks if level has already been added
+   *
+   * @private
+   * @param {AcademicLevel} level
+   * @returns {boolean}
+   * @memberof LearningObject
+   */
+  private acceptLevel(level: AcademicLevel): boolean[] {
+    const validLevels: AcademicLevel[] = Object.keys(AcademicLevel).map(
+      // @ts-ignore Keys are not numbers and element is of type AcademicLevel
+      (key: string) => AcademicLevel[key] as AcademicLevel
+    );
+    const alreadyAdded = this.levels.includes(level);
+    const isValid = validLevels.includes(level);
+    if (!alreadyAdded && isValid) {
+      return [alreadyAdded, isValid];
+    }
+    return [alreadyAdded, isValid];
+  }
+
+  private _goals: LearningGoal[];
   /**
    * @property {LearningGoal[]} goals (immutable)
    *       goals this learning object should achieve
@@ -142,42 +238,93 @@ export class LearningObject {
    *       reference itself is immutable, and elements can only be
    *       added and removed by the below functions
    */
-  goals: LearningGoal[];
+  get goals(): LearningGoal[] {
+    return this._goals;
+  }
+  /**
+   * Adds a new learning goal to this object.
+   * Returns the index of the new goal
+   */
+  addGoal(text: string): number {
+    const goal = new LearningGoal(text);
+    return this._goals.push(goal) - 1;
+  }
+  /**
+   * Removes the object's i-th learning goal.
+   * @param {number} index the index to remove from this object's goals
+   *
+   * @returns {LearningGoal} the goal which was removed
+   */
+  removeGoal(index: number): LearningGoal {
+    return this._goals.splice(index, 1)[0];
+  }
 
+  private _outcomes: LearningOutcome[];
   /**
    * @property {LearningOutcome[]} outcomes
    *       outcomes this object should enable students to achieve
    *
    */
-  outcomes: LearningOutcome[];
+  get outcomes(): LearningOutcome[] {
+    return this._outcomes;
+  }
+  /**
+   * Adds a passed outcome or new, blank learning outcome to this object.
+   * @returns {number} index of the outcome
+   */
+  addOutcome(outcome?: LearningOutcome): number {
+    const addingOutcome = outcome || new LearningOutcome();
+    return this._outcomes.push(addingOutcome) - 1;
+  }
+  /**
+   * Removes the object's i-th learning outcome.
+   * @param {number} index the index to remove from this objects' outcomes
+   *
+   * @returns {LearningOutcome} the learning outcome which was removed
+   */
+  removeOutcome(index: number): LearningOutcome {
+    return this._outcomes.splice(index, 1)[0];
+  }
 
+  private _materials: Material;
   /**
    * @property {Material} materials neutrino file/url storage
    *
-   * TODO: extend constituents into full-fledged entities
    */
-  materials: Material;
+  get material(): Material {
+    return this._materials;
+  }
+  set material(material: Material) {
+    this._materials = material;
+  }
 
+  private _metrics: Metrics;
   /**
    * @property {Metrics} metrics neutrino file/url storage
    *
-   * TODO: extend constituents into full-fledged entities
    */
-  metrics: Metrics;
+  get metrics(): Metrics {
+    return this._metrics;
+  }
+  set metrics(metrics: Metrics) {
+    this._metrics = metrics;
+  }
 
+  private _published: boolean;
   /**
    * @property {boolean} published
    *       Whether or not the Learning Object is published
    */
-  published: boolean;
-
+  get published(): boolean {
+    return this._published;
+  }
   /**
    * Sets LearningObject's published flag to true
    *
    * @memberof LearningObject
    */
   publish(): void {
-    this.published = true;
+    this._published = true;
   }
   /**
    * Sets LearningObject's published flag to false
@@ -185,65 +332,98 @@ export class LearningObject {
    * @memberof LearningObject
    */
   unpublish(): void {
-    this.published = false;
+    this._published = false;
   }
 
-  children: LearningObject[] | string[];
+  private _children: LearningObject[];
+  get children(): LearningObject[] {
+    return this._children;
+  }
 
+  /**
+   * Adds LearningObject to this object's children
+   *
+   * @param {LearningObject} object
+   * @returns {number}
+   * @memberof LearningObject
+   */
+  addChild(object: LearningObject): number {
+    return this._children.push(object) - 1;
+  }
+  /**
+   * Removes the object's i-th child.
+   * @param {number} index the index to remove from this objects' children
+   *
+   * @returns {LearningObject} the child object which was removed
+   */
+  removeChild(index: number): LearningObject {
+    return this._children.splice(index, 1)[0];
+  }
+
+  private _contributors: User[];
   /**
    * @property {contributors} User[] array of Users
    *
    */
-  contributors: User[];
-
-  lock: LearningObjectLock | undefined;
-
-  collection: string;
-  /**
-   * @property {status} string Represents current state of Learning Object
-   *
-   */
-  status: string;
-
-  /**
-   * Adds a new learning goal to this object.
-   *
-   */
-  addGoal(text: string): void {
-    let goal = new LearningGoal(text);
-    this.goals.push(goal);
+  get contributors(): LearningObject[] {
+    return this._children;
   }
 
   /**
-   * Removes the object's i-th learning goal.
-   * @param {number} i the index to remove from the goals array
+   * Adds User to this object's contributors
    *
-   * @returns {LearningObject} the goal which was removed
+   * @param {User} contributor
+   * @returns {number}
+   * @memberof LearningObject
    */
-  removeGoal(i: number): LearningGoal {
-    return this.goals.splice(i, 1)[0];
+  addContributor(contributor: User): number {
+    return this._contributors.push(contributor) - 1;
   }
+  /**
+   * Removes the object's i-th contributor.
+   * @param {number} index the index to remove from this object's contributors
+   *
+   * @returns {User} the user object which was removed
+   */
+  removeContributor(index: number): User {
+    return this._contributors.splice(index, 1)[0];
+  }
+
+  private _lock: LearningObjectLock;
 
   /**
-   * Adds a new, blank learning outcome to this object.
-   * @returns {AssessmentPlan} a reference to the new outcome
-   */
-  addOutcome(): LearningOutcome {
-    let outcome = new LearningOutcome();
-    this.outcomes.push(outcome);
-    return outcome;
-  }
-
-  /**
-   * Removes the object's i-th learning outcome.
-   * @param {number} i the index to remove from the outcomes array
+   * @property {lock} LearningObjectLock
    *
-   * @returns {LearningObject} the learning outcome which was removed
    */
-  removeOutcome(i: number): LearningOutcome {
-    return this.outcomes.splice(i, 1)[0];
+  get lock(): LearningObjectLock {
+    return this._lock;
+  }
+  set lock(lock: LearningObjectLock) {
+    this._lock = lock;
+  }
+  private _collection: string;
+  /**
+   * @property {collection} string the collection this object belongs to
+   *
+   */
+  get collection(): string {
+    return this._collection;
+  }
+  set collection(collection: string) {
+    this._collection = collection;
   }
 
+  private _status: Status;
+  /**
+   * @property {status} Status Represents current state of Learning Object
+   *
+   */
+  get status(): Status {
+    return this._status;
+  }
+  set status(status: Status) {
+    this._status = status;
+  }
   /**
    * Construct a new, blank LearningOutcome.
    * @param {User} source the author the new object belongs to
@@ -318,19 +498,3 @@ export class LearningObject {
     return learningObject;
   }
 }
-
-export type LearningObjectProperties = {
-  author: UserProperties;
-  name: string;
-  date: string;
-  length: string;
-  levels: AcademicLevel[];
-  goals: LearningGoalProperties[];
-  materials: Material;
-  metrics: Metrics;
-  published: boolean;
-  children: LearningObjectProperties[];
-  contributors: UserProperties[];
-  lock: LearningObjectLock;
-  [key: string]: any;
-};
