@@ -106,7 +106,22 @@ export class LearningObject {
       throw new Error(LEARNING_OBJECT_ERRORS.INVALID_NAME);
     }
   }
-  
+
+  private _description!: string;
+  /**
+   * @property {string} description
+   *       description of the object's content
+   *
+   */
+  get description(): string {
+    return this._description;
+  }
+  set description(description: string) {
+    if (description !== undefined && description !== null) {
+      this._description = description.trim();
+      this.updateDate();
+    }
+  }
 
   private _date: string;
   /**
@@ -458,6 +473,7 @@ export class LearningObject {
   constructor(object?: Partial<LearningObject>) {
     this._author = new User('', '', '', '', '');
     this.name = '';
+    this.description = '';
     this._date = Date.now().toString();
     this.length = 'nanomodule';
     this._levels = [AcademicLevel.Undergraduate];
@@ -493,6 +509,7 @@ export class LearningObject {
   private copyObject(object: Partial<LearningObject>): void {
     this._author = <User>object.author || this.author;
     this.name = <string>object.name || this.name;
+    this.description = <string>object.description || this.description;
     this._date = <string>object.date || this.date;
     this.length = <Length>object.length || this.length;
     (<AcademicLevel[]>object.levels).map(level => this.addLevel(level));
