@@ -466,11 +466,11 @@ export class LearningObject {
     }
     return false;
   }
+
   /**
-   * Construct a new, blank LearningOutcome.
-   * @param {User} source the author the new object belongs to
-   *
-   * @constructor
+   *Creates an instance of LearningObject.
+   * @param {Partial<LearningObject>} [object]
+   * @memberof LearningObject
    */
   constructor(object?: Partial<LearningObject>) {
     this._author = new User('', '', '', '', '');
