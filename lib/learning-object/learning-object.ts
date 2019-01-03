@@ -474,7 +474,7 @@ export class LearningObject {
    */
   constructor(object?: Partial<LearningObject>) {
     this._author = new User('', '', '', '', '');
-    this.name = '';
+    this._name = '';
     this.description = '';
     this._date = Date.now().toString();
     this.length = 'nanomodule';
