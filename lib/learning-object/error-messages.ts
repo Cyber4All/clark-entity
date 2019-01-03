@@ -1,5 +1,6 @@
 export const LEARNING_OBJECT_ERRORS = {
   INVALID_NAME: 'Name must be defined.',
+  INVALID_DESCRIPTION: 'Description must be defined.',
   INVALID_LENGTH(length: string) {
     if (!length) {
       return 'Length must be defined.';
@@ -19,4 +20,9 @@ export const LEARNING_OBJECT_ERRORS = {
     }
     return `${status} is not a valid status.`;
   }
+};
+
+export const SUBMITTABLE_LEARNING_OBJECT_ERRORS = {
+  INVALID_DESCRIPTION: 'Description must not be an empty string.',
+  INVALID_OUTCOMES: 'Outcomes must contain at least one valid outcome.'
 };
