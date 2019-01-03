@@ -2,8 +2,6 @@
  * Provide an abstract representation for a CLARK user.
  */
 
-import { LearningObject } from '../learning-object/learning-object';
-
 /**
  * A class to represent CLARK users.
  * @class
@@ -32,21 +30,6 @@ export class User {
   organization: string;
 
   /**
-   * @property {string} password a user's password authentication
-   */
-  password: string;
-
-  /**
-   * @property {LearningObject[]} objects (immutable)
-   *       an array of a user's learning objects
-   *
-   * NOTE: individual elements are freely accessible, but the array
-   *       reference itself is immutable, and elements can only be
-   *       added and removed by the below functions
-   */
-  objects: LearningObject[];
-
-  /**
    * Returns User's Bio
    *
    * @type {string}
@@ -70,37 +53,14 @@ export class User {
     username: string,
     name: string,
     email: string,
-    organization: string,
-    password: string
+    organization: string
   ) {
     this.username = username;
     this.name = name;
     this.email = email;
     this.organization = organization;
-    this.password = password;
-    this.objects = [];
     this.bio = '';
     this.createdAt = '';
-  }
-
-  /**
-   * Adds a new, blank learning object to this user.
-   * @returns {LearningObject} a reference to the new learning object
-   */
-  addObject(): LearningObject {
-    let object = new LearningObject({ author: this });
-    this._objects.push(object);
-    return object;
-  }
-
-  /**
-   * Removes the user's i-th learning object.
-   * @param {number} i the index to remove from the objects array
-   *
-   * @returns {LearningObject} the learning object which was removed
-   */
-  removeObject(i: number): LearningObject {
-    return this._objects.splice(i, 1)[0];
   }
 
   public static instantiate(object: any): User {
@@ -109,8 +69,7 @@ export class User {
       obj.username ? obj.username : '',
       obj.name ? obj.name : '',
       obj.email ? obj.email : '',
-      obj.organization ? obj.organization : '',
-      obj.password ? obj.password : ''
+      obj.organization ? obj.organization : ''
     );
     // Copy over props not in constructor
     Object.keys(obj).forEach((key: string) => {
