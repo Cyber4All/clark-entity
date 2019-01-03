@@ -12,5 +12,11 @@ export const LEARNING_OBJECT_ERRORS = {
   INVALID_LEVEL(level: string) {
     return `${level} is not a valid level.`;
   },
-  INVALID_LEVELS: 'Levels must contain at least one valid academic level.'
+  INVALID_LEVELS: 'Levels must contain at least one valid academic level.',
+  INVALID_STATUS(status: string) {
+    if (!status) {
+      return 'Status must be defined.';
+    }
+    return `${status} is not a valid status.`;
+  }
 };

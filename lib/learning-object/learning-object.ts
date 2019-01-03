@@ -72,7 +72,8 @@ export enum AcademicLevel {
 }
 
 type Length = 'nanomodule' | 'micromodule' | 'module' | 'unit' | 'course';
-type Status = string;
+
+type Status = 'unpublished' | 'waiting' | 'reviewed' | 'published' | 'denied';
 
 /**
  * A class to represent a learning object.
@@ -324,6 +325,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   publish(): void {
+    this.status = 'published';
     this._published = true;
   }
   /**
@@ -422,7 +424,29 @@ export class LearningObject {
     return this._status;
   }
   set status(status: Status) {
-    this._status = status;
+    if (this.acceptStatus(status)) {
+      if (this.status === 'published') {
+        this.publish();
+      } else {
+        this._status = status;
+      }
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_STATUS(status));
+    }
+  }
+
+  private acceptStatus(status: Status): boolean {
+    const validStatuses: Status[] = [
+      'unpublished',
+      'waiting',
+      'reviewed',
+      'denied',
+      'published'
+    ];
+    if (validStatuses.includes(status)) {
+      return true;
+    }
+    return false;
   }
   /**
    * Construct a new, blank LearningOutcome.
@@ -448,7 +472,7 @@ export class LearningObject {
     this._children = [];
     this._contributors = [];
     this.collection = '';
-    this.status = '';
+    this.status = 'unpublished';
     this.metrics = { saves: 0, downloads: 0 };
     this._published = false;
     this.lock = undefined;
