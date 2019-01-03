@@ -17,7 +17,7 @@ export class SubmittableLearningObject extends LearningObject {
     if (description.trim()) {
       super.description = description.trim();
     } else {
-      throw new Error();
+      throw new Error(SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_DESCRIPTION);
     }
   }
 
