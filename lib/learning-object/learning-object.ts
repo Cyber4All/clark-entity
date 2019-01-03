@@ -473,7 +473,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   constructor(object?: Partial<LearningObject>) {
-    this._author = new User('', '', '', '', '');
+    this._author = new User('', '', '', '');
     this._name = '';
     this.description = '';
     this._date = Date.now().toString();
