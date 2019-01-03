@@ -88,7 +88,7 @@ export class LearningObject {
     return this._author;
   }
 
-  private _name: string;
+  private _name!: string;
   /**
    * @property {string} name
    *       the object's identifying name, unique over a user
@@ -125,7 +125,7 @@ export class LearningObject {
     this._date = Date.now().toString();
   }
 
-  private _length: Length;
+  private _length!: Length;
   /**
    * @property {string} length
    *       the object's class, determining its length (eg. module)
@@ -286,19 +286,19 @@ export class LearningObject {
     return this._outcomes.splice(index, 1)[0];
   }
 
-  private _materials: Material;
+  private _materials!: Material;
   /**
    * @property {Material} materials neutrino file/url storage
    *
    */
-  get material(): Material {
+  get materials(): Material {
     return this._materials;
   }
-  set material(material: Material) {
+  set materials(material: Material) {
     this._materials = material;
   }
 
-  private _metrics: Metrics;
+  private _metrics!: Metrics;
   /**
    * @property {Metrics} metrics neutrino file/url storage
    *
@@ -365,8 +365,8 @@ export class LearningObject {
    * @property {contributors} User[] array of Users
    *
    */
-  get contributors(): LearningObject[] {
-    return this._children;
+  get contributors(): User[] {
+    return this._contributors;
   }
 
   /**
@@ -389,19 +389,19 @@ export class LearningObject {
     return this._contributors.splice(index, 1)[0];
   }
 
-  private _lock: LearningObjectLock;
+  private _lock?: LearningObjectLock;
 
   /**
    * @property {lock} LearningObjectLock
    *
    */
-  get lock(): LearningObjectLock {
+  get lock(): LearningObjectLock | undefined {
     return this._lock;
   }
-  set lock(lock: LearningObjectLock) {
+  set lock(lock: LearningObjectLock | undefined) {
     this._lock = lock;
   }
-  private _collection: string;
+  private _collection!: string;
   /**
    * @property {collection} string the collection this object belongs to
    *
@@ -413,7 +413,7 @@ export class LearningObject {
     this._collection = collection;
   }
 
-  private _status: Status;
+  private _status!: Status;
   /**
    * @property {status} Status Represents current state of Learning Object
    *
@@ -430,14 +430,14 @@ export class LearningObject {
    *
    * @constructor
    */
-  constructor(author: User = new User('', '', '', '', ''), name: string = '') {
-    this.author = author;
-    this.name = name;
-    this.date = Date.now().toString();
-    this.length = <string>Array.from(lengths)[0];
-    this.levels = [AcademicLevel.Undergraduate];
-    this.goals = [];
-    this.outcomes = [];
+  constructor(object?: Partial<LearningObject>) {
+    this._author = new User('', '', '', '', '');
+    this.name = '';
+    this._date = Date.now().toString();
+    this.length = 'nanomodule';
+    this._levels = [AcademicLevel.Undergraduate];
+    this._goals = [];
+    this._outcomes = [];
     this.materials = {
       files: [],
       urls: [],
@@ -445,56 +445,49 @@ export class LearningObject {
       folderDescriptions: [],
       pdf: { name: '', url: '' }
     };
-    this.metrics = { saves: 0, downloads: 0 };
-    this.published = false;
-    this.children = [];
-    this.contributors = [];
-    this.lock = undefined;
+    this._children = [];
+    this._contributors = [];
     this.collection = '';
     this.status = '';
+    this.metrics = { saves: 0, downloads: 0 };
+    this._published = false;
+    this.lock = undefined;
+
+    if (object) {
+      this.copyObject(object);
+    }
   }
 
-  public static instantiate(object: LearningObjectProperties): LearningObject {
-    const obj = { ...object };
-    let author = User.instantiate(obj.author);
-    let learningObject = new LearningObject(author, obj.name);
+  /**
+   * Copies properties of object to this learning object if defined
+   *
+   * @private
+   * @param {Partial<LearningObject>} object
+   * @memberof LearningObject
+   */
+  private copyObject(object: Partial<LearningObject>): void {
+    this._author = <User>object.author || this.author;
+    this.name = <string>object.name || this.name;
+    this._date = <string>object.date || this.date;
+    this.length = <Length>object.length || this.length;
+    (<AcademicLevel[]>object.levels).map(level => this.addLevel(level));
+    (<LearningGoal[]>object.goals).map(goal => this.addGoal(goal.text));
+    (<LearningOutcome[]>object.outcomes).map(outcome =>
+      this.addOutcome(outcome)
+    );
+    this.materials = <Material>object.materials || this.materials;
+    (<LearningObject[]>object.children).map(child => this.addChild(child));
+    (<User[]>object.contributors).map(contributor =>
+      this.addContributor(contributor)
+    );
+    this.collection = <string>object.collection || this.collection;
+    this.status = <Status>object.status || this.status;
+    this.metrics = <Metrics>object.metrics || this.metrics;
+    this._published = <boolean>object.published || this.published;
+    this.lock = <LearningObjectLock>object.lock || this.lock;
+  }
 
-    learningObject.goals = obj.goals
-      ? obj.goals.map(goal => LearningGoal.instantiate(goal))
-      : learningObject.goals;
-    learningObject.outcomes = obj.outcomes
-      ? obj.outcomes.map((outcome: Partial<LearningOutcome>) =>
-          LearningOutcome.instantiate(outcome)
-        )
-      : learningObject.outcomes;
-
-    learningObject.children = obj.children
-      ? obj.children
-          .filter(
-            (lo: LearningObjectProperties | string) => typeof lo !== 'string'
-          )
-          .map((child: LearningObjectProperties) =>
-            LearningObject.instantiate(child)
-          )
-      : learningObject.children;
-
-    learningObject.contributors = obj.contributors
-      ? obj.contributors.map((user: UserProperties) => User.instantiate(user))
-      : [];
-
-    learningObject.lock = obj.lock ? obj.lock : obj.lock;
-
-    // Remove Remove entities that required instantiation;;
-    delete obj.goals;
-    delete obj.outcomes;
-    delete obj.children;
-    delete obj.contributors;
-
-    // Copy over injected props
-    Object.keys(obj).forEach((key: string) => {
-      learningObject[key] = obj[key];
-    });
-
-    return learningObject;
+  public static instantiate(object: Partial<LearningObject>): LearningObject {
+    return new LearningObject(object);
   }
 }
