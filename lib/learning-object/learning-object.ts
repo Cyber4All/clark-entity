@@ -514,16 +514,26 @@ export class LearningObject {
     this.description = <string>object.description || this.description;
     this._date = <string>object.date || this.date;
     this.length = <Length>object.length || this.length;
-    (<AcademicLevel[]>object.levels).map(level => this.addLevel(level));
-    (<LearningGoal[]>object.goals).map(goal => this.addGoal(goal.text));
-    (<LearningOutcome[]>object.outcomes).map(outcome =>
-      this.addOutcome(outcome)
-    );
+    if (object.levels) {
+      (<AcademicLevel[]>object.levels).map(level => this.addLevel(level));
+    }
+    if (object.goals) {
+      (<LearningGoal[]>object.goals).map(goal => this.addGoal(goal.text));
+    }
+    if (object.outcomes) {
+      (<LearningOutcome[]>object.outcomes).map(outcome =>
+        this.addOutcome(outcome)
+      );
+    }
     this.materials = <Material>object.materials || this.materials;
-    (<LearningObject[]>object.children).map(child => this.addChild(child));
-    (<User[]>object.contributors).map(contributor =>
-      this.addContributor(contributor)
-    );
+    if (object.children) {
+      (<LearningObject[]>object.children).map(child => this.addChild(child));
+    }
+    if (object.contributors) {
+      (<User[]>object.contributors).map(contributor =>
+        this.addContributor(contributor)
+      );
+    }
     this.collection = <string>object.collection || this.collection;
     this.status = <Status>object.status || this.status;
     this.metrics = <Metrics>object.metrics || this.metrics;
