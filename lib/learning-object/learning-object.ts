@@ -320,7 +320,7 @@ export class LearningObject {
     return this._published;
   }
   /**
-   * Sets LearningObject's published flag to true
+   * Sets LearningObject's stats to published and published flag to true
    *
    * @memberof LearningObject
    */
