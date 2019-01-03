@@ -325,7 +325,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   publish(): void {
-    this.status = 'published';
+    this._status = 'published';
     this._published = true;
   }
   /**
