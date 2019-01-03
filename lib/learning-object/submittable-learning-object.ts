@@ -77,7 +77,35 @@ export class SubmittableLearningObject extends LearningObject {
   constructor(object: LearningObject) {
     super(object);
     this.description = object.description;
-    object.outcomes.map(outcome => this.addOutcome(outcome));
-    object.children.map(child => this.addChild(child));
+    this.validateOutcomes(object.outcomes as SubmittableLearningOutcome[]);
+    this.validateChildren(object.children as SubmittableLearningObject[]);
+  }
+
+  /**
+   * Validates outcomes contain at least one SubmittableOutcome and that all outcomes are SubmittableOutcomes
+   *
+   * @private
+   * @param {SubmittableLearningOutcome[]} outcomes
+   * @memberof SubmittableLearningObject
+   */
+  private validateOutcomes(outcomes: SubmittableLearningOutcome[]): void {
+    if (outcomes) {
+      outcomes.map(outcome => this.addOutcome(outcome));
+    } else {
+      throw new Error(SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_OUTCOMES);
+    }
+  }
+
+  /**
+   * Validates children are SubmittableOutcomes
+   *
+   * @private
+   * @param {SubmittableLearningObject[]} children
+   * @memberof SubmittableLearningObject
+   */
+  private validateChildren(children: SubmittableLearningObject[]): void {
+    if (children) {
+      children.map(child => this.addChild(child));
+    }
   }
 }
