@@ -510,7 +510,7 @@ export class LearningObject {
   constructor(object?: Partial<LearningObject>) {
     this._author = new User('', '', '', '');
     this._name = '';
-    this.description = '';
+    this._description = '';
     this._date = Date.now().toString();
     this.length = LearningObject.Length.NANOMODULE;
     this._levels = [LearningObject.Level.Undergraduate];
