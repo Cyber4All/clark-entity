@@ -344,8 +344,8 @@ export class LearningObject {
   get published(): boolean {
     return this._published;
   }
-  /**LearningObject.
-   * Sets LearningObject's stats to published and published flag to true
+  /**
+    * Sets LearningObject's status to published and published flag to true
    *
    * @memberof LearningObject
    */
