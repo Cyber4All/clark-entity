@@ -7,59 +7,6 @@ import { LearningGoal } from '../learning-goal';
 import { LearningOutcome } from '../learning-outcome/learning-outcome';
 import { LEARNING_OBJECT_ERRORS } from './error-messages';
 
-export enum Restriction {
-  FULL = 'full',
-  PUBLISH = 'publish',
-  DOWNLOAD = 'download'
-}
-export type LearningObjectLock = {
-  date?: string;
-  restrictions: Restriction[];
-};
-
-/**
- * Provide abstract representations for Materials.
- */
-export type Material = {
-  files: File[];
-  urls: Url[];
-  notes: string;
-  folderDescriptions: FolderDescription[];
-  pdf: LearningObjectPDF;
-};
-
-export type LearningObjectPDF = {
-  name: string;
-  url: string;
-};
-
-export type File = {
-  id: string;
-  name: string;
-  fileType: string;
-  extension: string;
-  url: string;
-  date: string;
-  fullPath?: string;
-  size?: number;
-  description?: string;
-};
-
-export type Url = {
-  title: string;
-  url: string;
-};
-
-export type FolderDescription = {
-  path: string;
-  description: string;
-};
-
-export type Metrics = {
-  saves: number;
-  downloads: number;
-};
-
 /**
  * A class to represent a learning object.
  * @class
@@ -327,15 +274,15 @@ export class LearningObject {
     }
   }
 
-  private _metrics!: Metrics;
+  private _metrics!: LearningObject.Metrics;
   /**
-   * @property {Metrics} metrics neutrino file/url storage
+   * @property {LearningObject.Metrics} metrics neutrino file/url storage
    *
    */
-  get metrics(): Metrics {
+  get metrics(): LearningObject.Metrics {
     return this._metrics;
   }
-  set metrics(metrics: Metrics) {
+  set metrics(metrics: LearningObject.Metrics) {
     if (metrics) {
       this._metrics = metrics;
     } else {
@@ -383,7 +330,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addChild(object: LearningObject): number {
-    if (object) {
+    if (object && object instanceof LearningObject) {
       this.updateDate();
       return this._children.push(object) - 1;
     } else {
@@ -418,7 +365,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addContributor(contributor: User): number {
-    if (contributor) {
+    if (contributor && contributor instanceof User) {
       this.updateDate();
       return this._contributors.push(contributor) - 1;
     } else {
@@ -436,16 +383,16 @@ export class LearningObject {
     return this._contributors.splice(index, 1)[0];
   }
 
-  private _lock?: LearningObjectLock;
+  private _lock?: LearningObject.Lock;
 
   /**
-   * @property {lock} LearningObjectLock
+   * @property {lock} LearningObject.Lock
    *
    */
-  get lock(): LearningObjectLock | undefined {
+  get lock(): LearningObject.Lock | undefined {
     return this._lock;
   }
-  set lock(lock: LearningObjectLock | undefined) {
+  set lock(lock: LearningObject.Lock | undefined) {
     this._lock = lock;
     this.updateDate();
   }
@@ -578,9 +525,9 @@ export class LearningObject {
     }
     this.collection = <string>object.collection || this.collection;
     this.status = <LearningObject.Status>object.status || this.status;
-    this.metrics = <Metrics>object.metrics || this.metrics;
+    this.metrics = <LearningObject.Metrics>object.metrics || this.metrics;
     this._published = <boolean>object.published || this.published;
-    this.lock = <LearningObjectLock>object.lock || this.lock;
+    this.lock = <LearningObject.Lock>object.lock || this.lock;
   }
 
   public static instantiate(object: Partial<LearningObject>): LearningObject {
@@ -615,5 +562,59 @@ export namespace LearningObject {
     PostGraduate = 'post graduate',
     CC = 'community college',
     Training = 'training'
+  }
+
+  export enum Restriction {
+    FULL = 'full',
+    PUBLISH = 'publish',
+    DOWNLOAD = 'download'
+  }
+
+  export interface Lock {
+    date?: string;
+    restrictions: Restriction[];
+  }
+
+  export interface Metrics {
+    saves: number;
+    downloads: number;
+  }
+}
+
+/**
+ * Provide abstract representations for Materials.
+ */
+export interface Material {
+  files: Material.File[];
+  urls: Material.Url[];
+  notes: string;
+  folderDescriptions: Material.FolderDescription[];
+  pdf: Material.PDF;
+}
+
+export namespace Material {
+  export interface File {
+    id: string;
+    name: string;
+    fileType: string;
+    extension: string;
+    url: string;
+    date: string;
+    fullPath?: string;
+    size?: number;
+    description?: string;
+  }
+  export interface Url {
+    title: string;
+    url: string;
+  }
+
+  export interface FolderDescription {
+    path: string;
+    description: string;
+  }
+  export interface PDF {
+    name: string;
+    url: string;
   }
 }
