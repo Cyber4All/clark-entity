@@ -19,7 +19,13 @@ export const LEARNING_OBJECT_ERRORS = {
       return 'Status must be defined.';
     }
     return `${status} is not a valid status.`;
-  }
+  },
+  INVALID_OUTCOME: 'Outcome must be defined and be a valid outcome.',
+  INVALID_CHILD: 'Child object must be defined.',
+  INVALID_CONTRIBUTOR: 'Contributor must be defined.',
+  INVALID_MATERIAL: 'Material must be defined.',
+  INVALID_METRICS: 'Metrics must be defined.',
+  INVALID_COLLECTION: 'Collection must be defined.'
 };
 
 export const SUBMITTABLE_LEARNING_OBJECT_ERRORS = {

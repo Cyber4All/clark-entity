@@ -272,6 +272,10 @@ export class LearningObject {
   /**
    * Adds a new learning goal to this object.
    * Returns the index of the new goal
+   *
+   * @param {string} text
+   * @returns {number}
+   * @memberof LearningObject
    */
   addGoal(text: string): number {
     const goal = new LearningGoal(text);
@@ -303,9 +307,13 @@ export class LearningObject {
    * @returns {number} index of the outcome
    */
   addOutcome(outcome?: LearningOutcome): number {
-    const addingOutcome = outcome || new LearningOutcome();
-    this.updateDate();
-    return this._outcomes.push(addingOutcome) - 1;
+    if (outcome && outcome instanceof LearningOutcome) {
+      const addingOutcome = outcome || new LearningOutcome();
+      this.updateDate();
+      return this._outcomes.push(addingOutcome) - 1;
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_OUTCOME);
+    }
   }
   /**
    * Removes the object's i-th learning outcome.
@@ -327,8 +335,12 @@ export class LearningObject {
     return this._materials;
   }
   set materials(material: Material) {
-    this.updateDate();
-    this._materials = material;
+    if (material) {
+      this.updateDate();
+      this._materials = material;
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_MATERIAL);
+    }
   }
 
   private _metrics!: Metrics;
@@ -340,7 +352,11 @@ export class LearningObject {
     return this._metrics;
   }
   set metrics(metrics: Metrics) {
-    this._metrics = metrics;
+    if (metrics) {
+      this._metrics = metrics;
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_METRICS);
+    }
   }
 
   private _published: boolean;
@@ -380,12 +396,16 @@ export class LearningObject {
    * Adds LearningObject to this object's children
    *
    * @param {LearningObject} object
-   * @returns {number}
+   * @returns {number} index of the child object
    * @memberof LearningObject
    */
   addChild(object: LearningObject): number {
-    this.updateDate();
-    return this._children.push(object) - 1;
+    if (object) {
+      this.updateDate();
+      return this._children.push(object) - 1;
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_CHILD);
+    }
   }
   /**
    * Removes the object's i-th child.
@@ -411,12 +431,16 @@ export class LearningObject {
    * Adds User to this object's contributors
    *
    * @param {User} contributor
-   * @returns {number}
+   * @returns {number} index of the contributor
    * @memberof LearningObject
    */
   addContributor(contributor: User): number {
-    this.updateDate();
-    return this._contributors.push(contributor) - 1;
+    if (contributor) {
+      this.updateDate();
+      return this._contributors.push(contributor) - 1;
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_CONTRIBUTOR);
+    }
   }
   /**
    * Removes the object's i-th contributor.
@@ -451,8 +475,12 @@ export class LearningObject {
     return this._collection;
   }
   set collection(collection: string) {
-    this._collection = collection;
-    this.updateDate();
+    if (collection !== undefined && collection !== null) {
+      this._collection = collection;
+      this.updateDate();
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_COLLECTION);
+    }
   }
 
   private _status!: Status;
