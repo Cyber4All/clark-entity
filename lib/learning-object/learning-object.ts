@@ -60,33 +60,6 @@ export type Metrics = {
   downloads: number;
 };
 
-export enum AcademicLevel {
-  Elementary = 'elementary',
-  Middle = 'middle',
-  High = 'high',
-  Undergraduate = 'undergraduate',
-  Graduate = 'graduate',
-  PostGraduate = 'post graduate',
-  CC = 'community college',
-  Training = 'training'
-}
-
-enum Length {
-  NANOMODULE = 'nanomodule',
-  MICROMODULE = 'micromodule',
-  MODULE = 'module',
-  UNIT = 'unit',
-  COURSE = 'course'
-}
-
-enum Status {
-  UNPUBLISHED = 'unpublished',
-  WAITING = 'waiting',
-  REVIEWED = 'reviewed',
-  PUBLISHED = 'published',
-  DENIED = 'denied'
-}
-
 /**
  * A class to represent a learning object.
  * @class
@@ -156,17 +129,17 @@ export class LearningObject {
     this._date = Date.now().toString();
   }
 
-  private _length!: Length;
+  private _length!: LearningObject.Length;
   /**
    * @property {string} length
    *       the object's class, determining its length (eg. module)
    *       values are restricted according to available lengths
    */
-  get length(): Length {
+  get length(): LearningObject.Length {
     return this._length;
   }
 
-  set length(length: Length) {
+  set length(length: LearningObject.Length) {
     if (this.isValidLength(length)) {
       this._length = length;
       this.updateDate();
@@ -179,14 +152,16 @@ export class LearningObject {
    * Validates length
    *
    * @private
-   * @param {Length} length
+   * @param {LearningObject.Length} length
    * @returns {boolean}
    * @memberof LearningObject
    */
-  private isValidLength(length: Length): boolean {
-    const validLengths: Length[] = Object.keys(Length).map(
+  private isValidLength(length: LearningObject.Length): boolean {
+    const validLengths: LearningObject.Length[] = Object.keys(
+      LearningObject.Length
+    ).map(
       // @ts-ignore Keys are not numbers and element is of type Length
-      (key: string) => Length[key] as Length
+      (key: string) => LearningObject.Length[key] as LearningObject.Length
     );
     if (validLengths.includes(length)) {
       return true;
@@ -194,21 +169,21 @@ export class LearningObject {
     return false;
   }
 
-  private _levels: AcademicLevel[];
+  private _levels: LearningObject.Level[];
   /**
    * @property {string[]} levels
    *       this object's Academic Level. (ie K-12)
    */
-  get levels(): AcademicLevel[] {
+  get levels(): LearningObject.Level[] {
     return this._levels;
   }
 
   /**
-   * Adds new AcademicLevel to array of levels if level is not present in this object's levels
+   * Adds new LearningObject.Level to array of levels if level is not present in this object's levels
    *
    * @memberof LearningObject
    */
-  addLevel(level: AcademicLevel) {
+  addLevel(level: LearningObject.Level) {
     const [alreadyAdded, isValid] = this.isValidLevel(level);
     if (!alreadyAdded && isValid) {
       this._levels.push(level);
@@ -221,13 +196,13 @@ export class LearningObject {
   }
 
   /**
-   * Removes AcademicLevel from this object's levels
+   * Removes LearningObject.Level from this object's levels
    *
    * @param {number} index
-   * @returns {AcademicLevel}
+   * @returns {LearningObject.Level}
    * @memberof LearningObject
    */
-  removeLevel(index: number): AcademicLevel {
+  removeLevel(index: number): LearningObject.Level {
     if (this.levels.length > 1) {
       this.updateDate();
       return this._levels.splice(index, 1)[0];
@@ -240,14 +215,16 @@ export class LearningObject {
    * Validates level and checks if level has already been added
    *
    * @private
-   * @param {AcademicLevel} level
+   * @param {LearningObject.Level} level
    * @returns {boolean}
    * @memberof LearningObject
    */
-  private isValidLevel(level: AcademicLevel): boolean[] {
-    const validLevels: AcademicLevel[] = Object.keys(AcademicLevel).map(
-      // @ts-ignore Keys are not numbers and element is of type AcademicLevel
-      (key: string) => AcademicLevel[key] as AcademicLevel
+  private isValidLevel(level: LearningObject.Level): boolean[] {
+    const validLevels: LearningObject.Level[] = Object.keys(
+      LearningObject.Level
+    ).map(
+      // @ts-ignore Keys are not numbers and element is of type LearningObject.Level
+      (key: string) => LearningObject.Level[key] as LearningObject.Level
     );
     const alreadyAdded = this.levels.includes(level);
     const isValid = validLevels.includes(level);
@@ -367,13 +344,13 @@ export class LearningObject {
   get published(): boolean {
     return this._published;
   }
-  /**
+  /**LearningObject.
    * Sets LearningObject's stats to published and published flag to true
    *
    * @memberof LearningObject
    */
   publish(): void {
-    this._status = Status.PUBLISHED;
+    this._status = LearningObject.Status.PUBLISHED;
     this._published = true;
     this.updateDate();
   }
@@ -483,17 +460,17 @@ export class LearningObject {
     }
   }
 
-  private _status!: Status;
+  private _status!: LearningObject.Status;
   /**
    * @property {status} Status Represents current state of Learning Object
    *
    */
-  get status(): Status {
+  get status(): LearningObject.Status {
     return this._status;
   }
-  set status(status: Status) {
+  set status(status: LearningObject.Status) {
     if (this.isValidStatus(status)) {
-      if (this.status === Status.PUBLISHED) {
+      if (this.status === LearningObject.Status.PUBLISHED) {
         this.publish();
       } else {
         this._status = status;
@@ -508,14 +485,16 @@ export class LearningObject {
    * Validates status passed is a valid status
    *
    * @private
-   * @param {Status} status
+   * @param {LearningObject.Status} status
    * @returns {boolean}
    * @memberof LearningObject
    */
-  private isValidStatus(status: Status): boolean {
-    const validStatuses: Status[] = Object.keys(Status).map(
+  private isValidStatus(status: LearningObject.Status): boolean {
+    const validStatuses: LearningObject.Status[] = Object.keys(
+      LearningObject.Status
+    ).map(
       // @ts-ignore Keys are not numbers and element is of type Status
-      (key: string) => Status[key] as Status
+      (key: string) => LearningObject.Status[key] as LearningObject.Status
     );
     if (validStatuses.includes(status)) {
       return true;
@@ -533,8 +512,8 @@ export class LearningObject {
     this._name = '';
     this.description = '';
     this._date = Date.now().toString();
-    this.length = Length.NANOMODULE;
-    this._levels = [AcademicLevel.Undergraduate];
+    this.length = LearningObject.Length.NANOMODULE;
+    this._levels = [LearningObject.Level.Undergraduate];
     this._goals = [];
     this._outcomes = [];
     this.materials = {
@@ -547,7 +526,7 @@ export class LearningObject {
     this._children = [];
     this._contributors = [];
     this.collection = '';
-    this.status = Status.UNPUBLISHED;
+    this.status = LearningObject.Status.UNPUBLISHED;
     this.metrics = { saves: 0, downloads: 0 };
     this._published = false;
     this.lock = undefined;
@@ -569,9 +548,9 @@ export class LearningObject {
     this.name = <string>object.name || this.name;
     this.description = <string>object.description || this.description;
     this._date = <string>object.date || this.date;
-    this.length = <Length>object.length || this.length;
+    this.length = <LearningObject.Length>object.length || this.length;
     if (object.levels) {
-      (<AcademicLevel[]>object.levels).map(level => this.addLevel(level));
+      (<LearningObject.Level[]>object.levels)
     }
     if (object.goals) {
       (<LearningGoal[]>object.goals).map(goal => this.addGoal(goal.text));
@@ -591,7 +570,7 @@ export class LearningObject {
       );
     }
     this.collection = <string>object.collection || this.collection;
-    this.status = <Status>object.status || this.status;
+    this.status = <LearningObject.Status>object.status || this.status;
     this.metrics = <Metrics>object.metrics || this.metrics;
     this._published = <boolean>object.published || this.published;
     this.lock = <LearningObjectLock>object.lock || this.lock;
@@ -599,5 +578,34 @@ export class LearningObject {
 
   public static instantiate(object: Partial<LearningObject>): LearningObject {
     return new LearningObject(object);
+  }
+}
+
+export namespace LearningObject {
+  export enum Length {
+    NANOMODULE = 'nanomodule',
+    MICROMODULE = 'micromodule',
+    MODULE = 'module',
+    UNIT = 'unit',
+    COURSE = 'course'
+  }
+
+  export enum Status {
+    UNPUBLISHED = 'unpublished',
+    WAITING = 'waiting',
+    REVIEWED = 'reviewed',
+    PUBLISHED = 'published',
+    DENIED = 'denied'
+  }
+
+  export enum Level {
+    Elementary = 'elementary',
+    Middle = 'middle',
+    High = 'high',
+    Undergraduate = 'undergraduate',
+    Graduate = 'graduate',
+    PostGraduate = 'post graduate',
+    CC = 'community college',
+    Training = 'training'
   }
 }
