@@ -1,23 +1,23 @@
 export const LEARNING_OBJECT_ERRORS = {
   INVALID_NAME: 'Name must be defined.',
   INVALID_DESCRIPTION: 'Description must be defined.',
-  INVALID_LENGTH(length: string) {
+  INVALID_LENGTH(length: any) {
     if (!length) {
       return 'Length must be defined.';
     }
     return `${length} is not a valid length.`;
   },
-  LEVEL_EXISTS(level: string) {
+  LEVEL_EXISTS(level: any) {
     return `${level} has already been added.`;
   },
-  INVALID_LEVEL(level: string) {
+  INVALID_LEVEL(level: any) {
     return `${level} is not a valid level.`;
   },
-  LEVEL_DOES_NOT_EXIST(level: string) {
+  LEVEL_DOES_NOT_EXIST(level: any) {
     return `${level} does not exist on this object.`;
   },
   INVALID_LEVELS: 'Levels must contain at least one valid academic level.',
-  INVALID_STATUS(status: string) {
+  INVALID_STATUS(status: any) {
     if (!status) {
       return 'Status must be defined.';
     }
