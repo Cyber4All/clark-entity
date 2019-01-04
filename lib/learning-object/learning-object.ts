@@ -275,6 +275,7 @@ export class LearningObject {
    */
   addGoal(text: string): number {
     const goal = new LearningGoal(text);
+    this.updateDate();
     return this._goals.push(goal) - 1;
   }
   /**
@@ -284,6 +285,7 @@ export class LearningObject {
    * @returns {LearningGoal} the goal which was removed
    */
   removeGoal(index: number): LearningGoal {
+    this.updateDate();
     return this._goals.splice(index, 1)[0];
   }
 
@@ -302,6 +304,7 @@ export class LearningObject {
    */
   addOutcome(outcome?: LearningOutcome): number {
     const addingOutcome = outcome || new LearningOutcome();
+    this.updateDate();
     return this._outcomes.push(addingOutcome) - 1;
   }
   /**
@@ -311,6 +314,7 @@ export class LearningObject {
    * @returns {LearningOutcome} the learning outcome which was removed
    */
   removeOutcome(index: number): LearningOutcome {
+    this.updateDate();
     return this._outcomes.splice(index, 1)[0];
   }
 
@@ -323,6 +327,7 @@ export class LearningObject {
     return this._materials;
   }
   set materials(material: Material) {
+    this.updateDate();
     this._materials = material;
   }
 
@@ -354,6 +359,7 @@ export class LearningObject {
   publish(): void {
     this._status = Status.PUBLISHED;
     this._published = true;
+    this.updateDate();
   }
   /**
    * Sets LearningObject's published flag to false
@@ -362,6 +368,7 @@ export class LearningObject {
    */
   unpublish(): void {
     this._published = false;
+    this.updateDate();
   }
 
   private _children: LearningObject[];
@@ -377,6 +384,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addChild(object: LearningObject): number {
+    this.updateDate();
     return this._children.push(object) - 1;
   }
   /**
@@ -386,6 +394,7 @@ export class LearningObject {
    * @returns {LearningObject} the child object which was removed
    */
   removeChild(index: number): LearningObject {
+    this.updateDate();
     return this._children.splice(index, 1)[0];
   }
 
@@ -406,6 +415,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addContributor(contributor: User): number {
+    this.updateDate();
     return this._contributors.push(contributor) - 1;
   }
   /**
@@ -415,6 +425,7 @@ export class LearningObject {
    * @returns {User} the user object which was removed
    */
   removeContributor(index: number): User {
+    this.updateDate();
     return this._contributors.splice(index, 1)[0];
   }
 
@@ -429,6 +440,7 @@ export class LearningObject {
   }
   set lock(lock: LearningObjectLock | undefined) {
     this._lock = lock;
+    this.updateDate();
   }
   private _collection!: string;
   /**
@@ -440,6 +452,7 @@ export class LearningObject {
   }
   set collection(collection: string) {
     this._collection = collection;
+    this.updateDate();
   }
 
   private _status!: Status;
@@ -457,6 +470,7 @@ export class LearningObject {
       } else {
         this._status = status;
       }
+      this.updateDate();
     } else {
       throw new Error(LEARNING_OBJECT_ERRORS.INVALID_STATUS(status));
     }
