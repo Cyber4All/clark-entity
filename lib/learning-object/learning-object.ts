@@ -291,7 +291,7 @@ export class LearningObject {
    * @returns {number} index of the outcome
    */
   addOutcome(outcome?: LearningOutcome): number {
-    if (outcome && outcome instanceof LearningOutcome) {
+    if (outcome instanceof LearningOutcome || outcome === undefined) {
       const addingOutcome = outcome || new LearningOutcome();
       this.updateDate();
       return this._outcomes.push(addingOutcome) - 1;

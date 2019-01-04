@@ -23,7 +23,7 @@ export const LEARNING_OBJECT_ERRORS = {
     }
     return `${status} is not a valid status.`;
   },
-  INVALID_OUTCOME: 'Outcome must be defined and be a valid outcome.',
+  INVALID_OUTCOME: 'Outcome must be a valid outcome.',
   INVALID_CHILD: 'Child object must be defined.',
   INVALID_CONTRIBUTOR: 'Contributor must be defined.',
   INVALID_MATERIAL: 'Material must be defined.',
