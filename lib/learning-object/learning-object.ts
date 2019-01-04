@@ -71,9 +71,22 @@ export enum AcademicLevel {
   Training = 'training'
 }
 
-type Length = 'nanomodule' | 'micromodule' | 'module' | 'unit' | 'course';
 
-type Status = 'unpublished' | 'waiting' | 'reviewed' | 'published' | 'denied';
+enum Length {
+  NANOMODULE = 'nanomodule',
+  MICROMODULE = 'micromodule',
+  MODULE = 'module',
+  UNIT = 'unit',
+  COURSE = 'course'
+}
+
+enum Status {
+  UNPUBLISHED = 'unpublished',
+  WAITING = 'waiting',
+  REVIEWED = 'reviewed',
+  PUBLISHED = 'published',
+  DENIED = 'denied'
+}
 
 /**
  * A class to represent a learning object.
@@ -172,13 +185,10 @@ export class LearningObject {
    * @memberof LearningObject
    */
   private acceptLength(length: Length): boolean {
-    const validLengths: Length[] = [
-      'nanomodule',
-      'micromodule',
-      'module',
-      'unit',
-      'course'
-    ];
+    const validLengths: Length[] = Object.keys(Length).map(
+      // @ts-ignore Keys are not numbers and element is of type Length
+      (key: string) => Length[key] as Length
+    );
     if (validLengths.includes(length)) {
       return true;
     }
@@ -343,7 +353,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   publish(): void {
-    this._status = 'published';
+    this._status = Status.PUBLISHED;
     this._published = true;
   }
   /**
@@ -454,13 +464,10 @@ export class LearningObject {
   }
 
   private acceptStatus(status: Status): boolean {
-    const validStatuses: Status[] = [
-      'unpublished',
-      'waiting',
-      'reviewed',
-      'denied',
-      'published'
-    ];
+    const validStatuses: Status[] = Object.keys(Status).map(
+      // @ts-ignore Keys are not numbers and element is of type Status
+      (key: string) => Status[key] as Status
+    );
     if (validStatuses.includes(status)) {
       return true;
     }
@@ -477,7 +484,7 @@ export class LearningObject {
     this._name = '';
     this.description = '';
     this._date = Date.now().toString();
-    this.length = 'nanomodule';
+    this.length = Length.NANOMODULE;
     this._levels = [AcademicLevel.Undergraduate];
     this._goals = [];
     this._outcomes = [];
@@ -491,7 +498,7 @@ export class LearningObject {
     this._children = [];
     this._contributors = [];
     this.collection = '';
-    this.status = 'unpublished';
+    this.status = Status.UNPUBLISHED;
     this.metrics = { saves: 0, downloads: 0 };
     this._published = false;
     this.lock = undefined;
