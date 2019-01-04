@@ -83,7 +83,10 @@ export class LearningObject {
   get name(): string {
     return this._name;
   }
+
   set name(name: string) {
+    // Condition is true if name is defined and the value returned from name.trim() is not an empty string
+    // name.trim() is used to verify that name is not a string of whitespaces
     if (name !== undefined && name !== null && name.trim()) {
       this._name = name.trim();
       this.updateDate();
