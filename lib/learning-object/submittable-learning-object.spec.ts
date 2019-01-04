@@ -1,6 +1,6 @@
 import { LearningObject } from './learning-object';
 import { SubmittableLearningObject } from './submittable-learning-object';
-import { LearningOutcome } from '..';
+import { LearningOutcome } from '../learning-outcome/learning-outcome';
 import { SubmittableLearningOutcome } from '../learning-outcome/submittable-learning-outcome';
 import { SUBMITTABLE_LEARNING_OBJECT_ERRORS } from './error-messages';
 
