@@ -164,18 +164,31 @@ export class LearningOutcome {
    * @memberof LearningOutcome
    */
   constructor(outcome?: Partial<LearningOutcome>) {
-    this.bloom = outcome ? <string>outcome.bloom : Array.from(levels)[0];
-    this.verb = outcome
-      ? <string>outcome.verb
-      : Array.from(verbs[this.bloom])[0];
-    this.text = outcome ? <string>outcome.text : '';
+    this.bloom = Array.from(levels)[0];
+    this.verb = Array.from(verbs[this.bloom])[0];
+    this.text = '';
     this._mappings = [];
-    // Add mappings from passed outcome
-    if (outcome) {
-      (<StandardOutcome[]>outcome.mappings).map(outcome => this.mapTo(outcome));
-    }
     this._assessments = [];
     this._strategies = [];
+    if (outcome) {
+      this.copyOutcome(outcome);
+    }
+  }
+
+  /**
+   * Copies properties of outcome to this outcome if defined
+   *
+   * @private
+   * @param {Partial<LearningOutcome>} outcome
+   * @memberof LearningOutcome
+   */
+  private copyOutcome(outcome: Partial<LearningOutcome>): void {
+    this.bloom = outcome.bloom || this.bloom;
+    this.verb = outcome.verb || this.verb;
+    this.text = outcome.text || this.text;
+    if (outcome.mappings) {
+      (<StandardOutcome[]>outcome.mappings).map(outcome => this.mapTo(outcome));
+    }
   }
 
   public static instantiate(
