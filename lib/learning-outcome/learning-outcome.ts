@@ -164,9 +164,9 @@ export class LearningOutcome {
    * @memberof LearningOutcome
    */
   constructor(outcome?: Partial<LearningOutcome>) {
-    this.bloom = Array.from(levels)[0];
-    this.verb = Array.from(verbs[this.bloom])[0];
-    this.text = '';
+    this._bloom = Array.from(levels)[0];
+    this._verb = Array.from(verbs[this.bloom])[0];
+    this._text = '';
     this._mappings = [];
     this._assessments = [];
     this._strategies = [];
