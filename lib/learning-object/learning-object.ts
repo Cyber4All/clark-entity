@@ -452,7 +452,7 @@ export class LearningObject {
   }
   set status(status: Status) {
     if (this.isValidStatus(status)) {
-      if (this.status === 'published') {
+      if (this.status === Status.PUBLISHED) {
         this.publish();
       } else {
         this._status = status;
