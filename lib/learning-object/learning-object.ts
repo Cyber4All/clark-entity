@@ -551,6 +551,8 @@ export class LearningObject {
     this.length = <LearningObject.Length>object.length || this.length;
     if (object.levels) {
       (<LearningObject.Level[]>object.levels)
+        .filter(level => !this.levels.includes(level))
+        .map(level => this.addLevel(level));
     }
     if (object.goals) {
       (<LearningGoal[]>object.goals).map(goal => this.addGoal(goal.text));
