@@ -13,6 +13,9 @@ export const LEARNING_OBJECT_ERRORS = {
   INVALID_LEVEL(level: string) {
     return `${level} is not a valid level.`;
   },
+  LEVEL_DOES_NOT_EXIST(level: string) {
+    return `${level} does not exist on this object.`;
+  },
   INVALID_LEVELS: 'Levels must contain at least one valid academic level.',
   INVALID_STATUS(status: string) {
     if (!status) {

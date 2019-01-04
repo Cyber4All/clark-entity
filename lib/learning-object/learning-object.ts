@@ -199,18 +199,22 @@ export class LearningObject {
   }
 
   /**
-   * Removes LearningObject.Level from this object's levels
+   * Removes level from this object's levels
    *
-   * @param {number} index
-   * @returns {LearningObject.Level}
+   * @param {level} LearningObject.Level
    * @memberof LearningObject
    */
-  removeLevel(index: number): LearningObject.Level {
-    if (this.levels.length > 1) {
+  removeLevel(level: LearningObject.Level): void {
+    const index = this.levels.indexOf(level);
+    if (this.levels.length > 1 && index > -1) {
+      this._levels.splice(index, 1)[0];
       this.updateDate();
-      return this._levels.splice(index, 1)[0];
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_LEVELS);
+      throw new Error(
+        index <= -1
+          ? LEARNING_OBJECT_ERRORS.LEVEL_DOES_NOT_EXIST(level)
+          : LEARNING_OBJECT_ERRORS.INVALID_LEVELS
+      );
     }
   }
 
