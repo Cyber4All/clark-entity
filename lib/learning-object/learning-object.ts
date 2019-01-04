@@ -345,12 +345,11 @@ export class LearningObject {
     return this._published;
   }
   /**
-    * Sets LearningObject's status to published and published flag to true
+   * Sets LearningObject's status to published and published flag to true
    *
    * @memberof LearningObject
    */
   publish(): void {
-    this._status = LearningObject.Status.PUBLISHED;
     this._published = true;
     this.updateDate();
   }
@@ -470,10 +469,9 @@ export class LearningObject {
   }
   set status(status: LearningObject.Status) {
     if (this.isValidStatus(status)) {
-      if (this.status === LearningObject.Status.PUBLISHED) {
+      this._status = status;
+      if (this.status === LearningObject.Status.RELEASED) {
         this.publish();
-      } else {
-        this._status = status;
       }
       this.updateDate();
     } else {
@@ -526,7 +524,7 @@ export class LearningObject {
     this._children = [];
     this._contributors = [];
     this.collection = '';
-    this.status = LearningObject.Status.UNPUBLISHED;
+    this.status = LearningObject.Status.UNRELEASED;
     this.metrics = { saves: 0, downloads: 0 };
     this._published = false;
     this.lock = undefined;
@@ -593,11 +591,12 @@ export namespace LearningObject {
   }
 
   export enum Status {
-    UNPUBLISHED = 'unpublished',
+    REJECTED = 'rejected',
+    UNRELEASED = 'unreleased',
     WAITING = 'waiting',
     REVIEWED = 'reviewed',
-    PUBLISHED = 'published',
-    DENIED = 'denied'
+    PROOFING = 'proofing',
+    RELEASED = 'released'
   }
 
   export enum Level {
