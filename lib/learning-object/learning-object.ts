@@ -71,7 +71,6 @@ export enum AcademicLevel {
   Training = 'training'
 }
 
-
 enum Length {
   NANOMODULE = 'nanomodule',
   MICROMODULE = 'micromodule',
@@ -168,7 +167,7 @@ export class LearningObject {
   }
 
   set length(length: Length) {
-    if (this.acceptLength(length)) {
+    if (this.isValidLength(length)) {
       this._length = length;
       this.updateDate();
     } else {
@@ -184,7 +183,7 @@ export class LearningObject {
    * @returns {boolean}
    * @memberof LearningObject
    */
-  private acceptLength(length: Length): boolean {
+  private isValidLength(length: Length): boolean {
     const validLengths: Length[] = Object.keys(Length).map(
       // @ts-ignore Keys are not numbers and element is of type Length
       (key: string) => Length[key] as Length
@@ -210,7 +209,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addLevel(level: AcademicLevel) {
-    const [alreadyAdded, isValid] = this.acceptLevel(level);
+    const [alreadyAdded, isValid] = this.isValidLevel(level);
     if (!alreadyAdded && isValid) {
       this._levels.push(level);
       this.updateDate();
@@ -245,7 +244,7 @@ export class LearningObject {
    * @returns {boolean}
    * @memberof LearningObject
    */
-  private acceptLevel(level: AcademicLevel): boolean[] {
+  private isValidLevel(level: AcademicLevel): boolean[] {
     const validLevels: AcademicLevel[] = Object.keys(AcademicLevel).map(
       // @ts-ignore Keys are not numbers and element is of type AcademicLevel
       (key: string) => AcademicLevel[key] as AcademicLevel
@@ -452,7 +451,7 @@ export class LearningObject {
     return this._status;
   }
   set status(status: Status) {
-    if (this.acceptStatus(status)) {
+    if (this.isValidStatus(status)) {
       if (this.status === 'published') {
         this.publish();
       } else {
@@ -463,7 +462,15 @@ export class LearningObject {
     }
   }
 
-  private acceptStatus(status: Status): boolean {
+  /**
+   * Validates status passed is a valid status
+   *
+   * @private
+   * @param {Status} status
+   * @returns {boolean}
+   * @memberof LearningObject
+   */
+  private isValidStatus(status: Status): boolean {
     const validStatuses: Status[] = Object.keys(Status).map(
       // @ts-ignore Keys are not numbers and element is of type Status
       (key: string) => Status[key] as Status
