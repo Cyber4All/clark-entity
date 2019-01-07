@@ -30,7 +30,7 @@ jobs:
           at: ~/clark-entity
       - run:
           name: Expose NPM Key
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/clark-entity/.npmrc
       - run:
           name: Publish to NPM
           command: npm publish
