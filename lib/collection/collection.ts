@@ -1,5 +1,5 @@
 import { LearningObject } from '../learning-object/learning-object';
-export type Collection = {
+export interface Collection {
   name: string;
   learningObjects: LearningObject[];
-};
+}

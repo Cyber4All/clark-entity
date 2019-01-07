@@ -1,8 +1,5 @@
 import { User } from './user/user';
-import {
-  LearningObject,
-  AcademicLevel
-} from './learning-object/learning-object';
+import { LearningObject } from './learning-object/learning-object';
 import { Outcome, OutcomeSuggestion } from './outcome/outcome';
 import { StandardOutcome } from './standard-outcome/standard-outcome';
 import { LearningOutcome } from './learning-outcome/learning-outcome';
@@ -16,7 +13,6 @@ import { Rating } from './rating/rating';
 export {
   User,
   LearningObject,
-  AcademicLevel,
   Outcome,
   OutcomeSuggestion,
   LearningOutcome,
