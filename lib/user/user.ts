@@ -32,7 +32,7 @@ export class User {
     return this._email;
   }
   set email(email: string) {
-    if (email) {
+    if (email && User.isValidEmail(email)) {
       this._email = email;
     }
   }
@@ -118,5 +118,23 @@ export class User {
     this.organization = user.organization || this.organization;
     this.bio = user.bio || this.bio;
     this._createdAt = user.createdAt || this.createdAt;
+  }
+}
+
+export namespace User {
+  /**
+   * Checks email provided again email regex pattern
+   *
+   * @export
+   * @param {string} email
+   * @returns {boolean}
+   */
+  export function isValidEmail(email: string): boolean {
+    // tslint:disable-next-line:max-line-length
+    const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailPattern.test(email)) {
+      return true;
+    }
+    return false;
   }
 }
