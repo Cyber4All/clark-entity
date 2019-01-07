@@ -9,6 +9,17 @@ import { STANDARD_OUTCOME_ERRORS } from './error-messages';
  * @class
  */
 export class StandardOutcome implements Outcome {
+  private _id: string;
+  get id(): string {
+    return this._id;
+  }
+  set id(id: string) {
+    if (!this.id) {
+      this._id = id;
+    } else {
+      throw new Error(STANDARD_OUTCOME_ERRORS.ID_SET);
+    }
+  }
   _author: string;
   /**
    * @property {string} source
@@ -75,6 +86,8 @@ export class StandardOutcome implements Outcome {
    * @memberof StandardOutcome
    */
   constructor(outcome?: Partial<StandardOutcome>) {
+    // @ts-ignore Id will be undefined on creation
+    this._id = undefined;
     this._author = '';
     this._name = '';
     this._date = '';
@@ -91,6 +104,9 @@ export class StandardOutcome implements Outcome {
    * @memberof StandardOutcome
    */
   private copyOutcome(outcome: Partial<StandardOutcome>): void {
+    if (outcome.id) {
+      this.id = outcome.id;
+    }
     if (outcome.author) {
       this.author = outcome.author;
     }

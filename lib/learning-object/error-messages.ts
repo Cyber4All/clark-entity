@@ -28,7 +28,8 @@ export const LEARNING_OBJECT_ERRORS = {
   INVALID_CONTRIBUTOR: 'Contributor must be defined.',
   INVALID_MATERIAL: 'Material must be defined.',
   INVALID_METRICS: 'Metrics must be defined.',
-  INVALID_COLLECTION: 'Collection must be defined.'
+  INVALID_COLLECTION: 'Collection must be defined.',
+  ID_SET: 'Id has already been set and cannot be modified.'
 };
 
 export const SUBMITTABLE_LEARNING_OBJECT_ERRORS = {

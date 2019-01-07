@@ -5,6 +5,17 @@ import { USER_ERRORS } from './error-messages';
  * @class
  */
 export class User {
+  private _id: string;
+  get id(): string {
+    return this._id;
+  }
+  set id(id: string) {
+    if (!this.id) {
+      this._id = id;
+    } else {
+      throw new Error(USER_ERRORS.ID_SET);
+    }
+  }
   _username: string;
   /**
    * @property {string} username a user's unique log-in username
@@ -116,6 +127,8 @@ export class User {
    * @memberof User
    */
   constructor(user?: Partial<User>) {
+    // @ts-ignore Id will be undefined on creation
+    this._id = undefined;
     this._username = '';
     this._name = '';
     this._email = '';
@@ -136,6 +149,9 @@ export class User {
    * @memberof User
    */
   private copyUser(user: Partial<User>): void {
+    if (user.id) {
+      this.id = user.id;
+    }
     this._username = user.username || this.username;
     this.name = user.name || this.name;
     if (user.email) {
