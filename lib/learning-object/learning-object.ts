@@ -478,8 +478,12 @@ export class LearningObject {
       this.id = object.id;
     }
     this._author = <User>object.author || this.author;
-    this.name = <string>object.name || this.name;
-    this.description = <string>object.description || this.description;
+    if (object.name) {
+      this.name = object.name;
+    }
+    if (object.description) {
+      this.description = object.description;
+    }
     this._date = <string>object.date || this.date;
     this.length = <LearningObject.Length>object.length || this.length;
     if (object.levels) {
@@ -507,6 +511,40 @@ export class LearningObject {
     this.metrics = <LearningObject.Metrics>object.metrics || this.metrics;
     this._published = <boolean>object.published || this.published;
     this.lock = <LearningObject.Lock>object.lock || this.lock;
+  }
+
+  /**
+   * Converts LearningObject to plain object without functions and private properties
+   *
+   * @returns {Partial<LearningObject>}
+   * @memberof LearningObject
+   */
+  public toPlainObject(): Partial<LearningObject> {
+    const object: Partial<LearningObject> = {
+      id: this.id,
+      author: this.author.toPlainObject() as User,
+      name: this.name,
+      description: this.description,
+      date: this.date,
+      length: this.length,
+      levels: this.levels,
+      outcomes: this.outcomes.map(
+        outcome => outcome.toPlainObject() as LearningOutcome
+      ),
+      materials: this.materials,
+      contributors: this.contributors.map(
+        contributor => contributor.toPlainObject() as User
+      ),
+      children: this.children.map(
+        child => child.toPlainObject() as LearningObject
+      ),
+      collection: this.collection,
+      status: this.status,
+      metrics: this.metrics,
+      published: this.published,
+      lock: this.lock
+    };
+    return object;
   }
 }
 
