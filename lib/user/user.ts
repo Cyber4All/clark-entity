@@ -1,3 +1,5 @@
+import { USER_ERRORS } from './error-messages';
+
 /**
  * A class to represent CLARK users.
  * @class
@@ -34,6 +36,8 @@ export class User {
   set email(email: string) {
     if (email && User.isValidEmail(email)) {
       this._email = email;
+    } else {
+      throw new Error(USER_ERRORS.INVALID_EMAIL(email));
     }
   }
 
