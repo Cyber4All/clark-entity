@@ -573,6 +573,7 @@ export namespace LearningObject {
       fullPath?: string;
       size?: number;
       description?: string;
+      packageable?: boolean;
     }
     export interface Url {
       title: string;
