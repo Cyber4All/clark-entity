@@ -41,7 +41,7 @@ workflows:
       - build:
           filters:
             branches:
-              only: /^(?!.*master).*$/
+              ignore: /master/
   build-test-and-publish:
     jobs:
       - build:
