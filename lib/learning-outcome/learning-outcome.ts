@@ -88,7 +88,15 @@ export class LearningOutcome {
    * @returns {number} the index of the mapping
    */
   mapTo(mapping: StandardOutcome): number {
-    return this._mappings.push(mapping) - 1;
+    if (mapping) {
+      const addingMapping =
+        mapping instanceof StandardOutcome
+          ? mapping
+          : new StandardOutcome(mapping);
+      return this._mappings.push(addingMapping) - 1;
+    } else {
+      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_MAPPING);
+    }
   }
 
   /**
