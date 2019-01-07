@@ -212,14 +212,12 @@ export class LearningObject {
    * @returns {number} index of the outcome
    */
   addOutcome(outcome?: LearningOutcome): number {
-    if (outcome) {
-      const addingOutcome =
-        outcome instanceof LearningOutcome ? outcome : new LearningOutcome();
-      this.updateDate();
-      return this._outcomes.push(addingOutcome) - 1;
-    } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_OUTCOME);
-    }
+    const addingOutcome =
+      outcome instanceof LearningOutcome
+        ? outcome
+        : new LearningOutcome(outcome);
+    this.updateDate();
+    return this._outcomes.push(addingOutcome) - 1;
   }
   /**
    * Removes the object's i-th learning outcome.
