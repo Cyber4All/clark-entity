@@ -11,12 +11,12 @@ const validBloom = levelsArray[0];
 const verbsArray = Array.from(verbs[validBloom]);
 const validVerb = verbsArray[0];
 const validText = 'This is valid text';
-const validStandardOutcome = new StandardOutcome(
-  'Some developer',
-  'Valid StandardOutcome',
-  Date.now().toString(),
-  'I am a valid standard outcome'
-);
+const validStandardOutcome = new StandardOutcome({
+  author: 'Some developer',
+  name: 'Valid StandardOutcome',
+  date: Date.now().toString(),
+  outcome: 'I am a valid standard outcome'
+});
 
 // Invalid values
 const invalidBloom = 'not a bloom taxon';
