@@ -1,5 +1,3 @@
-import { AssessmentPlan } from '../assessment-plan';
-import { InstructionalStrategy } from '../instructional-strategy';
 import { StandardOutcome } from '../standard-outcome/standard-outcome';
 import { levels, verbs } from '@cyber4all/clark-taxonomy';
 import { LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
@@ -93,71 +91,6 @@ export class LearningOutcome {
     return this._mappings.splice(i, 1)[0];
   }
 
-  private _assessments: AssessmentPlan[];
-  /**
-   * @property {AssessmentPlan[]} assessments (immutable)
-   *       plans to assess how well the outcome is achieved
-   *
-   * NOTE: individual elements are freely accessible, but the array
-   *       reference itself is immutable, and elements can only be
-   *       added and removed by the below functions
-   */
-  get assessments(): AssessmentPlan[] {
-    return this._assessments;
-  }
-  /**
-   * Adds a new, blank assessment plan to this outcome.
-   * @returns {AssessmentPlan} a reference to the new assessment plan
-   */
-  addAssessment(): AssessmentPlan {
-    let assessment = new AssessmentPlan(this);
-    this._assessments.push(assessment);
-    return assessment;
-  }
-
-  /**
-   * Removes the outcome's i-th assessment plan.
-   * @param {number} i the index to remove from the assessments array
-   *
-   * @returns {LearningObject} the assessment plan which was removed
-   */
-  removeAssessment(i: number): AssessmentPlan {
-    return this._assessments.splice(i, 1)[0];
-  }
-
-  private _strategies: InstructionalStrategy[];
-  /**
-   * @property {InstructionalStrategy[]} strategies (immutable)
-   *       strategies on how to achieve the outcome
-   *
-   * NOTE: individual elements are freely accessible, but the array
-   *       reference itself is immutable, and elements can only be
-   *       added and removed by the below functions
-   */
-  get strategies(): InstructionalStrategy[] {
-    return this._strategies;
-  }
-
-  /**
-   * Adds a new, blank instructional strategy to this outcome.
-   * @returns {InstructionalStrategy} a reference to the new strategy
-   */
-  addStrategy(): InstructionalStrategy {
-    let strategy = new InstructionalStrategy(this);
-    this._strategies.push(strategy);
-    return strategy;
-  }
-
-  /**
-   * Removes the outcome's i-th instructional strategy.
-   * @param {number} i the index to remove from the strategies array
-   *
-   * @returns {LearningObject} the strategy which was removed
-   */
-  removeStrategy(i: number): InstructionalStrategy {
-    return this._strategies.splice(i, 1)[0];
-  }
-
   /**
    *Creates an instance of LearningOutcome.
    * @param {Partial<LearningOutcome>} [outcome]
@@ -168,8 +101,6 @@ export class LearningOutcome {
     this._verb = Array.from(verbs[this.bloom])[0];
     this._text = '';
     this._mappings = [];
-    this._assessments = [];
-    this._strategies = [];
     if (outcome) {
       this.copyOutcome(outcome);
     }
