@@ -79,14 +79,3 @@ export class User {
     return user;
   }
 }
-
-export type UserProperties = {
-  _username: string;
-  _name: string;
-  _email: string;
-  _organization: string;
-  _password: string;
-  _bio: string;
-  _createdAt: string;
-  [key: string]: any;
-};
