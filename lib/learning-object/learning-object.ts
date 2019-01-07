@@ -523,7 +523,7 @@ export namespace LearningObject {
     REJECTED = 'rejected',
     UNRELEASED = 'unreleased',
     WAITING = 'waiting',
-    REVIEWED = 'reviewed',
+    REVIEW = 'review',
     PROOFING = 'proofing',
     RELEASED = 'released'
   }
