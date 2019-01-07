@@ -478,8 +478,12 @@ export class LearningObject {
       this.id = object.id;
     }
     this._author = <User>object.author || this.author;
-    this.name = <string>object.name || this.name;
-    this.description = <string>object.description || this.description;
+    if (object.name) {
+      this.name = object.name;
+    }
+    if (object.description) {
+      this.description = object.description;
+    }
     this._date = <string>object.date || this.date;
     this.length = <LearningObject.Length>object.length || this.length;
     if (object.levels) {
