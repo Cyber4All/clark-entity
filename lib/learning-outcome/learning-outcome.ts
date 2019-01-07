@@ -136,4 +136,22 @@ export class LearningOutcome {
       (<StandardOutcome[]>outcome.mappings).map(outcome => this.mapTo(outcome));
     }
   }
+  /**
+   * Converts LearningOutcome to plain object without functions and private properties
+   *
+   * @returns {Partial<LearningOutcome>}
+   * @memberof LearningOutcome
+   */
+  public toPlainObject(): Partial<LearningOutcome> {
+    const outcome: Partial<LearningOutcome> = {
+      id: this.id,
+      bloom: this.bloom,
+      verb: this.verb,
+      text: this.text,
+      mappings: this.mappings.map(
+        mapping => mapping.toPlainObject() as StandardOutcome
+      )
+    };
+    return outcome;
+  }
 }

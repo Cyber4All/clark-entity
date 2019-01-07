@@ -162,6 +162,26 @@ export class User {
     this.bio = user.bio || this.bio;
     this._createdAt = user.createdAt || this.createdAt;
   }
+
+  /**
+   * Converts User to plain object without functions and private properties
+   *
+   * @returns {Partial<User>}
+   * @memberof User
+   */
+  public toPlainObject(): Partial<User> {
+    const user: Partial<User> = {
+      id: this.id,
+      username: this.username,
+      name: this.name,
+      email: this.email,
+      emailVerified: this.emailVerified,
+      organization: this.organization,
+      bio: this.bio,
+      createdAt: this.createdAt
+    };
+    return user;
+  }
 }
 
 export namespace User {

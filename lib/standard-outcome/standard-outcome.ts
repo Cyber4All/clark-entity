@@ -120,4 +120,21 @@ export class StandardOutcome implements Outcome {
       this.outcome = outcome.outcome;
     }
   }
+
+  /**
+   * Converts StandardOutcome to plain object without functions and private properties
+   *
+   * @returns {Partial<StandardOutcome>}
+   * @memberof StandardOutcome
+   */
+  public toPlainObject(): Partial<StandardOutcome> {
+    const outcome: Partial<StandardOutcome> = {
+      id: this.id,
+      author: this.author,
+      name: this.name,
+      date: this.date,
+      outcome: this.outcome
+    };
+    return outcome;
+  }
 }
