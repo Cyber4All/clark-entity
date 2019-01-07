@@ -3,7 +3,6 @@
  */
 
 import { User } from '../user/user';
-import { LearningGoal } from '../learning-goal';
 import { LearningOutcome } from '../learning-outcome/learning-outcome';
 import { LEARNING_OBJECT_ERRORS } from './error-messages';
 
@@ -186,42 +185,6 @@ export class LearningObject {
       return [alreadyAdded, isValid];
     }
     return [alreadyAdded, isValid];
-  }
-
-  private _goals: LearningGoal[];
-  /**
-   * @property {LearningGoal[]} goals (immutable)
-   *       goals this learning object should achieve
-   *
-   * NOTE: individual elements are freely accessible, but the array
-   *       reference itself is immutable, and elements can only be
-   *       added and removed by the below functions
-   */
-  get goals(): LearningGoal[] {
-    return this._goals;
-  }
-  /**
-   * Adds a new learning goal to this object.
-   * Returns the index of the new goal
-   *
-   * @param {string} text
-   * @returns {number}
-   * @memberof LearningObject
-   */
-  addGoal(text: string): number {
-    const goal = new LearningGoal(text);
-    this.updateDate();
-    return this._goals.push(goal) - 1;
-  }
-  /**
-   * Removes the object's i-th learning goal.
-   * @param {number} index the index to remove from this object's goals
-   *
-   * @returns {LearningGoal} the goal which was removed
-   */
-  removeGoal(index: number): LearningGoal {
-    this.updateDate();
-    return this._goals.splice(index, 1)[0];
   }
 
   private _outcomes: LearningOutcome[];
@@ -466,7 +429,6 @@ export class LearningObject {
     this._date = Date.now().toString();
     this.length = LearningObject.Length.NANOMODULE;
     this._levels = [LearningObject.Level.Undergraduate];
-    this._goals = [];
     this._outcomes = [];
     this.materials = {
       files: [],
@@ -505,9 +467,6 @@ export class LearningObject {
       (<LearningObject.Level[]>object.levels)
         .filter(level => !this.levels.includes(level))
         .map(level => this.addLevel(level));
-    }
-    if (object.goals) {
-      (<LearningGoal[]>object.goals).map(goal => this.addGoal(goal.text));
     }
     if (object.outcomes) {
       (<LearningOutcome[]>object.outcomes).map(outcome =>
