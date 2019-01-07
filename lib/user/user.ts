@@ -26,6 +26,29 @@ export class User {
     }
   }
 
+  /**
+   * Returns first index of name string split by white space
+   *
+   * @readonly
+   * @type {string}
+   * @memberof User
+   */
+  get firstName(): string {
+    return this.name.split(' ')[0];
+  }
+
+  /**
+   * Returns name split by white space without value at the first index
+   *
+   * @readonly
+   * @type {string}
+   * @memberof User
+   */
+  get lastName(): string {
+    const nameChunks = this.name.split(' ');
+    return nameChunks.slice(1, nameChunks.length).join(' ');
+  }
+
   _email: string;
   /**
    * @property {string} email a user's email on file
