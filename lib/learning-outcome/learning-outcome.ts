@@ -121,10 +121,4 @@ export class LearningOutcome {
       (<StandardOutcome[]>outcome.mappings).map(outcome => this.mapTo(outcome));
     }
   }
-
-  public static instantiate(
-    outcome: Partial<LearningOutcome>
-  ): LearningOutcome {
-    return new LearningOutcome(outcome);
-  }
 }

@@ -488,10 +488,6 @@ export class LearningObject {
     this._published = <boolean>object.published || this.published;
     this.lock = <LearningObject.Lock>object.lock || this.lock;
   }
-
-  public static instantiate(object: Partial<LearningObject>): LearningObject {
-    return new LearningObject(object);
-  }
 }
 
 export namespace LearningObject {
