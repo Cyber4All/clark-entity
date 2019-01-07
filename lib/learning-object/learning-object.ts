@@ -212,8 +212,9 @@ export class LearningObject {
    * @returns {number} index of the outcome
    */
   addOutcome(outcome?: LearningOutcome): number {
-    if (outcome instanceof LearningOutcome || outcome === undefined) {
-      const addingOutcome = outcome || new LearningOutcome();
+    if (outcome) {
+      const addingOutcome =
+        outcome instanceof LearningOutcome ? outcome : new LearningOutcome();
       this.updateDate();
       return this._outcomes.push(addingOutcome) - 1;
     } else {
@@ -304,9 +305,11 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addChild(object: LearningObject): number {
-    if (object && object instanceof LearningObject) {
+    if (object) {
+      const addingObject =
+        object instanceof LearningObject ? object : new LearningObject(object);
       this.updateDate();
-      return this._children.push(object) - 1;
+      return this._children.push(addingObject) - 1;
     } else {
       throw new Error(LEARNING_OBJECT_ERRORS.INVALID_CHILD);
     }
@@ -339,9 +342,11 @@ export class LearningObject {
    * @memberof LearningObject
    */
   addContributor(contributor: User): number {
-    if (contributor && contributor instanceof User) {
+    if (contributor) {
+      const addingUser =
+        contributor instanceof User ? contributor : new User(contributor);
       this.updateDate();
-      return this._contributors.push(contributor) - 1;
+      return this._contributors.push(addingUser) - 1;
     } else {
       throw new Error(LEARNING_OBJECT_ERRORS.INVALID_CONTRIBUTOR);
     }
