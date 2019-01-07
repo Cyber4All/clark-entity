@@ -7,7 +7,17 @@ import { LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
  * @class
  */
 export class LearningOutcome {
-  public id?: string;
+  private _id: string;
+  get id(): string {
+    return this._id;
+  }
+  set id(id: string) {
+    if (!this.id) {
+      this._id = id;
+    } else {
+      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.ID_SET);
+    }
+  }
 
   private _bloom!: string;
   /**
@@ -97,6 +107,8 @@ export class LearningOutcome {
    * @memberof LearningOutcome
    */
   constructor(outcome?: Partial<LearningOutcome>) {
+    // @ts-ignore Id will be undefined on creation
+    this._id = undefined;
     this._bloom = Array.from(levels)[0];
     this._verb = Array.from(verbs[this.bloom])[0];
     this._text = '';
@@ -114,6 +126,9 @@ export class LearningOutcome {
    * @memberof LearningOutcome
    */
   private copyOutcome(outcome: Partial<LearningOutcome>): void {
+    if (outcome.id) {
+      this.id = outcome.id;
+    }
     this.bloom = outcome.bloom || this.bloom;
     this.verb = outcome.verb || this.verb;
     this.text = outcome.text || this.text;

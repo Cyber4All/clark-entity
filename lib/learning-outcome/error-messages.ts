@@ -5,7 +5,8 @@ export const LEARNING_OUTCOME_ERROR_MESSAGES = {
   INVALID_VERB(bloom: string, verb: string) {
     return `${verb} is not a valid verb for the ${bloom} taxon.`;
   },
-  INVALID_TEXT: 'Text must be defined.'
+  INVALID_TEXT: 'Text must be defined.',
+  ID_SET: 'Id has already been set and cannot be modified.'
 };
 
 export const SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES = {

@@ -11,6 +11,17 @@ import { LEARNING_OBJECT_ERRORS } from './error-messages';
  * @class
  */
 export class LearningObject {
+  private _id: string;
+  get id(): string {
+    return this._id;
+  }
+  set id(id: string) {
+    if (!this.id) {
+      this._id = id;
+    } else {
+      throw new Error(LEARNING_OBJECT_ERRORS.ID_SET);
+    }
+  }
   private _author: User;
   /**
    * @property {User} author (immutable)
@@ -32,7 +43,7 @@ export class LearningObject {
 
   set name(name: string) {
     // Condition is true if name is defined and the value returned from name.trim() is not an empty string
-    // name.trim() is used to verify that name is not a string of whitespaces
+    // name.trim() is used to verify that name is not a string of white spaces
     if (name !== undefined && name !== null && name.trim()) {
       this._name = name.trim();
       this.updateDate();
@@ -220,15 +231,15 @@ export class LearningObject {
     return this._outcomes.splice(index, 1)[0];
   }
 
-  private _materials!: Material;
+  private _materials!: LearningObject.Material;
   /**
-   * @property {Material} materials neutrino file/url storage
+   * @property {LearningObject.Material} materials neutrino file/url storage
    *
    */
-  get materials(): Material {
+  get materials(): LearningObject.Material {
     return this._materials;
   }
-  set materials(material: Material) {
+  set materials(material: LearningObject.Material) {
     if (material) {
       this.updateDate();
       this._materials = material;
@@ -423,14 +434,16 @@ export class LearningObject {
    * @memberof LearningObject
    */
   constructor(object?: Partial<LearningObject>) {
+    // @ts-ignore Id will be undefined on creation
+    this._id = undefined;
     this._author = new User();
     this._name = '';
     this._description = '';
     this._date = Date.now().toString();
-    this.length = LearningObject.Length.NANOMODULE;
+    this._length = LearningObject.Length.NANOMODULE;
     this._levels = [LearningObject.Level.Undergraduate];
     this._outcomes = [];
-    this.materials = {
+    this._materials = {
       files: [],
       urls: [],
       notes: '',
@@ -439,11 +452,11 @@ export class LearningObject {
     };
     this._children = [];
     this._contributors = [];
-    this.collection = '';
-    this.status = LearningObject.Status.UNRELEASED;
-    this.metrics = { saves: 0, downloads: 0 };
+    this._collection = '';
+    this._status = LearningObject.Status.UNRELEASED;
+    this._metrics = { saves: 0, downloads: 0 };
     this._published = false;
-    this.lock = undefined;
+    this._lock = undefined;
 
     if (object) {
       this.copyObject(object);
@@ -458,6 +471,9 @@ export class LearningObject {
    * @memberof LearningObject
    */
   private copyObject(object: Partial<LearningObject>): void {
+    if (object.id) {
+      this.id = object.id;
+    }
     this._author = <User>object.author || this.author;
     this.name = <string>object.name || this.name;
     this.description = <string>object.description || this.description;
@@ -473,7 +489,8 @@ export class LearningObject {
         this.addOutcome(outcome)
       );
     }
-    this.materials = <Material>object.materials || this.materials;
+    this.materials =
+      <LearningObject.Material>object.materials || this.materials;
     if (object.children) {
       (<LearningObject[]>object.children).map(child => this.addChild(child));
     }
@@ -534,42 +551,38 @@ export namespace LearningObject {
     saves: number;
     downloads: number;
   }
-}
-
-/**
- * Provide abstract representations for Materials.
- */
-export interface Material {
-  files: Material.File[];
-  urls: Material.Url[];
-  notes: string;
-  folderDescriptions: Material.FolderDescription[];
-  pdf: Material.PDF;
-}
-
-export namespace Material {
-  export interface File {
-    id: string;
-    name: string;
-    fileType: string;
-    extension: string;
-    url: string;
-    date: string;
-    fullPath?: string;
-    size?: number;
-    description?: string;
-  }
-  export interface Url {
-    title: string;
-    url: string;
+  export interface Material {
+    files: LearningObject.Material.File[];
+    urls: LearningObject.Material.Url[];
+    notes: string;
+    folderDescriptions: LearningObject.Material.FolderDescription[];
+    pdf: LearningObject.Material.PDF;
   }
 
-  export interface FolderDescription {
-    path: string;
-    description: string;
-  }
-  export interface PDF {
-    name: string;
-    url: string;
+  export namespace Material {
+    export interface File {
+      id: string;
+      name: string;
+      fileType: string;
+      extension: string;
+      url: string;
+      date: string;
+      fullPath?: string;
+      size?: number;
+      description?: string;
+    }
+    export interface Url {
+      title: string;
+      url: string;
+    }
+
+    export interface FolderDescription {
+      path: string;
+      description: string;
+    }
+    export interface PDF {
+      name: string;
+      url: string;
+    }
   }
 }
