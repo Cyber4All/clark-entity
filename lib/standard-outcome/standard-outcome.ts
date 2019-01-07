@@ -65,7 +65,7 @@ export class StandardOutcome implements Outcome {
     if (outcome && outcome.trim()) {
       this._outcome = outcome;
     } else {
-      throw new Error(STANDARD_OUTCOME_ERRORS.INVALID_DATE);
+      throw new Error(STANDARD_OUTCOME_ERRORS.INVALID_OUTCOME);
     }
   }
 
