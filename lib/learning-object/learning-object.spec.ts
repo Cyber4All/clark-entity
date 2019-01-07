@@ -26,12 +26,18 @@ const validMetrics: LearningObject.Metrics = {
   saves: 22
 };
 const validChild = new LearningObject();
-const validContributor = new User(
-  'contrib123',
-  'Contributor',
-  'contrib@dev.com',
-  'Society of Contributors'
-);
+const validAuthor = new User({
+  username: 'me123',
+  name: 'Me',
+  email: 'me@dev.com',
+  organization: 'Meander'
+});
+const validContributor = new User({
+  username: 'contrib123',
+  name: 'Contributor',
+  email: 'contrib@dev.com',
+  organization: 'Society of Contributors'
+});
 const validCollection = 'some collection';
 const validStatus = LearningObject.Status.RELEASED;
 
@@ -59,7 +65,7 @@ describe('Class: LearningObject', () => {
   });
   it('should return a new LearningObject with valid properties', () => {
     const someObject: Partial<LearningObject> = {
-      author: new User('me123', 'Me', 'me@dev.com', 'Meander'),
+      author: validAuthor,
       name: validName,
       description: validDescription,
       date: Date.now().toString(),

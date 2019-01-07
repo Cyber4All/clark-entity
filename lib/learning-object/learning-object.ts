@@ -423,7 +423,7 @@ export class LearningObject {
    * @memberof LearningObject
    */
   constructor(object?: Partial<LearningObject>) {
-    this._author = new User('', '', '', '');
+    this._author = new User();
     this._name = '';
     this._description = '';
     this._date = Date.now().toString();
@@ -487,10 +487,6 @@ export class LearningObject {
     this.metrics = <LearningObject.Metrics>object.metrics || this.metrics;
     this._published = <boolean>object.published || this.published;
     this.lock = <LearningObject.Lock>object.lock || this.lock;
-  }
-
-  public static instantiate(object: Partial<LearningObject>): LearningObject {
-    return new LearningObject(object);
   }
 }
 
