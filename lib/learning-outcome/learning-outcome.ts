@@ -70,6 +70,13 @@ export class LearningOutcome {
       throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
     }
   }
+  /**
+   * @property {string} text
+   *       full text of this outcome, with the verb
+   */
+  get outcome(): string {
+    return `${this._verb} ${this._text}`;
+  }
 
   private _mappings: StandardOutcome[];
   /**
@@ -156,6 +163,7 @@ export class LearningOutcome {
       bloom: this.bloom,
       verb: this.verb,
       text: this.text,
+      outcome: this.outcome,
       mappings: this.mappings.map(
         mapping => mapping.toPlainObject() as StandardOutcome
       )
