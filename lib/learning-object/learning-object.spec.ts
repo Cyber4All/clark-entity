@@ -1,4 +1,4 @@
-import { LearningObject, Material } from './learning-object';
+import { LearningObject } from './learning-object';
 import { User } from '../user/user';
 import { LEARNING_OBJECT_ERRORS } from './error-messages';
 import { LearningOutcome } from '../learning-outcome/learning-outcome';
@@ -12,7 +12,7 @@ const validDescription = 'This is a valid description';
 const validLength = LearningObject.Length.NANOMODULE;
 const validLevel = LearningObject.Level.Training;
 const validOutcome = new LearningOutcome();
-const validMaterial: Material = {
+const validMaterial: LearningObject.Material = {
   files: [],
   urls: [{ title: 'some valid title', url: 'some valid url' }],
   notes: 'these are notes',
