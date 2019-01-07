@@ -25,7 +25,6 @@ const validMetrics: LearningObject.Metrics = {
   downloads: 22,
   saves: 22
 };
-const validChild = new LearningObject();
 const validAuthor = new User({
   username: 'me123',
   name: 'Me',
@@ -46,11 +45,8 @@ const invalidName = '         ';
 const invalidDescription = null;
 const invalidLength = 'some length';
 const invalidLevel = 'some level';
-const invalidOutcome = 22;
 const invalidMaterial = null;
 const invalidMetrics = null;
-const invalidChild = 22;
-const invalidContributor = 22;
 const invalidCollection = null;
 const invalidStatus = 'some status';
 
@@ -157,16 +153,6 @@ describe('Class: LearningObject', () => {
     const index = object.addOutcome();
     expect(object.outcomes).toContain(object.outcomes[index]);
   });
-  it('should add an invalid outcome and throw an error', () => {
-    const errorMessage = LEARNING_OBJECT_ERRORS.INVALID_OUTCOME;
-    try {
-      // @ts-ignore Value may or may not match type signature for test purposes
-      object.addOutcome(invalidOutcome);
-      fail(`Expected ${errorMessage}`);
-    } catch (e) {
-      expect(e.message).toEqual(errorMessage);
-    }
-  });
   it('should remove an outcome', () => {
     const index = object.addOutcome(validOutcome);
     object.removeOutcome(index);
@@ -203,16 +189,6 @@ describe('Class: LearningObject', () => {
   it('should add a valid contributor', () => {
     object.addContributor(validContributor);
     expect(object.contributors).toContain(validContributor);
-  });
-  it('should add an invalid contributor and throw an error', () => {
-    const errorMessage = LEARNING_OBJECT_ERRORS.INVALID_CONTRIBUTOR;
-    try {
-      // @ts-ignore Value may or may not match type signature for test purposes
-      object.addContributor(invalidContributor);
-      fail(`Expected ${errorMessage}`);
-    } catch (e) {
-      expect(e.message).toEqual(errorMessage);
-    }
   });
   it('should remove a contributor', () => {
     const index = object.addContributor(validContributor);
