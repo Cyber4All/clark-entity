@@ -477,7 +477,9 @@ export class LearningObject {
     if (object.id) {
       this.id = object.id;
     }
-    this._author = <User>object.author || this.author;
+    if (object.author) {
+      this._author = new User(object.author);
+    }
     if (object.name) {
       this.name = object.name;
     }
