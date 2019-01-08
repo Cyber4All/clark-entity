@@ -1,15 +1,14 @@
 import { LearningOutcome } from './learning-outcome';
-import { levels, verbs } from '@cyber4all/clark-taxonomy';
+import { levels, taxonomy } from '@cyber4all/clark-taxonomy';
 import { LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
 import { StandardOutcome } from '../standard-outcome/standard-outcome';
 
 // Defaults
 
 // Valid values
-const levelsArray = Array.from(levels);
-const validBloom = levelsArray[0];
-const verbsArray = Array.from(verbs[validBloom]);
-const validVerb = verbsArray[0];
+const validBloom = levels[0];
+// @ts-ignore
+const validVerb = (taxonomy.taxons[validBloom] as { verbs: string[] }).verbs[0];
 const validText = 'This is valid text';
 const validStandardOutcome = new StandardOutcome({
   author: 'Some developer',

@@ -1,5 +1,5 @@
 import { StandardOutcome } from '../standard-outcome/standard-outcome';
-import { levels, verbs } from '@cyber4all/clark-taxonomy';
+import { levels, taxonomy } from '@cyber4all/clark-taxonomy';
 import { LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
 
 /**
@@ -29,8 +29,8 @@ export class LearningOutcome {
     return this._bloom;
   }
   set bloom(bloom: string) {
-    if (bloom && levels.has(bloom)) {
-      this._bloom = bloom;
+    if (bloom && levels.includes(bloom.toLowerCase())) {
+      this._bloom = bloom.toLowerCase();
     } else {
       throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_BLOOM(bloom));
     }
@@ -46,8 +46,14 @@ export class LearningOutcome {
     return this._verb;
   }
   set verb(verb: string) {
-    if (verb && verbs[this.bloom].has(verb)) {
-      this._verb = verb;
+    if (
+      verb &&
+      // @ts-ignore
+      (taxonomy.taxons[this.bloom] as { verbs: string[] }).verbs.includes(
+        verb.toLowerCase()
+      )
+    ) {
+      this._verb = verb.toLowerCase();
     } else {
       throw new Error(
         LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_VERB(this.bloom, verb)
@@ -124,8 +130,9 @@ export class LearningOutcome {
   constructor(outcome?: Partial<LearningOutcome>) {
     // @ts-ignore Id will be undefined on creation
     this._id = undefined;
-    this._bloom = Array.from(levels)[0];
-    this._verb = Array.from(verbs[this.bloom])[0];
+    this._bloom = levels[0];
+    // @ts-ignore
+    this._verb = (taxonomy.taxons[this.bloom] as { verbs: string[] }).verbs[0];
     this._text = '';
     this._mappings = [];
     if (outcome) {
