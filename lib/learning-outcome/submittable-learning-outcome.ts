@@ -1,5 +1,6 @@
 import { LearningOutcome } from './learning-outcome';
 import { SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
+import { EntityError } from '../errors/entity-error';
 
 /**
  * A class to represent a submittable learning outcome.
@@ -23,11 +24,8 @@ export class SubmittableLearningOutcome extends LearningOutcome {
    * @memberof SubmittableLearningOutcome
    */
   set text(text: string) {
-    if (text && text.trim()) {
-      super.text = text;
-    } else {
-      throw new Error(SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
-    }
+    SubmittableLearningOutcome.validateText(text);
+    super.text = text;
   }
   /**
    *Creates an instance of SubmittableLearningOutcome.
@@ -37,5 +35,37 @@ export class SubmittableLearningOutcome extends LearningOutcome {
   constructor(outcome: LearningOutcome) {
     super(outcome);
     this.text = outcome.text;
+  }
+}
+
+export namespace SubmittableLearningOutcome {
+  export function validateText(text: string) {
+    if (!text || !text.trim()) {
+      throw new EntityError(
+        SUBMITTABLE_LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT,
+        'text'
+      );
+    }
+  }
+
+  export function validateOutcome(
+    outcome: LearningOutcome
+  ): { [index: string]: EntityError } | undefined {
+    const errors: { [index: string]: EntityError } = {};
+    const validationFunctions = [
+      {
+        function: SubmittableLearningOutcome.validateText,
+        arguments: [outcome.text]
+      }
+    ];
+    validationFunctions.forEach(func => {
+      try {
+        // @ts-ignore Arguments are valid since they are predefined
+        func.function(...func.arguments);
+      } catch (e) {
+        errors[e.property] = e.message;
+      }
+    });
+    return Object.keys(errors).length ? errors : undefined;
   }
 }

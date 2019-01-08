@@ -68,4 +68,21 @@ describe('Class: SubmittableLearningObject', () => {
       expect(e.message).toBeDefined();
     }
   });
+  it('should validate a SubmittableLearningObject', () => {
+    const errors = SubmittableLearningObject.validateObject(object);
+    expect(errors).not.toBeDefined();
+  });
+  it('should validate a non SubmittableLearningObject and return error object', () => {
+    const errors = SubmittableLearningObject.validateObject(
+      new LearningObject({
+        outcomes: [
+          new LearningOutcome({ text: 'VALID TEST' }),
+          new LearningOutcome()
+        ],
+        children: [new LearningObject(), validObject]
+      })
+    );
+    console.log('ERRORS: ', errors);
+    expect(errors).toBeDefined();
+  });
 });

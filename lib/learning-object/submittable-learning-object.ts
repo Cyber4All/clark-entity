@@ -1,6 +1,8 @@
 import { LearningObject } from './learning-object';
 import { SubmittableLearningOutcome } from '../learning-outcome/submittable-learning-outcome';
 import { SUBMITTABLE_LEARNING_OBJECT_ERRORS } from './error-messages';
+import { EntityError } from '../errors/entity-error';
+import { LearningOutcome } from '../learning-outcome/learning-outcome';
 
 export class SubmittableLearningObject extends LearningObject {
   get description(): string {
@@ -14,11 +16,8 @@ export class SubmittableLearningObject extends LearningObject {
    * @memberof SubmittableLearningObject
    */
   set description(description: string) {
-    if (description.trim()) {
-      super.description = description.trim();
-    } else {
-      throw new Error(SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_DESCRIPTION);
-    }
+    SubmittableLearningObject.validateDescription(description);
+    super.description = description.trim();
   }
 
   /**
@@ -107,5 +106,87 @@ export class SubmittableLearningObject extends LearningObject {
     if (children && children.length) {
       children.map(child => this.addChild(child));
     }
+  }
+}
+
+export namespace SubmittableLearningObject {
+  export function validateName(name: string) {
+    try {
+      new LearningObject({ name });
+    } catch (e) {
+      throw new EntityError(e.message, 'name');
+    }
+  }
+  export function validateDescription(description: string) {
+    if (!description || !description.trim()) {
+      throw new EntityError(
+        SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_DESCRIPTION,
+        'description'
+      );
+    }
+  }
+  export function validateOutcomes(outcomes: LearningOutcome[]) {
+    if (outcomes && outcomes.length) {
+      const errors = outcomes
+        .map((outcome, index) => ({
+          index,
+          ...SubmittableLearningOutcome.validateOutcome(outcome)
+        }))
+        .filter(err => !!err && Object.keys(err).length > 1);
+      if (errors.length) {
+        throw { property: 'outcomes', message: errors };
+      }
+    } else {
+      throw new EntityError(
+        SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_OUTCOMES,
+        'outcomes'
+      );
+    }
+  }
+  export function validateChildren(children: LearningObject[]) {
+    if (children && children.length) {
+      const errors = children
+        .map((child, index) => ({
+          index,
+          ...SubmittableLearningObject.validateObject(child)
+        }))
+        .filter(err => !!err && Object.keys(err).length > 1);
+      if (errors.length) {
+        throw { property: 'children', message: errors };
+      }
+    }
+  }
+
+  export function validateObject(
+    object: LearningObject
+  ): { [index: string]: EntityError } | undefined {
+    const errors: { [index: string]: EntityError } = {};
+    const validationFunctions = [
+      {
+        function: SubmittableLearningObject.validateName,
+        arguments: [object.name]
+      },
+      {
+        function: SubmittableLearningObject.validateDescription,
+        arguments: [object.description]
+      },
+      {
+        function: SubmittableLearningObject.validateOutcomes,
+        arguments: [object.outcomes]
+      },
+      {
+        function: SubmittableLearningObject.validateChildren,
+        arguments: [object.children]
+      }
+    ];
+    validationFunctions.forEach(func => {
+      try {
+        // @ts-ignore Arguments are valid since they are predefined
+        func.function(...func.arguments);
+      } catch (e) {
+        errors[e.property] = e.message || e;
+      }
+    });
+    return Object.keys(errors).length ? errors : undefined;
   }
 }
