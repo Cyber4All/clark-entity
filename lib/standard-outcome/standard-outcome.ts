@@ -41,7 +41,7 @@ export class StandardOutcome implements Outcome {
    * @property {string} name the label or unit of the outcome
    */
   get name(): string {
-    return this._author;
+    return this._name;
   }
   set name(name: string) {
     if (name && name.trim()) {
@@ -56,7 +56,7 @@ export class StandardOutcome implements Outcome {
    * @property {string} date the year this standard was established
    */
   get date(): string {
-    return this._author;
+    return this._date;
   }
   set date(date: string) {
     if (date && date.trim()) {
@@ -70,7 +70,7 @@ export class StandardOutcome implements Outcome {
    */
   _outcome: string;
   get outcome(): string {
-    return this._author;
+    return this._outcome;
   }
   set outcome(outcome: string) {
     if (outcome && outcome.trim()) {
