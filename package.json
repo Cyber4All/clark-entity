@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/Cyber4All/entity#readme",
   "dependencies": {
-    "@cyber4all/clark-taxonomy": "^3.0.0"
+    "@cyber4all/clark-taxonomy": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.11",
