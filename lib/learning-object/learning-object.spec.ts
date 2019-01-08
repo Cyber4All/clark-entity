@@ -42,6 +42,9 @@ const validStatus = LearningObject.Status.RELEASED;
 
 // Invalid values
 const invalidName = '         ';
+const invalidNameMin = 'h';
+const invalidNameMax =
+  '01234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950';
 const invalidDescription = null;
 const invalidLength = 'some length';
 const invalidLevel = 'some level';
@@ -78,11 +81,21 @@ describe('Class: LearningObject', () => {
     object.name = validName;
     expect(object.name).toEqual(validName);
   });
-  it('should set an invalid name and throw an error', () => {
+  it('should set an invalid name (min length) and throw an error', () => {
     const errorMessage = LEARNING_OBJECT_ERRORS.INVALID_NAME;
     try {
       // @ts-ignore Value may or may not match type signature for test purposes
-      object.name = invalidName;
+      object.name = invalidNameMin;
+      fail(`Expected ${errorMessage}`);
+    } catch (e) {
+      expect(e.message).toEqual(errorMessage);
+    }
+  });
+  it('should set an invalid name (max length) and throw an error', () => {
+    const errorMessage = LEARNING_OBJECT_ERRORS.INVALID_NAME;
+    try {
+      // @ts-ignore Value may or may not match type signature for test purposes
+      object.name = invalidNameMax;
       fail(`Expected ${errorMessage}`);
     } catch (e) {
       expect(e.message).toEqual(errorMessage);

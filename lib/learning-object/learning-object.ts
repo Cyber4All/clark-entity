@@ -6,6 +6,9 @@ import { User } from '../user/user';
 import { LearningOutcome } from '../learning-outcome/learning-outcome';
 import { LEARNING_OBJECT_ERRORS } from './error-messages';
 
+const MIN_NAME_LENGTH = 3;
+const MAX_NAME_LENGTH = 50;
+
 /**
  * A class to represent a learning object.
  * @class
@@ -42,14 +45,34 @@ export class LearningObject {
   }
 
   set name(name: string) {
-    // Condition is true if name is defined and the value returned from name.trim() is not an empty string
-    // name.trim() is used to verify that name is not a string of white spaces
-    if (name !== undefined && name !== null && name.trim()) {
+    if (this.isValidName(name)) {
       this._name = name.trim();
       this.updateDate();
     } else {
       throw new Error(LEARNING_OBJECT_ERRORS.INVALID_NAME);
     }
+  }
+
+  /**
+   * Checks if name is valid
+   *
+   * @private
+   * @param {string} name
+   * @returns {boolean}
+   * @memberof LearningObject
+   */
+  private isValidName(name: string): boolean {
+    if (name !== undefined && name !== null) {
+      const trimmedName = name.trim();
+      if (
+        trimmedName.length < MIN_NAME_LENGTH ||
+        trimmedName.length > MAX_NAME_LENGTH
+      ) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   private _description!: string;
