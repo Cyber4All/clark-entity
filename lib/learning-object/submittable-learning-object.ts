@@ -89,7 +89,7 @@ export class SubmittableLearningObject extends LearningObject {
    * @memberof SubmittableLearningObject
    */
   private validateOutcomes(outcomes: SubmittableLearningOutcome[]): void {
-    if (outcomes) {
+    if (outcomes && outcomes.length) {
       outcomes.map(outcome => this.addOutcome(outcome));
     } else {
       throw new Error(SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_OUTCOMES);
@@ -104,7 +104,7 @@ export class SubmittableLearningObject extends LearningObject {
    * @memberof SubmittableLearningObject
    */
   private validateChildren(children: SubmittableLearningObject[]): void {
-    if (children) {
+    if (children && children.length) {
       children.map(child => this.addChild(child));
     }
   }
