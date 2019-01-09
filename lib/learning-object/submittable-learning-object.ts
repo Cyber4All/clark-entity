@@ -48,7 +48,10 @@ export class SubmittableLearningObject extends LearningObject {
     if (this.outcomes.length > 1) {
       return super.removeOutcome(index);
     } else {
-      throw new Error(SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_OUTCOMES);
+      throw new EntityError(
+        SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_OUTCOMES,
+        'outcomes'
+      );
     }
   }
 
@@ -91,7 +94,10 @@ export class SubmittableLearningObject extends LearningObject {
     if (outcomes && outcomes.length) {
       outcomes.map(outcome => this.addOutcome(outcome));
     } else {
-      throw new Error(SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_OUTCOMES);
+      throw new EntityError(
+        SUBMITTABLE_LEARNING_OBJECT_ERRORS.INVALID_OUTCOMES,
+        'outcomes'
+      );
     }
   }
 

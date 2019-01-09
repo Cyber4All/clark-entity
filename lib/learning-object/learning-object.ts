@@ -5,6 +5,7 @@
 import { User } from '../user/user';
 import { LearningOutcome } from '../learning-outcome/learning-outcome';
 import { LEARNING_OBJECT_ERRORS } from './error-messages';
+import { EntityError } from '../errors/entity-error';
 
 const MIN_NAME_LENGTH = 3;
 const MAX_NAME_LENGTH = 50;
@@ -22,7 +23,7 @@ export class LearningObject {
     if (!this.id) {
       this._id = id;
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.ID_SET);
+      throw new EntityError(LEARNING_OBJECT_ERRORS.ID_SET, 'id');
     }
   }
   private _author: User;
@@ -49,7 +50,7 @@ export class LearningObject {
       this._name = name.trim();
       this.updateDate();
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_NAME);
+      throw new EntityError(LEARNING_OBJECT_ERRORS.INVALID_NAME, 'name');
     }
   }
 
@@ -89,7 +90,10 @@ export class LearningObject {
       this._description = description.trim();
       this.updateDate();
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_DESCRIPTION);
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.INVALID_DESCRIPTION,
+        'description'
+      );
     }
   }
 
@@ -127,7 +131,10 @@ export class LearningObject {
       this._length = length;
       this.updateDate();
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_LENGTH(length));
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.INVALID_LENGTH(length),
+        'length'
+      );
     }
   }
 
@@ -172,9 +179,15 @@ export class LearningObject {
       this._levels.push(level);
       this.updateDate();
     } else if (alreadyAdded) {
-      throw new Error(LEARNING_OBJECT_ERRORS.LEVEL_EXISTS(level));
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.LEVEL_EXISTS(level),
+        'level'
+      );
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_LEVEL(level));
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.INVALID_LEVEL(level),
+        'level'
+      );
     }
   }
 
@@ -190,10 +203,11 @@ export class LearningObject {
       this._levels.splice(index, 1)[0];
       this.updateDate();
     } else {
-      throw new Error(
+      throw new EntityError(
         index <= -1
           ? LEARNING_OBJECT_ERRORS.LEVEL_DOES_NOT_EXIST(level)
-          : LEARNING_OBJECT_ERRORS.INVALID_LEVELS
+          : LEARNING_OBJECT_ERRORS.INVALID_LEVELS,
+        'level'
       );
     }
   }
@@ -266,7 +280,10 @@ export class LearningObject {
       this.updateDate();
       this._materials = material;
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_MATERIAL);
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.INVALID_MATERIAL,
+        'materials'
+      );
     }
   }
 
@@ -282,7 +299,7 @@ export class LearningObject {
     if (metrics) {
       this._metrics = metrics;
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_METRICS);
+      throw new EntityError(LEARNING_OBJECT_ERRORS.INVALID_METRICS, 'metrics');
     }
   }
 
@@ -332,7 +349,7 @@ export class LearningObject {
       this.updateDate();
       return this._children.push(addingObject) - 1;
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_CHILD);
+      throw new EntityError(LEARNING_OBJECT_ERRORS.INVALID_CHILD, 'children');
     }
   }
   /**
@@ -369,7 +386,10 @@ export class LearningObject {
       this.updateDate();
       return this._contributors.push(addingUser) - 1;
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_CONTRIBUTOR);
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.INVALID_CONTRIBUTOR,
+        'contributors'
+      );
     }
   }
   /**
@@ -409,7 +429,10 @@ export class LearningObject {
       this._collection = collection;
       this.updateDate();
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_COLLECTION);
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.INVALID_COLLECTION,
+        'collection'
+      );
     }
   }
 
@@ -429,7 +452,10 @@ export class LearningObject {
       }
       this.updateDate();
     } else {
-      throw new Error(LEARNING_OBJECT_ERRORS.INVALID_STATUS(status));
+      throw new EntityError(
+        LEARNING_OBJECT_ERRORS.INVALID_STATUS(status),
+        'status'
+      );
     }
   }
 

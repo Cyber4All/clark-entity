@@ -1,4 +1,5 @@
 import { USER_ERRORS } from './error-messages';
+import { EntityError } from '../errors/entity-error';
 
 /**
  * A class to represent CLARK users.
@@ -13,7 +14,7 @@ export class User {
     if (!this.id) {
       this._id = id;
     } else {
-      throw new Error(USER_ERRORS.ID_SET);
+      throw new EntityError(USER_ERRORS.ID_SET, 'id');
     }
   }
   _username: string;
@@ -71,7 +72,7 @@ export class User {
     if (email && User.isValidEmail(email)) {
       this._email = email;
     } else {
-      throw new Error(USER_ERRORS.INVALID_EMAIL(email));
+      throw new EntityError(USER_ERRORS.INVALID_EMAIL(email), 'email');
     }
   }
 

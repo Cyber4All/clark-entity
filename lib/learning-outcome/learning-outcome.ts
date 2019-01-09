@@ -1,6 +1,7 @@
 import { StandardOutcome } from '../standard-outcome/standard-outcome';
 import { levels, taxonomy } from '@cyber4all/clark-taxonomy';
 import { LEARNING_OUTCOME_ERROR_MESSAGES } from './error-messages';
+import { EntityError } from '../errors/entity-error';
 
 /**
  * A class to represent a learning outcome.
@@ -15,7 +16,7 @@ export class LearningOutcome {
     if (!this.id) {
       this._id = id;
     } else {
-      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.ID_SET);
+      throw new EntityError(LEARNING_OUTCOME_ERROR_MESSAGES.ID_SET, 'id');
     }
   }
 
@@ -32,7 +33,10 @@ export class LearningOutcome {
     if (bloom && levels.includes(bloom.toLowerCase())) {
       this._bloom = bloom.toLowerCase();
     } else {
-      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_BLOOM(bloom));
+      throw new EntityError(
+        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_BLOOM(bloom),
+        'bloom'
+      );
     }
   }
 
@@ -55,8 +59,9 @@ export class LearningOutcome {
     ) {
       this._verb = verb.toLowerCase();
     } else {
-      throw new Error(
-        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_VERB(this.bloom, verb)
+      throw new EntityError(
+        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_VERB(this.bloom, verb),
+        'verb'
       );
     }
   }
@@ -73,7 +78,10 @@ export class LearningOutcome {
     if (text !== undefined && text !== null) {
       this._text = text.trim();
     } else {
-      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT);
+      throw new EntityError(
+        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_TEXT,
+        'text'
+      );
     }
   }
   /**
@@ -108,7 +116,10 @@ export class LearningOutcome {
           : new StandardOutcome(mapping);
       return this._mappings.push(addingMapping) - 1;
     } else {
-      throw new Error(LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_MAPPING);
+      throw new EntityError(
+        LEARNING_OUTCOME_ERROR_MESSAGES.INVALID_MAPPING,
+        'mappings'
+      );
     }
   }
 

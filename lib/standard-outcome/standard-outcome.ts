@@ -3,6 +3,7 @@
  */
 import { Outcome } from '../outcome/outcome';
 import { STANDARD_OUTCOME_ERRORS } from './error-messages';
+import { EntityError } from '../errors/entity-error';
 
 /**
  * A class to represent a standard outcome. Immutable.
@@ -17,7 +18,7 @@ export class StandardOutcome implements Outcome {
     if (!this.id) {
       this._id = id;
     } else {
-      throw new Error(STANDARD_OUTCOME_ERRORS.ID_SET);
+      throw new EntityError(STANDARD_OUTCOME_ERRORS.ID_SET, 'id');
     }
   }
   _author: string;
@@ -32,7 +33,7 @@ export class StandardOutcome implements Outcome {
     if (author && author.trim()) {
       this._author = author;
     } else {
-      throw new Error(STANDARD_OUTCOME_ERRORS.INVALID_AUTHOR);
+      throw new EntityError(STANDARD_OUTCOME_ERRORS.INVALID_AUTHOR, 'author');
     }
   }
 
@@ -47,7 +48,7 @@ export class StandardOutcome implements Outcome {
     if (name && name.trim()) {
       this._name = name;
     } else {
-      throw new Error(STANDARD_OUTCOME_ERRORS.INVALID_NAME);
+      throw new EntityError(STANDARD_OUTCOME_ERRORS.INVALID_NAME, 'name');
     }
   }
 
@@ -62,7 +63,7 @@ export class StandardOutcome implements Outcome {
     if (date && date.trim()) {
       this._date = date;
     } else {
-      throw new Error(STANDARD_OUTCOME_ERRORS.INVALID_DATE);
+      throw new EntityError(STANDARD_OUTCOME_ERRORS.INVALID_DATE, 'date');
     }
   }
   /**
@@ -76,7 +77,7 @@ export class StandardOutcome implements Outcome {
     if (outcome && outcome.trim()) {
       this._outcome = outcome;
     } else {
-      throw new Error(STANDARD_OUTCOME_ERRORS.INVALID_OUTCOME);
+      throw new EntityError(STANDARD_OUTCOME_ERRORS.INVALID_OUTCOME, 'outcome');
     }
   }
 
