@@ -503,7 +503,7 @@ export class LearningObject {
     if (object.author) {
       this._author = new User(object.author);
     }
-    if (object.name) {
+    if (object.name !== undefined) {
       this.name = object.name;
     }
     if (object.description) {
