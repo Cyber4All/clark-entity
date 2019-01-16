@@ -77,6 +77,17 @@ describe('Class: LearningObject', () => {
     const newObject = new LearningObject(someObject);
     expect(newObject).toBeDefined();
   });
+  it('should return a new LearningObject with the same date that was passed in', done => {
+    const date = Date.now().toString();
+    const someObject: Partial<LearningObject> = {
+      date
+    };
+    setTimeout(() => {
+      const newObject = new LearningObject(someObject);
+      expect(newObject.date).toEqual(date);
+      done();
+    }, 100);
+  });
   it('should set a valid name', () => {
     object.name = validName;
     expect(object.name).toEqual(validName);

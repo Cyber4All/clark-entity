@@ -113,7 +113,9 @@ export class LearningObject {
    * @memberof LearningObject
    */
   private updateDate() {
-    this._date = Date.now().toString();
+    if (this._constructed) {
+      this._date = Date.now().toString();
+    }
   }
 
   private _length!: LearningObject.Length;
@@ -480,6 +482,8 @@ export class LearningObject {
     return false;
   }
 
+  private _constructed = false;
+
   /**
    *Creates an instance of LearningObject.
    * @param {Partial<LearningObject>} [object]
@@ -513,6 +517,7 @@ export class LearningObject {
     if (object) {
       this.copyObject(object);
     }
+    this._constructed = true;
   }
 
   /**
@@ -535,7 +540,9 @@ export class LearningObject {
     if (object.description) {
       this.description = object.description;
     }
-    this._date = <string>object.date || this.date;
+    if (object.date) {
+      this._date = object.date;
+    }
     this.length = <LearningObject.Length>object.length || this.length;
     if (object.levels) {
       (<LearningObject.Level[]>object.levels)
