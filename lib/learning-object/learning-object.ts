@@ -8,7 +8,7 @@ import { LEARNING_OBJECT_ERRORS } from './error-messages';
 import { EntityError } from '../errors/entity-error';
 
 const MIN_NAME_LENGTH = 3;
-const MAX_NAME_LENGTH = 50;
+const MAX_NAME_LENGTH = 170;
 
 /**
  * A class to represent a learning object.
