@@ -447,6 +447,8 @@ export class LearningObject {
     return this._status;
   }
   set status(status: LearningObject.Status) {
+    // FIXME: Remove when system has removed old valid status values
+    status = this.remapStatus(status);
     if (this.isValidStatus(status)) {
       this._status = status;
       if (this.status === LearningObject.Status.RELEASED) {
@@ -458,6 +460,23 @@ export class LearningObject {
         LEARNING_OBJECT_ERRORS.INVALID_STATUS(status),
         'status'
       );
+    }
+  }
+
+  /**
+   * Map deprecated status values to new LearningObject.Status values
+   *
+   * @private
+   * @param {string} status
+   * @returns {LearningObject.Status}
+   * @memberof LearningObject
+   */
+  private remapStatus(status: string): LearningObject.Status {
+    switch (status) {
+      case 'published':
+        return LearningObject.Status.RELEASED;
+      default:
+        return status as LearningObject.Status;
     }
   }
 
@@ -476,8 +495,6 @@ export class LearningObject {
       // @ts-ignore Keys are not numbers and element is of type Status
       (key: string) => LearningObject.Status[key] as LearningObject.Status
     );
-    // FIXME: Remove when usage of 'published' is removed from system
-    validStatuses.push('published' as any);
     if (validStatuses.includes(status)) {
       return true;
     }
