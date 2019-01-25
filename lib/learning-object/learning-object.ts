@@ -475,6 +475,8 @@ export class LearningObject {
     switch (status) {
       case 'published':
         return LearningObject.Status.RELEASED;
+      case 'unpublished':
+        return LearningObject.Status.UNRELEASED;
       default:
         return status as LearningObject.Status;
     }
