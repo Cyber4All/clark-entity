@@ -476,6 +476,8 @@ export class LearningObject {
       // @ts-ignore Keys are not numbers and element is of type Status
       (key: string) => LearningObject.Status[key] as LearningObject.Status
     );
+    // FIXME: Remove when usage of 'published' is removed from system
+    validStatuses.push('published' as any);
     if (validStatuses.includes(status)) {
       return true;
     }
