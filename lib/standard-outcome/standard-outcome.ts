@@ -37,6 +37,22 @@ export class StandardOutcome implements Outcome {
     }
   }
 
+  _source: string;
+  /**
+   * @property {string} source
+   *       the organization or document this outcome is drawn from
+   */
+  get source(): string {
+    return this._source;
+  }
+  set source(author: string) {
+    if (author && author.trim()) {
+      this._source = author;
+    } else {
+      throw new EntityError(STANDARD_OUTCOME_ERRORS.INVALID_AUTHOR, 'source');
+    }
+  }
+
   _name: string;
   /**
    * @property {string} name the label or unit of the outcome
@@ -90,6 +106,7 @@ export class StandardOutcome implements Outcome {
     // @ts-ignore Id will be undefined on creation
     this._id = undefined;
     this._author = '';
+    this._source = '';
     this._name = '';
     this._date = '';
     this._outcome = '';
@@ -110,6 +127,9 @@ export class StandardOutcome implements Outcome {
     }
     if (outcome.author) {
       this.author = outcome.author;
+    }
+    if (outcome.source) {
+      this.source = outcome.source;
     }
     if (outcome.name) {
       this.name = outcome.name;
