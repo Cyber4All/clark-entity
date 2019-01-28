@@ -45,9 +45,9 @@ export class StandardOutcome implements Outcome {
   get source(): string {
     return this._source;
   }
-  set source(author: string) {
-    if (author && author.trim()) {
-      this._source = author;
+  set source(source: string) {
+    if (source && source.trim()) {
+      this._source = source;
     } else {
       throw new EntityError(STANDARD_OUTCOME_ERRORS.INVALID_AUTHOR, 'source');
     }
@@ -152,6 +152,7 @@ export class StandardOutcome implements Outcome {
     const outcome: Partial<StandardOutcome> = {
       id: this.id,
       author: this.author,
+      source: this.source,
       name: this.name,
       date: this.date,
       outcome: this.outcome
